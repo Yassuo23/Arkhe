@@ -1,0 +1,121 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+
+
+body {
+    height: 100vh;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url(fundo.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    color: #D45A33;
+    justify-content: center;
+}
+
+    .voltar {
+      margin: 30px 0;
+    }
+
+    .voltar a {
+      color: #e6332a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+button {
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.7s ease;
+    text-decoration: none;
+    background-color: #D45A33;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+button a {
+    text-decoration: none;
+    color: white;
+}
+
+button a:hover{
+    color: #D45A33;
+}
+
+button:hover {
+      background-color: #F8F3EC;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(212, 90, 51, 0.2);
+}
+
+#botoes {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header {
+    text-align: center;
+    margin-top: 30px;
+}
+
+form {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    color: #292929;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form input {
+    padding: 5px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    height: 2vh;
+    width: 25vh;
+    color: #505050;
+}
+
+form input:focus {
+    border-color: #c0c0bf;
+    outline: none;
+}
+
+.tudo {
+    background-color: rgba(255, 255, 255, 0.9);
+    height: 100vh;
+    border: 1px 2px 4px #202020;
+    border-radius: 5px;
+    width: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+   
+}
+@media (max-width: 480px) {
+    
+}
+@media (max-width: 320px) {
+    
+}
+@media (min-width: 1200px) {
+    
+}
