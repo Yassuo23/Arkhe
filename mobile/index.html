@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Arkhe — App</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone-shell">
+
+  <!-- ===================== LOGIN ===================== -->
+  <section id="screen-login" class="screen active login-screen">
+    <div class="login-top">
+      <h1 class="login-logo">ARKHE</h1>
+      <div class="login-illustration">🐾🐕</div>
+    </div>
+
+    <form class="login-form" onsubmit="return handleLogin(event)">
+      <label class="field-label">Nome de usuário ou email:</label>
+      <input class="field-input" type="text" placeholder="Nome super legal" id="loginUser">
+
+      <label class="field-label">Senha:</label>
+      <input class="field-input" type="password" placeholder="**********" id="loginPass">
+
+      <button type="submit" class="btn btn-light btn-block">Entrar</button>
+
+      <p class="login-alt">Entrar com:</p>
+      <div class="social-row">
+        <button type="button" class="social-btn" onclick="handleLogin(event)">🍎</button>
+        <button type="button" class="social-btn" onclick="handleLogin(event)">G</button>
+        <button type="button" class="social-btn" onclick="handleLogin(event)">f</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===================== APP SHELL (header shared) ===================== -->
+  <div id="app-shell" class="app-shell">
+
+    <!-- ---------- HOME ---------- -->
+    <section id="screen-home" class="screen app-screen">
+      <header class="topbar">
+        <button class="icon-btn" onclick="openSidebar()">☰</button>
+        <div class="location">
+          <span class="location-label">localização</span>
+          <strong>Limeira, SP</strong>
+        </div>
+        <button class="avatar-btn" onclick="showScreen('perfil')">👩</button>
+      </header>
+
+      <div class="content-scroll">
+        <div class="card card-favorites">
+          <h3>Seus Favoritados</h3>
+          <div class="fav-row">
+            <div class="fav-photo">🐕</div>
+            <div class="fav-info">
+              <strong>Bob</strong>
+              <span>Pastor Alemão</span>
+              <span>3 anos</span>
+              <span>Macho</span>
+              <span>Porte Grande</span>
+            </div>
+            <button class="btn btn-pill" onclick="showScreen('pet-detail')">Ver pet</button>
+          </div>
+          <div class="dots"><span class="dot active"></span><span class="dot"></span></div>
+        </div>
+
+        <div class="card card-activities">
+          <h3>Suas atividades</h3>
+          <div class="activity-item" onclick="showScreen('chat')">
+            <span class="activity-icon">💬</span>
+            <div><strong>Conversa com IA</strong><br><small>"Meu cachorro esta vomitando"</small></div>
+          </div>
+          <div class="activity-item">
+            <span class="activity-icon">📷</span>
+            <div><strong>Análise de imagem</strong><br><small>"Possível dermatite alérgica"</small></div>
+          </div>
+          <div class="activity-item" onclick="showScreen('pet-detail')">
+            <span class="activity-icon">❤️</span>
+            <div><strong>Solicitação de adoção</strong><br><small>"Interesse no pet Thor"</small></div>
+          </div>
+        </div>
+
+        <div class="card card-tips">
+          <span class="tip-icon">🐾</span>
+          <div><strong>Dicas de cuidado</strong><p>Mantenha a vacinação do seu pet sempre em dia!</p></div>
+          <span class="tip-pets">🐶🐱</span>
+        </div>
+
+        <h3 class="section-title">Resumo</h3>
+        <div class="summary-grid">
+          <div class="summary-box light" onclick="showScreen('favoritos')"><strong>2 Pets</strong></div>
+          <div class="summary-box light" onclick="showScreen('chat')"><strong>15</strong><span>Pré consultas</span></div>
+          <div class="summary-box dark"><strong>8</strong><span>Imagens</span></div>
+          <div class="summary-box dark" onclick="showScreen('pet-detail')"><strong>1</strong><span>Sol. De Adoção</span></div>
+        </div>
+      </div>
+      <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showScreen('home')">🏠<span>Início</span></button>
+        <button class="nav-item" onclick="showScreen('ongs')">💬<span>ONGs</span></button>
+        <button class="nav-item" onclick="showScreen('petmatch')">🐾<span>PetMatch</span></button>
+        <button class="nav-item" onclick="showScreen('favoritos')">♡<span>Favoritos</span></button>
+        <button class="nav-item" onclick="showScreen('perfil')">👤<span>Perfil</span></button>
+      </nav>
+    </section>
+
+    <!-- ---------- PET DETAIL ---------- -->
+    <section id="screen-pet-detail" class="screen app-screen">
+      <header class="topbar plain">
+        <button class="icon-btn" onclick="showScreen('home')">←</button>
+        <span></span>
+        <button class="icon-btn">⬇️</button>
+      </header>
+      <div class="content-scroll">
+        <div class="pet-hero">🐕</div>
+        <div class="card pet-card">
+          <div class="pet-card-top">
+            <div>
+              <h2>Bob</h2>
+              <p>Pastor Alemão</p>
+              <p>Brincalhão</p>
+              <p>ONG responsável</p>
+            </div>
+            <div class="pet-age">♂<br>3 anos</div>
+          </div>
+        </div>
+        <div class="card extra-card">
+          <h4>Dados extras</h4>
+          <ul>
+            <li>Vacinado contra raiva...</li>
+            <li>Possui 2 irmãos</li>
+            <li>Não adestrado</li>
+            <li>Responde comandos básicos</li>
+          </ul>
+        </div>
+      </div>
+      <div class="bottom-actions">
+        <button class="btn-heart" onclick="toggleFav(this)">♡</button>
+        <button class="btn btn-block" onclick="alert('Solicitação de adoção enviada para a ONG responsável por Bob!')">Adotar</button>
+      </div>
+    </section>
+
+    <!-- ---------- FAVORITOS ---------- -->
+    <section id="screen-favoritos" class="screen app-screen">
+      <header class="topbar plain">
+        <button class="icon-btn" onclick="openSidebar()">☰</button>
+        <strong>Favoritos</strong>
+        <span></span>
+      </header>
+      <div class="content-scroll">
+        <div class="pet-list-item" onclick="showScreen('pet-detail')">
+          <span class="pet-thumb">🐕</span>
+          <div><strong>Bob</strong><br><small>Pastor Alemão · 3 anos · Grande</small></div>
+          <span class="tag tag-green">Favorito</span>
+        </div>
+        <div class="pet-list-item">
+          <span class="pet-thumb">🐈</span>
+          <div><strong>Tunico</strong><br><small>Gato · 1 ano · Pequeno</small></div>
+          <span class="tag tag-green">Favorito</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- ONGs (gestão) ---------- -->
+    <section id="screen-ongs" class="screen app-screen">
+      <header class="topbar plain">
+        <button class="icon-btn" onclick="openSidebar()">☰</button>
+        <strong>🐾 Arkhe</strong>
+        <button class="icon-btn">🔔</button>
+      </header>
+      <div class="content-scroll">
+        <div class="ong-banner">
+          <span>🏠</span>
+          <div><strong>ONG Arkhe</strong><br><small>Gerencie os animais da sua ONG</small></div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box teal"><strong>28</strong><span>Animais cadastrados</span></div>
+          <div class="stat-box yellow"><strong>12</strong><span>Para adoção</span></div>
+          <div class="stat-box orange"><strong>8</strong><span>Adotados</span></div>
+          <div class="stat-box blue"><strong>156</strong><span>Visualizações</span></div>
+        </div>
+        <button class="btn btn-teal btn-block" onclick="alert('Formulário de cadastro de novo animal em breve!')">+ Cadastrar novo animal</button>
+
+        <div class="list-header">
+          <strong>Meus animais</strong>
+          <a href="#" onclick="return false">Ver todos ›</a>
+        </div>
+        <input class="search-input" type="text" placeholder="Buscar animal..." oninput="filterAnimals(this.value)">
+
+        <div id="animalList">
+          <div class="pet-list-item" data-name="mel">
+            <span class="pet-thumb">🐕</span>
+            <div><strong>Mel</strong><br><small>Cachorro · 1 ano · Médio</small></div>
+            <span class="tag tag-green">Para adoção</span>
+          </div>
+          <div class="pet-list-item" data-name="luna">
+            <span class="pet-thumb">🐈</span>
+            <div><strong>Luna</strong><br><small>Gata · 2 anos · Pequeno</small></div>
+            <span class="tag tag-green">Para adoção</span>
+          </div>
+          <div class="pet-list-item" data-name="thor">
+            <span class="pet-thumb">🐕</span>
+            <div><strong>Thor</strong><br><small>Cachorro · 3 anos · Grande</small></div>
+            <span class="tag tag-green">Para adoção</span>
+          </div>
+          <div class="pet-list-item" data-name="bidu">
+            <span class="pet-thumb">🐈</span>
+            <div><strong>Bidu</strong><br><small>Gato · 4 anos · Médio</small></div>
+            <span class="tag tag-gray">Já adotado</span>
+          </div>
+        </div>
+
+        <div class="ong-summary">
+          <strong>Resumo da ONG</strong>
+          <div class="ong-summary-row">
+            <div>📅 Último cadastro<br><small>Hoje, 10:30</small></div>
+            <div>👥 Adoções este mês<br><small>5</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- PERFIL ---------- -->
+    <section id="screen-perfil" class="screen app-screen">
+      <header class="topbar plain">
+        <button class="icon-btn" onclick="openSidebar()">☰</button>
+        <strong>🐾 Arkhe</strong>
+        <span></span>
+      </header>
+      <div class="content-scroll">
+        <h2>Meu Perfil</h2>
+        <p class="muted">Gerencie suas informações e preferências</p>
+
+        <div class="card profile-photo-card">
+          <span class="profile-avatar">🐕</span>
+          <div><strong>Foto de perfil</strong><br><small>Toque na imagem para alterar</small></div>
+        </div>
+
+        <div class="card">
+          <div class="profile-field"><span>👤</span><div><small>Nome completo</small><br><strong>Lucas Oliveira</strong></div></div>
+          <div class="profile-field"><span>✉️</span><div><small>E-mail</small><br><strong>lucas.oliveira@email.com</strong></div></div>
+          <div class="profile-field"><span>📞</span><div><small>Telefone</small><br><strong>(11) 98765-4321</strong></div></div>
+          <div class="profile-field" onclick="showScreen('config')"><span>📍</span><div><small>Cidade</small><br><strong>São Paulo - SP</strong></div><span class="chev">›</span></div>
+        </div>
+
+        <div class="card">
+          <strong class="pref-title">Preferências</strong>
+          <div class="profile-field" onclick="showScreen('config')"><span>🔔</span><div><small>Notificações</small><br><strong>Gerencie suas notificações</strong></div><span class="chev">›</span></div>
+          <div class="profile-field" onclick="showScreen('config')"><span>🛡️</span><div><small>Privacidade</small><br><strong>Controle sua privacidade</strong></div><span class="chev">›</span></div>
+          <div class="profile-field" onclick="showScreen('config')"><span>🔒</span><div><small>Segurança</small><br><strong>Altere sua senha</strong></div><span class="chev">›</span></div>
+          <div class="profile-field" onclick="showScreen('config')"><span>🎨</span><div><small>Aparência</small><br><strong>Escolha o tema do aplicativo</strong></div><span class="chev">›</span></div>
+        </div>
+
+        <div class="card help-card">
+          <span>❤️</span><div><strong>Central de ajuda</strong><br><small>Tire dúvidas e fale conosco</small></div>
+        </div>
+
+        <button class="btn btn-teal btn-block" onclick="logout()">↪ Sair da conta</button>
+      </div>
+    </section>
+
+    <!-- ---------- PETMATCH ---------- -->
+    <section id="screen-petmatch" class="screen app-screen petmatch-bg">
+      <header class="topbar plain">
+        <button class="icon-btn" onclick="showScreen('home')">⚙️</button>
+        <strong>PetMatch 🐾</strong>
+        <button class="icon-btn">💬</button>
+      </header>
+      <div class="content-scroll center-col">
+        <div class="match-card" id="matchCard">
+          <div class="match-photo">🐈</div>
+          <strong id="matchName">Tunico, 1</strong>
+          <div class="match-tags">calmo, curioso, medroso</div>
+          <p class="match-quote">"Um amorzinho de gatinho"</p>
+        </div>
+        <div class="match-actions">
+          <button class="round-btn no" onclick="swipePet('no')">✕</button>
+          <button class="round-btn star" onclick="swipePet('star')">★</button>
+          <button class="round-btn yes" onclick="swipePet('yes')">♥</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- CHAT IA ---------- -->
+    <section id="screen-chat" class="screen app-screen">
+      <header class="topbar plain">
+        <button class="icon-btn" onclick="openSidebar()">☰</button>
+        <div><strong>Chat com IA</strong><br><small class="muted">Seu assistente veterinário inteligente</small></div>
+        <span></span>
+      </header>
+      <div class="content-scroll" id="chatBody">
+        <div class="chat-bubble bot">
+          <span class="chat-avatar">🐾</span>
+          <p>Sou o assistente veterinário do Arkhe. Como posso ajudar você e seu pet hoje?</p>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="icon-btn">📎</button>
+        <button class="icon-btn">📷</button>
+        <button class="send-btn" onclick="sendChat()">✓</button>
+      </div>
+    </section>
+
+    <!-- ---------- CONFIGURAÇÕES ---------- -->
+    <section id="screen-config" class="screen app-screen">
+      <header class="topbar config-header">
+        <button class="icon-btn light" onclick="showScreen('perfil')">☰</button>
+        <strong>Configurações</strong>
+        <span></span>
+      </header>
+      <div class="content-scroll">
+        <div class="card config-user">
+          <span class="profile-avatar small">🐕</span>
+          <div><strong>Usuário</strong> ✎<br><small>usuario@email.com</small></div>
+        </div>
+        <button class="btn btn-outline btn-block" onclick="showScreen('perfil')">👤 Ver meu perfil ›</button>
+
+        <h4 class="section-title teal">Preferências do app</h4>
+        <div class="card">
+          <div class="settings-row"><span>🎨</span><div><strong>Tema do app</strong><br><small>Escolha entre claro, escuro ou automático</small></div><span class="value-chip">Automático ›</span></div>
+          <div class="settings-row"><span>Aa</span><div><strong>Tamanho da fonte</strong><br><small>Ajuste o tamanho do texto</small></div><span class="value-chip">Médio ›</span></div>
+          <div class="settings-row"><span>🔔</span><div><strong>Notificações</strong><br><small>Receba lembretes e novidades</small></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="settings-row"><span>🔊</span><div><strong>Sons do app</strong><br><small>Ativar sons de interações</small></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="settings-row"><span>🌐</span><div><strong>Idioma</strong><br><small>Selecione o idioma do aplicativo</small></div><span class="value-chip">Português (BR) ›</span></div>
+        </div>
+
+        <h4 class="section-title teal">Acessibilidade</h4>
+        <div class="card">
+          <div class="settings-row"><span>◐</span><div><strong>Alto contraste</strong><br><small>Melhora a visualização do app</small></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+          <div class="settings-row"><span>🔍</span><div><strong>Leitor de tela</strong><br><small>Compatível com leitores de tela</small></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+          <div class="settings-row"><span>✋</span><div><strong>Reduzir movimento</strong><br><small>Minimiza animações do app</small></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        </div>
+
+        <h4 class="section-title teal">Outros</h4>
+        <div class="card">
+          <div class="settings-row"><span>🛡️</span><div><strong>Privacidade e segurança</strong><br><small>Gerencie seus dados e permissões</small></div><span class="chev">›</span></div>
+          <div class="settings-row"><span>❓</span><div><strong>Ajuda e suporte</strong><br><small>Central de ajuda e contato</small></div><span class="chev">›</span></div>
+          <div class="settings-row"><span>ℹ️</span><div><strong>Sobre o Arkhe</strong><br><small>Versão 1.0.0</small></div><span class="chev">›</span></div>
+        </div>
+
+        <button class="btn btn-danger-outline btn-block" onclick="logout()">↪ Sair da conta ›</button>
+      </div>
+    </section>
+
+  </div><!-- /app-shell -->
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-user">
+      <span class="profile-avatar small">👩</span>
+      <div><strong>Usuário Lindo</strong><br><small>Plano assinado</small></div>
+    </div>
+    <div class="sidebar-banner">
+      <span class="tip-icon">🐱</span>
+      <strong>PRÉ-CONSULTA<br>DIGITAL</strong>
+    </div>
+    <nav class="sidebar-menu">
+      <button onclick="showScreen('home')">🏠 Início</button>
+      <button onclick="showScreen('ongs')">💬 ONGs</button>
+      <button onclick="showScreen('perfil')">👤 Perfil</button>
+      <button onclick="showScreen('favoritos')">♡ Favoritos</button>
+      <button class="petmatch-link" onclick="showScreen('petmatch')">🐾 PetMatch</button>
+    </nav>
+    <div class="sidebar-footer">
+      <button onclick="showScreen('config')">⚙️ Configurações</button>
+      <span>|</span>
+      <button onclick="logout()">Sair</button>
+    </div>
+  </aside>
+
+  <!-- ===================== MATCH MODAL ===================== -->
+  <div id="matchModal" class="match-modal">
+    <div class="match-modal-inner">
+      <h1 class="match-title">DEU<br>MATCH!</h1>
+      <p>você e seu bichinho são<br>100% compatíveis!</p>
+      <div class="match-modal-photos">
+        <span class="mm-photo">🐈</span><span class="mm-heart">💔</span><span class="mm-photo">👩</span>
+      </div>
+      <button class="btn btn-teal btn-block" onclick="closeMatchModal()">Continuar</button>
+    </div>
+  </div>
+
+</div><!-- /phone-shell -->
+
+<script src="app.js"></script>
+</body>
+</html>
