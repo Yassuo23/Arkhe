@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login no Web Shelter">
+  <title>ARKHE | Login</title>
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="icon" href="favicon.png" type="image/x-icon">
+</head>
+
+<body>
+  <div class="tudo">
+    <header>
+      <h1>ARKHE</h1>
+      <h2>Acesse sua conta para continuar</h2>
+    </header>
+
+    <main>
+      <form id="FormLogin" action="#" method="post">
+        <fieldset>
+          <legend>Entrar</legend>
+
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="exemplo@gmail.com" required>
+
+          <label for="password">Senha</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Digite sua senha" required>
+        </fieldset>
+
+        <div class="esqueci-senha">
+          <a href="#">Esqueceu sua senha?</a>
+        </div>
+
+        <div id="botoes">
+          <button type="submit">Entrar</button>
+        </div>
+      </form>
+    </main>
+
+    <nav class="voltar" aria-label="Navegação secundária">
+      <p>Ainda não tem uma conta? <a href="Cadastro.html">Cadastre-se</a></p>
+    </nav>
+  </div>
+
+<script scr="login.js"></script>
+</body>
+</html>

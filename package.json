@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-     "start": "electron src/main/index.js"
+    "start": "electron src/main/index.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,8 @@
   "type": "commonjs",
   "dependencies": {
     "bootstrap": "^5.3.8",
-    "electron": "^43.3.0"
+    "dotenv": "^17.4.2",
+    "electron": "^43.3.0",
+    "mysql2": "^3.24.4"
   }
 }
