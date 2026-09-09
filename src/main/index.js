@@ -59,7 +59,31 @@ ipcMain.handle('singUp', (event, data) => {
                 return;
             }
             resolve({id:result.insertId, ...data})
+            console.log("Dados cadastrados!!!");
         });
     });
 });
+
+ipcMain.handle("login", (e, payload) => {
+    return new Promise((resolve, reject) => {
+        const dbData = 'SELECT id, name, password FROM users WHERE email = ?';
+
+        connection.query(dbData, [payload.email], (erro, resultados) => {
+            if (erro) {
+                console.error(erro);
+                reject(erro);
+                return;
+            }
+
+            const usuario = resultados[0];
+            const autenticado = usuario && usuario.password === payload.password;
+
+            resolve(autenticado ? {
+                id: usuario.id,
+                name: usuario.name,
+                email: payload.email
+            } : null);
+        });
+    });
+})
 

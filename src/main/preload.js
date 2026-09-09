@@ -2,7 +2,8 @@ const {contextBridge, ipcRenderer} = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
 
-    openCadastros: () => ipcRenderer.invoke('openCadastros'),
-    singUp: (data) => ipcRenderer.invoke("singUp", data)
+    openMainPage: () => ipcRenderer.invoke('openMainPage'),
+    singUp: (data) => ipcRenderer.invoke("singUp", data),
+    login: (payload) => ipcRenderer.invoke("login", payload)
     
 })
