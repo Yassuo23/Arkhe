@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkhe — Marketplace</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="brand"><span class="paw">🐾</span> ARKHE</a>
+  <nav class="nav-links">
+    <a href="index.html#ongs">ONGs</a>
+    <a href="consultas.html">Consultas</a>
+    <a href="marketplace.html" class="active">Marketplace</a>
+    <a href="diagnostico.html">IA Diagnóstico</a>
+  </nav>
+  <div class="nav-right">
+    <a href="#" class="btn btn-outline" onclick="alert('Formulário de cadastro de ONG em breve!'); return false;">Cadastrar ONG</a>
+    <a href="#" class="btn btn-orange" onclick="alert('Tela de login em breve!'); return false;">Entrar</a>
+  </div>
+</header>
+
+<section class="market-hero">
+  <div class="container">
+    <span class="eyebrow">MARKETPLACE</span>
+    <h1>Os melhores produtos para seu pet 🛍️</h1>
+    <p style="color:var(--gray);">Petshops e marcas selecionadas com entrega rápida para todo o Brasil.</p>
+
+    <div class="promo-banner">
+      <div class="promo-left">
+        <strong>🔥 Promoções do dia</strong>
+        <p>Até 40% off em produtos selecionados</p>
+      </div>
+      <div class="promo-search">
+        <input type="text" id="productSearch" placeholder="🔍 Buscar produtos..." oninput="filterProducts()">
+        <select id="sortSelect" onchange="filterProducts()">
+          <option value="relevancia">Relevância</option>
+          <option value="menor">Menor preço</option>
+          <option value="maior">Maior preço</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="cat-row" id="catRow">
+    <button class="cat-chip active" data-cat="racao" onclick="setCategory(this)">🍖 Ração</button>
+    <button class="cat-chip" data-cat="brinquedos" onclick="setCategory(this)">🧸 Brinquedos</button>
+    <button class="cat-chip" data-cat="higiene" onclick="setCategory(this)">🧴 Higiene</button>
+    <button class="cat-chip" data-cat="saude" onclick="setCategory(this)">💊 Saúde</button>
+    <button class="cat-chip" data-cat="caminhas" onclick="setCategory(this)">🛏️ Caminhas</button>
+    <button class="cat-chip" data-cat="acessorios" onclick="setCategory(this)">🎀 Acessórios</button>
+    <button class="cat-chip" data-cat="aquario" onclick="setCategory(this)">🐟 Aquário</button>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+    <div class="product-card" data-cat="racao" data-price="189">
+      <span class="discount">-20%</span>
+      <div class="product-img">🍖</div>
+      <div class="product-body">
+        <strong>Ração Premium Cães Adultos 15kg</strong>
+        <span class="price">R$ 189,90</span><span class="old-price">R$ 237,00</span>
+        <button class="btn btn-teal" onclick="addToCart('Ração Premium Cães Adultos')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="racao" data-price="79">
+      <div class="product-img">🐟</div>
+      <div class="product-body">
+        <strong>Ração Gatos Filhotes Salmão 3kg</strong>
+        <span class="price">R$ 79,90</span>
+        <button class="btn btn-teal" onclick="addToCart('Ração Gatos Filhotes Salmão')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="brinquedos" data-price="34">
+      <div class="product-img">🎾</div>
+      <div class="product-body">
+        <strong>Kit Bolinhas Mordedoras</strong>
+        <span class="price">R$ 34,90</span>
+        <button class="btn btn-teal" onclick="addToCart('Kit Bolinhas Mordedoras')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="higiene" data-price="42">
+      <span class="discount">-15%</span>
+      <div class="product-img">🧴</div>
+      <div class="product-body">
+        <strong>Shampoo Neutro Cães e Gatos</strong>
+        <span class="price">R$ 42,00</span><span class="old-price">R$ 49,90</span>
+        <button class="btn btn-teal" onclick="addToCart('Shampoo Neutro')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="saude" data-price="58">
+      <div class="product-img">💊</div>
+      <div class="product-body">
+        <strong>Antipulgas e Carrapatos Oral</strong>
+        <span class="price">R$ 58,50</span>
+        <button class="btn btn-teal" onclick="addToCart('Antipulgas Oral')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="caminhas" data-price="129">
+      <div class="product-img">🛏️</div>
+      <div class="product-body">
+        <strong>Caminha Ortopédica Tamanho G</strong>
+        <span class="price">R$ 129,90</span>
+        <button class="btn btn-teal" onclick="addToCart('Caminha Ortopédica')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="acessorios" data-price="27">
+      <div class="product-img">🎀</div>
+      <div class="product-body">
+        <strong>Coleira Ajustável com Guia</strong>
+        <span class="price">R$ 27,90</span>
+        <button class="btn btn-teal" onclick="addToCart('Coleira Ajustável')">Adicionar</button>
+      </div>
+    </div>
+    <div class="product-card" data-cat="aquario" data-price="65">
+      <div class="product-img">🐠</div>
+      <div class="product-body">
+        <strong>Filtro para Aquário 60L</strong>
+        <span class="price">R$ 65,00</span>
+        <button class="btn btn-teal" onclick="addToCart('Filtro Aquário 60L')">Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

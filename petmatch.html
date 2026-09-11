@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkhe — PetMatch</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar pm-header">
+  <a href="index.html" class="brand"><span class="paw">🐾</span> Arkhe</a>
+  <nav class="nav-links">
+    <a href="petmatch.html" class="active">Match</a>
+    <a href="#" onclick="alert('Página de perfil em breve!'); return false;">Perfil</a>
+    <a href="#" onclick="alert('Sem mensagens novas.'); return false;">Mensagens</a>
+    <a href="consultas.html#ongs">Abrigos</a>
+  </nav>
+  <div class="nav-right"></div>
+</header>
+
+<div class="container pm-wrap">
+  <div class="pm-main">
+    <div class="pm-card" id="pmCard">
+      <div class="pm-photo" id="pmPhoto">🐕</div>
+      <h2 id="pmName">Simba</h2>
+      <p class="sub" id="pmDesc">Cachorro Caramelo - 2 anos - Dócil &amp; Brincalhão</p>
+      <div class="pm-tags" id="pmTags">
+        <span class="pm-tag">Vacinado</span>
+        <span class="pm-tag">Castrado</span>
+        <span class="pm-tag">Dócil</span>
+      </div>
+    </div>
+    <div class="pm-actions">
+      <button class="pm-round no" onclick="pmSwipe('no')">✕</button>
+      <button class="pm-round info" onclick="alert('Mostrando mais detalhes deste pet...')">ⓘ</button>
+      <button class="pm-round yes" onclick="pmSwipe('yes')">♥</button>
+    </div>
+  </div>
+
+  <aside class="pm-side">
+    <h4>Matches Recentes</h4>
+    <div class="match-mini"><span class="thumb">🐕</span><div><strong>Max</strong></div><span class="status">Ativo</span></div>
+    <div class="match-mini"><span class="thumb">🐈</span><div><strong>Luna</strong></div><span class="status">Calmo</span></div>
+
+    <h4>Animais Salvos</h4>
+    <div class="match-mini"><span class="thumb">🐈</span><div><strong>Tunico</strong></div></div>
+    <div class="match-mini"><span class="thumb">🐕</span><div><strong>Bob</strong></div></div>
+  </aside>
+</div>
+
+<footer>
+  Sobre &nbsp;·&nbsp; Contato &nbsp;·&nbsp; Privacidade &nbsp;·&nbsp; Ajuda
+  <br><small>© 2026 Arkhe</small>
+</footer>
+
+<div class="pm-modal" id="pmModal">
+  <div class="pm-modal-inner">
+    <h1>DEU<br>MATCH!</h1>
+    <p>você e seu bichinho são<br>100% compatíveis!</p>
+    <div class="pm-modal-photos">
+      <span id="pmModalPet">🐕</span><span>💔</span><span>👩</span>
+    </div>
+    <button class="btn btn-teal" style="width:100%;" onclick="closePmModal()">Continuar</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
