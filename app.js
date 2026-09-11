@@ -1,138 +1,129 @@
-// ---------- NAVIGATION ----------
-function showView(name, btn){
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const active = btn || document.querySelector(`.nav-btn[data-view="${name}"]`);
-  if(active) active.classList.add('active');
-  if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('show');
+// ---------- LOGIN ----------
+function handleLogin(e){
+  e.preventDefault();
+  document.getElementById('screen-login').classList.remove('active');
+  document.getElementById('app-shell').style.display = 'block';
+  showScreen('home');
+  return false;
+}
+
+function logout(){
+  closeSidebar();
+  document.getElementById('app-shell').style.display = 'none';
+  document.getElementById('screen-login').classList.add('active');
+}
+
+// ---------- SCREEN NAV ----------
+function showScreen(name){
+  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + name);
+  if(target) target.classList.add('active');
+  closeSidebar();
+
+  // sync bottom nav highlight
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  const map = {home:0, ongs:1, petmatch:2, favoritos:3, perfil:4};
+  if(map[name] !== undefined){
+    document.querySelectorAll('.nav-item')[map[name]].classList.add('active');
+  }
+  const shell = document.getElementById('app-shell');
+  if(shell) shell.scrollTop = 0;
   window.scrollTo(0,0);
-
-  // lazy-init charts the first time each view is shown
-  if(name === 'dashboard') initDashboardCharts();
-  if(name === 'analytics') initAnalyticsCharts();
 }
 
-function toggleSidebar(){
-  document.getElementById('sidebar').classList.toggle('show');
+// ---------- SIDEBAR ----------
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('show');
+  document.getElementById('sidebarOverlay').classList.add('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('show');
+  document.getElementById('sidebarOverlay').classList.remove('show');
 }
 
-// ---------- SETTINGS TABS ----------
-function showTab(name, btn){
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+// ---------- FAVORITE HEART ----------
+function toggleFav(btn){
+  btn.classList.toggle('active');
+  btn.textContent = btn.classList.contains('active') ? '♥' : '♡';
 }
 
-// ---------- CADASTROS ----------
-function filterCadastros(q){
+// ---------- ONG ANIMAL SEARCH ----------
+function filterAnimals(q){
   q = q.toLowerCase();
-  document.querySelectorAll('#cadastrosTable tbody tr').forEach(row=>{
-    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  document.querySelectorAll('#animalList .pet-list-item').forEach(item=>{
+    const name = item.dataset.name || '';
+    item.style.display = name.includes(q) ? 'flex' : 'none';
   });
 }
-function openNewRegistration(){
-  alert('Abrindo formulário de novo cadastro...');
+
+// ---------- PETMATCH ----------
+const petDeck = [
+  {name:'Tunico, 1', tags:'calmo, curioso, medroso', quote:'"Um amorzinho de gatinho"', emoji:'🐈'},
+  {name:'Max, 2', tags:'ativo, brincalhão, leal', quote:'"Sempre pronto pra correr!"', emoji:'🐕'},
+  {name:'Luna, 3', tags:'calma, carinhosa, dócil', quote:'"Adora um colo à tarde"', emoji:'🐈'},
+];
+let petIndex = 0;
+
+function renderMatchCard(){
+  const p = petDeck[petIndex % petDeck.length];
+  document.querySelector('.match-photo').textContent = p.emoji;
+  document.getElementById('matchName').textContent = p.name;
+  document.querySelector('.match-tags').textContent = p.tags;
+  document.querySelector('.match-quote').textContent = p.quote;
 }
-function editRow(btn){
-  const row = btn.closest('tr');
-  const name = row.querySelector('strong').textContent;
-  alert('Editando cadastro: ' + name);
-}
-function deleteRow(btn){
-  const row = btn.closest('tr');
-  const name = row.querySelector('strong').textContent;
-  if(confirm('Remover cadastro de ' + name + '?')){
-    row.remove();
-    recalcStats();
+
+function swipePet(action){
+  if(action === 'yes'){
+    openMatchModal();
+  } else {
+    petIndex++;
+    renderMatchCard();
   }
 }
-function recalcStats(){
-  const rows = document.querySelectorAll('#cadastrosTable tbody tr');
-  document.getElementById('statTotal').textContent = rows.length;
-  document.getElementById('statAtivos').textContent = document.querySelectorAll('#cadastrosTable tbody tr[data-status="Ativo"]').length;
-  document.getElementById('statPendentes').textContent = document.querySelectorAll('#cadastrosTable tbody tr[data-status="Pendente"]').length;
-  document.getElementById('statInativos').textContent = document.querySelectorAll('#cadastrosTable tbody tr[data-status="Inativo"]').length;
+function openMatchModal(){
+  document.getElementById('matchModal').classList.add('show');
+}
+function closeMatchModal(){
+  document.getElementById('matchModal').classList.remove('show');
+  petIndex++;
+  renderMatchCard();
+}
+renderMatchCard();
+
+// ---------- CHAT ----------
+const botReplies = [
+  "Entendi. Pode me dizer há quanto tempo esse sintoma começou?",
+  "Isso pode ter várias causas. Recomendo manter o pet hidratado e observar por 24h.",
+  "Com base no que você descreveu, sugiro agendar uma consulta com um veterinário da nossa rede.",
+  "Você pode enviar uma foto da área afetada para eu analisar melhor?"
+];
+function sendChat(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+  const body = document.getElementById('chatBody');
+
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble user';
+  userBubble.innerHTML = `<p>${escapeHtml(text)}</p>`;
+  body.appendChild(userBubble);
+  input.value = '';
+  body.scrollTop = body.scrollHeight;
+
+  setTimeout(()=>{
+    const reply = botReplies[Math.floor(Math.random()*botReplies.length)];
+    const botBubble = document.createElement('div');
+    botBubble.className = 'chat-bubble bot';
+    botBubble.innerHTML = `<span class="chat-avatar">🐾</span><p>${reply}</p>`;
+    body.appendChild(botBubble);
+    body.scrollTop = body.scrollHeight;
+  }, 600);
+}
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
 }
 
-// ---------- DATE ----------
-document.getElementById('dashDate').textContent =
-  'Visão geral do sistema - ' + new Date().toLocaleDateString('pt-BR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
-
-// ---------- CHARTS ----------
-Chart.defaults.font.family = "'Segoe UI', sans-serif";
-let dashCharts = null, analyticsCharts = null;
-
-function initDashboardCharts(){
-  if(dashCharts) return;
-  dashCharts = true;
-
-  new Chart(document.getElementById('chartTrend'), {
-    type:'line',
-    data:{
-      labels:['Jan','Fev','Mar','Abr','Mai','Jun'],
-      datasets:[{data:[420,310,590,820,720,900], borderColor:'#e2703a', backgroundColor:'rgba(226,112,58,.15)', tension:.4, fill:true, pointBackgroundColor:'#e2703a'}]
-    },
-    options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
-  });
-
-  new Chart(document.getElementById('chartStatus'), {
-    type:'pie',
-    data:{
-      labels:['Ativos','Pendentes','Inativos','Arquivados'],
-      datasets:[{data:[40,30,20,10], backgroundColor:['#5b9bd5','#8fc4de','#cfe6f0','#f3d9a8']}]
-    },
-    options:{plugins:{legend:{position:'right'}}}
-  });
-
-  new Chart(document.getElementById('chartCompare'), {
-    type:'bar',
-    data:{
-      labels:['Jan','Fev','Mar','Abr','Mai','Jun'],
-      datasets:[{data:[350,260,600,780,680,880], backgroundColor:'#e8a04d', borderRadius:4}]
-    },
-    options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
-  });
-}
-
-function initAnalyticsCharts(){
-  if(analyticsCharts) return;
-  analyticsCharts = true;
-
-  new Chart(document.getElementById('chartActivity'), {
-    type:'line',
-    data:{
-      labels:['00:00','04:00','08:00','12:00','16:00','20:00'],
-      datasets:[{data:[120,80,420,510,480,260], borderColor:'#5b9bd5', backgroundColor:'rgba(91,155,213,.15)', fill:true, tension:.4, pointRadius:0}]
-    },
-    options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
-  });
-
-  new Chart(document.getElementById('chartWeekly'), {
-    type:'bar',
-    data:{
-      labels:['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-      datasets:[
-        {label:'Realizado', data:[3900,3400,5100,4500,5700,2900,2700], backgroundColor:'#7fbfae'},
-        {label:'Meta', data:[3500,3200,4700,4300,5200,3100,2900], backgroundColor:'#e8a04d'}
-      ]
-    },
-    options:{plugins:{legend:{position:'bottom'}}, scales:{y:{beginAtZero:true}}}
-  });
-
-  new Chart(document.getElementById('chartRadar'), {
-    type:'radar',
-    data:{
-      labels:['SEO','Acessibilidade','Performance','UX','Segurança','Velocidade'],
-      datasets:[
-        {label:'Atual', data:[80,75,68,72,60,85], backgroundColor:'rgba(14,110,95,.25)', borderColor:'#0e6e5f'},
-        {label:'Anterior', data:[65,60,70,60,55,70], backgroundColor:'rgba(226,112,58,.2)', borderColor:'#e2703a'}
-      ]
-    },
-    options:{plugins:{legend:{position:'bottom'}}}
-  });
-}
-
-// init first view
-initDashboardCharts();
+// init: hide app shell until login
+document.getElementById('app-shell').style.display = 'none';
