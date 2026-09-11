@@ -1,25 +1,316 @@
-  <!DOCTYPE html>
-  <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Shelter</title>
-    <link rel="stylesheet" href="index.css">
-    <link rel="icon" href="favicon.png" type="image/x-icon">
-  </head>
-  <body>
-    <div id="pagina">
-      <div class="esquerda">
-        <h1>Web Shelter</h1>
-        <p>Seu novo amigo está aqui!</p>
-        <div id="botoes">
-        <button><a href="cadastro.html">Cadastro</a></button>
-        <button><a href="contato.html">Contato</a></button>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkhe — Dev Panel</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <strong>Dev Panel</strong>
+      <button class="close-btn" onclick="toggleSidebar()">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" data-view="dashboard" onclick="showView('dashboard', this)">📊 Dashboard</button>
+      <button class="nav-btn" data-view="relatorios" onclick="showView('relatorios', this)">📄 Relatórios</button>
+      <button class="nav-btn" data-view="cadastros" onclick="showView('cadastros', this)">🗄️ Cadastros</button>
+      <button class="nav-btn" data-view="analytics" onclick="showView('analytics', this)">📈 Analytics</button>
+      <button class="nav-btn" data-view="configuracoes" onclick="showView('configuracoes', this)">⚙️ Configurações</button>
+    </nav>
+    <div class="sidebar-user">
+      <span class="avatar">DV</span>
+      <div><strong>Developer</strong><br><small>Admin</small></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="view active">
+      <h1>Dashboard</h1>
+      <p class="subtitle" id="dashDate">Visão geral do sistema</p>
+
+      <div class="kpi-grid">
+        <div class="kpi-card blue"><div><small>Total de Usuários</small><h2>1,234</h2><span class="up">+12.5% vs mês anterior</span></div><span class="kpi-icon">👥</span></div>
+        <div class="kpi-card yellow"><div><small>Relatórios Gerados</small><h2>856</h2><span class="up">+8.2% vs mês anterior</span></div><span class="kpi-icon">📄</span></div>
+        <div class="kpi-card teal"><div><small>Cadastros Ativos</small><h2>2,567</h2><span class="up">+23.1% vs mês anterior</span></div><span class="kpi-icon">🗄️</span></div>
+        <div class="kpi-card gold"><div><small>Taxa de Sucesso</small><h2>94.2%</h2><span class="up">+2.4% vs mês anterior</span></div><span class="kpi-icon">📈</span></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Tendências Mensais</h3>
+          <canvas id="chartTrend" height="180"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Distribuição por Status</h3>
+          <canvas id="chartStatus" height="180"></canvas>
         </div>
       </div>
-      <div class="direita">
-      <img src="animalshelter.jpeg" alt="Imagem de um abrigo de animais">
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Comparativo Mensal</h3>
+          <canvas id="chartCompare" height="180"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Atividades Recentes</h3>
+          <ul class="activity-feed">
+            <li><span class="dot-icon">🔄</span> Novo cadastro realizado <small>5 min atrás</small></li>
+            <li><span class="dot-icon">⏱️</span> Relatório pendente de aprovação <small>15 min atrás</small></li>
+            <li><span class="dot-icon">✅</span> Atualização de dados concluída <small>1 hora atrás</small></li>
+            <li><span class="dot-icon">💾</span> Backup automático executado <small>2 horas atrás</small></li>
+            <li><span class="dot-icon">➕</span> Novo usuário adicionado <small>3 horas atrás</small></li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </body>
-  </html>
+    </section>
+
+    <!-- RELATÓRIOS -->
+    <section id="view-relatorios" class="view">
+      <h1>Relatórios</h1>
+      <p class="subtitle">Estatísticas de veterinários, ONGs e usuários</p>
+
+      <div class="kpi-grid three">
+        <div class="mini-card"><small>VETERINÁRIOS</small><h2>5 <span>cadastrados</span></h2></div>
+        <div class="mini-card"><small>ONGS</small><h2>5 <span>628 animais</span></h2></div>
+        <div class="mini-card"><small>USUÁRIOS</small><h2>5 <span>ativos</span></h2></div>
+      </div>
+
+      <h3>Veterinários e Planos</h3>
+      <table class="data-table">
+        <thead><tr><th>Nome</th><th>Plano</th><th>Valor</th></tr></thead>
+        <tbody>
+          <tr><td>Dr. Carlos Silva</td><td><span class="badge dark">Premium</span></td><td>R$ 299/mês</td></tr>
+          <tr><td>Dra. Maria Santos</td><td><span class="badge light">Básico</span></td><td>R$ 99/mês</td></tr>
+          <tr><td>Dr. João Oliveira</td><td><span class="badge dark">Premium</span></td><td>R$ 299/mês</td></tr>
+          <tr><td>Dra. Ana Costa</td><td><span class="badge light">Standard</span></td><td>R$ 179/mês</td></tr>
+          <tr><td>Dr. Pedro Lima</td><td><span class="badge dark">Premium</span></td><td>R$ 299/mês</td></tr>
+        </tbody>
+      </table>
+
+      <h3>ONGs Cadastradas</h3>
+      <table class="data-table">
+        <thead><tr><th>Nome</th><th>Animais</th></tr></thead>
+        <tbody>
+          <tr><td>Amigos dos Animais SP</td><td>145 animais</td></tr>
+          <tr><td>Resgate Animal RJ</td><td>89 animais</td></tr>
+          <tr><td>Proteção Animal MG</td><td>203 animais</td></tr>
+          <tr><td>ONG Patinhas Felizes</td><td>67 animais</td></tr>
+          <tr><td>Lar dos Bichos</td><td>124 animais</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Usuários</h3>
+      <table class="data-table">
+        <thead><tr><th>Nome</th><th>Email</th><th>Tipo</th></tr></thead>
+        <tbody>
+          <tr><td>Ana Paula Silva</td><td>ana@email.com</td><td><span class="badge light">Comum</span></td></tr>
+          <tr><td>Roberto Santos</td><td>roberto@email.com</td><td><span class="badge dark">Premium</span></td></tr>
+          <tr><td>Julia Mendes</td><td>julia@email.com</td><td><span class="badge light">Comum</span></td></tr>
+          <tr><td>Carlos Eduardo</td><td>carlos@email.com</td><td><span class="badge dark">Premium</span></td></tr>
+          <tr><td>Mariana Costa</td><td>mariana@email.com</td><td><span class="badge light">Comum</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CADASTROS -->
+    <section id="view-cadastros" class="view">
+      <div class="view-header-row">
+        <div><h1>Cadastros</h1><p class="subtitle">Gerencie todos os cadastros do sistema</p></div>
+        <button class="btn-primary" onclick="openNewRegistration()">+ Novo Cadastro</button>
+      </div>
+
+      <div class="kpi-grid four">
+        <div class="mini-card blue"><small>Total</small><h2 id="statTotal">6</h2></div>
+        <div class="mini-card teal"><small>Ativos</small><h2 id="statAtivos">4</h2></div>
+        <div class="mini-card yellow"><small>Pendentes</small><h2 id="statPendentes">1</h2></div>
+        <div class="mini-card red"><small>Inativos</small><h2 id="statInativos">1</h2></div>
+      </div>
+
+      <input class="search-bar" type="text" placeholder="Buscar por nome, email, empresa..." oninput="filterCadastros(this.value)">
+
+      <table class="data-table" id="cadastrosTable">
+        <thead>
+          <tr><th>Cadastro</th><th>Contato</th><th>Localização</th><th>Status</th><th>Categoria</th><th>Data</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+          <tr data-status="Ativo">
+            <td><strong>João Silva Santos</strong><br><small>Tech Solutions Ltda</small></td>
+            <td>✉ joao.silva@email.com<br>📞 (11) 98765-4321</td>
+            <td>📍 São Paulo</td>
+            <td><span class="status-pill green">Ativo</span></td>
+            <td><span class="badge dark">Premium</span></td>
+            <td>14/01/2026</td>
+            <td><button class="icon-action" onclick="editRow(this)">✎</button><button class="icon-action" onclick="deleteRow(this)">⋮</button></td>
+          </tr>
+          <tr data-status="Ativo">
+            <td><strong>Maria Oliveira Costa</strong><br><small>Inovação Digital SA</small></td>
+            <td>✉ maria.oliveira@email.com<br>📞 (21) 99876-5432</td>
+            <td>📍 Rio de Janeiro</td>
+            <td><span class="status-pill green">Ativo</span></td>
+            <td><span class="badge light">Standard</span></td>
+            <td>19/02/2026</td>
+            <td><button class="icon-action" onclick="editRow(this)">✎</button><button class="icon-action" onclick="deleteRow(this)">⋮</button></td>
+          </tr>
+          <tr data-status="Pendente">
+            <td><strong>Pedro Souza Lima</strong><br><small>Consultoria MG</small></td>
+            <td>✉ pedro.souza@email.com<br>📞 (31) 98654-3210</td>
+            <td>📍 Belo Horizonte</td>
+            <td><span class="status-pill yellow">Pendente</span></td>
+            <td><span class="badge light">Basic</span></td>
+            <td>09/03/2026</td>
+            <td><button class="icon-action" onclick="editRow(this)">✎</button><button class="icon-action" onclick="deleteRow(this)">⋮</button></td>
+          </tr>
+          <tr data-status="Ativo">
+            <td><strong>Ana Paula Ferreira</strong><br><small>Start PR</small></td>
+            <td>✉ ana.ferreira@email.com<br>📞 (41) 99123-4567</td>
+            <td>📍 Curitiba</td>
+            <td><span class="status-pill green">Ativo</span></td>
+            <td><span class="badge dark">Premium</span></td>
+            <td>04/04/2026</td>
+            <td><button class="icon-action" onclick="editRow(this)">✎</button><button class="icon-action" onclick="deleteRow(this)">⋮</button></td>
+          </tr>
+          <tr data-status="Inativo">
+            <td><strong>Carlos Eduardo Alves</strong><br><small>Porto Alegre Tech</small></td>
+            <td>✉ carlos.alves@email.com<br>📞 (51) 99321-7654</td>
+            <td>📍 Porto Alegre</td>
+            <td><span class="status-pill red">Inativo</span></td>
+            <td><span class="badge light">Standard</span></td>
+            <td>27/12/2025</td>
+            <td><button class="icon-action" onclick="editRow(this)">✎</button><button class="icon-action" onclick="deleteRow(this)">⋮</button></td>
+          </tr>
+          <tr data-status="Ativo">
+            <td><strong>Fernanda Lima Rocha</strong><br><small>Rocha Advocacia</small></td>
+            <td>✉ fernanda.lima@email.com<br>📞 (61) 99555-1234</td>
+            <td>📍 Brasília</td>
+            <td><span class="status-pill green">Ativo</span></td>
+            <td><span class="badge dark">Premium</span></td>
+            <td>02/05/2026</td>
+            <td><button class="icon-action" onclick="editRow(this)">✎</button><button class="icon-action" onclick="deleteRow(this)">⋮</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="view-analytics" class="view">
+      <div class="view-header-row">
+        <div><h1>Analytics</h1><p class="subtitle">Análise detalhada de métricas e performance</p></div>
+        <select class="period-select">
+          <option>Últimos 7 dias</option>
+          <option>Últimos 30 dias</option>
+          <option>Este ano</option>
+        </select>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="mini-card blue"><small>Visitantes Únicos</small><h2>12,456</h2><span class="up">↗ +18.2%</span></div>
+        <div class="mini-card blue"><small>Taxa de Conversão</small><h2>5.8%</h2><span class="up">↗ +2.1%</span></div>
+        <div class="mini-card yellow"><small>Tempo Médio</small><h2>4m 32s</h2><span class="down">↘ -8.4%</span></div>
+        <div class="mini-card gray"><small>Páginas por Visita</small><h2>3.2</h2><span class="up">↗ +5.7%</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Atividade ao Longo do Dia</h3>
+        <canvas id="chartActivity" height="120"></canvas>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Performance Semanal</h3>
+          <canvas id="chartWeekly" height="180"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Análise de Performance</h3>
+          <canvas id="chartRadar" height="180"></canvas>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Páginas Mais Acessadas</h3>
+        <div class="page-list">
+          <div class="page-row"><span class="rank">1</span><div class="page-info"><strong>/dashboard</strong><small>👁 12.450 views · Bounce: 32% · ⏱ 5m 12s</small></div><div class="bar"><div style="width:92%"></div></div></div>
+          <div class="page-row"><span class="rank">2</span><div class="page-info"><strong>/cadastros</strong><small>👁 8.920 views · Bounce: 28% · ⏱ 6m 45s</small></div><div class="bar"><div style="width:70%"></div></div></div>
+          <div class="page-row"><span class="rank">3</span><div class="page-info"><strong>/reports</strong><small>👁 7.340 views · Bounce: 35% · ⏱ 4m 23s</small></div><div class="bar"><div style="width:58%"></div></div></div>
+          <div class="page-row"><span class="rank">4</span><div class="page-info"><strong>/analytics</strong><small>👁 5.680 views · Bounce: 42% · ⏱ 3m 56s</small></div><div class="bar"><div style="width:44%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section id="view-configuracoes" class="view">
+      <h1>Configurações</h1>
+      <p class="subtitle">Gerencie as configurações do sistema e preferências</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="perfil" onclick="showTab('perfil', this)">👤 Perfil</button>
+        <button class="tab-btn" data-tab="notificacoes" onclick="showTab('notificacoes', this)">🔔 Notificações</button>
+        <button class="tab-btn" data-tab="seguranca" onclick="showTab('seguranca', this)">◯ Segurança</button>
+        <button class="tab-btn" data-tab="sistema" onclick="showTab('sistema', this)">🗄️ Sistema</button>
+        <button class="tab-btn" data-tab="aparencia" onclick="showTab('aparencia', this)">🎨 Aparência</button>
+      </div>
+
+      <div class="panel tab-panel active" id="tab-perfil">
+        <h3>Informações do Perfil</h3>
+        <div class="profile-row">
+          <span class="avatar big">DV</span>
+          <button class="btn-secondary">Alterar Foto</button>
+          <small>JPG, PNG ou GIF. Máx. 2MB</small>
+        </div>
+        <div class="form-grid">
+          <label>Nome Completo<input type="text" value="Developer Admin"></label>
+          <label>Email<input type="email" value="developer@admin.com"></label>
+          <label>Telefone<input type="text" value="(11) 99999-9999"></label>
+          <label>Função<input type="text" value="Desenvolvedor Senior"></label>
+        </div>
+        <div class="form-actions">
+          <button class="btn-secondary" onclick="showView('dashboard')">Cancelar</button>
+          <button class="btn-primary" onclick="alert('Alterações salvas!')">💾 Salvar Alterações</button>
+        </div>
+      </div>
+
+      <div class="panel tab-panel" id="tab-notificacoes">
+        <h3>Preferências de Notificação</h3>
+        <div class="settings-row"><div><strong>Notificações por e-mail</strong><br><small>Receba resumos e alertas por e-mail</small></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="settings-row"><div><strong>Notificações push</strong><br><small>Alertas em tempo real no navegador</small></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="settings-row"><div><strong>Relatórios semanais</strong><br><small>Resumo semanal de atividades</small></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      </div>
+
+      <div class="panel tab-panel" id="tab-seguranca">
+        <h3>Segurança da Conta</h3>
+        <div class="form-grid">
+          <label>Senha atual<input type="password" placeholder="••••••••"></label>
+          <label>Nova senha<input type="password" placeholder="••••••••"></label>
+        </div>
+        <div class="settings-row"><div><strong>Autenticação em duas etapas</strong><br><small>Camada extra de segurança no login</small></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+        <div class="form-actions"><button class="btn-primary" onclick="alert('Senha atualizada!')">Atualizar senha</button></div>
+      </div>
+
+      <div class="panel tab-panel" id="tab-sistema">
+        <h3>Preferências do Sistema</h3>
+        <div class="settings-row"><div><strong>Backup automático</strong><br><small>Executa backups diários às 03:00</small></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="settings-row"><div><strong>Modo de manutenção</strong><br><small>Bloqueia acesso de usuários comuns</small></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+      </div>
+
+      <div class="panel tab-panel" id="tab-aparencia">
+        <h3>Aparência</h3>
+        <div class="settings-row"><div><strong>Tema</strong><br><small>Escolha entre claro, escuro ou automático</small></div>
+          <select><option>Claro</option><option>Escuro</option><option selected>Automático</option></select>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
