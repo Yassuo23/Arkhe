@@ -1,0 +1,18 @@
+:root{
+  --teal-dark:#0e6e5f;
+  --teal:#12836f;
+  --peach-bg:#fbe7d9;
+  --orange:#e2703a;
+  --ink:#26312d;
+  --gray:#7c8b86;
+  font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,sans-serif;
+}
+
+#sidebar button{
+  background-color: var(--teal-dark);
+}
+
+#sidebar {
+  background-color: var(--teal);
+
+}
