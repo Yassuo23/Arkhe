@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Shelter</title>
+  <link rel="icon" href="favicon.png" type="image/x-icon">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      background-color: #F8F3EC;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    nav h1 {
+      font-size: 2.2rem;
+      color: #D45A33;
+      margin-bottom: 5px;
+    }
+
+    nav p {
+      font-size: 1.2rem;
+      color: #3A2E2A;
+    }
+
+    /* Container principal */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      max-width: 1000px;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* Lado esquerdo vermelho */
+    .informacoes {
+      flex: 1;
+      background-color: #e6332a;
+      color: white;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 40px;
+  
+    }
+
+    .informacoes h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .informacoes p, 
+    .informacoes a {
+      color: white;
+      font-size: 1rem;
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    /* Lado direito branco */
+    .contato {
+      flex: 1;
+      background: white;
+      padding: 60px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      
+    }
+    .contato button {
+      align-self: center;
+    }
+
+    .contato h1 {
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      color: #222;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    input,
+    textarea {
+      border: none;
+      border-bottom: 2px solid #333;
+      padding: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+      background: transparent;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #e6332a;
+    }
+
+    button {
+      width: 150px;
+      height: 60px;
+      padding: 10px;
+      border: none;
+      color: white;
+      background-color: #D45A33;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.7s ease;
+      text-transform: uppercase;
+      border-radius: 5px;
+      
+    }
+
+    button:hover {
+      background-color: #F8F3EC;
+      color: #D45A33;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(212, 90, 51, 0.2);
+    }
+
+    /* Link voltar */
+    .voltar {
+      margin: 30px 0;
+    }
+
+    .voltar a {
+      color: #e6332a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+      }
+      .informacoes,
+      .contato {
+        padding: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <h1>Web Shelter</h1>
+    <p>Seu novo amigo está aqui!</p>
+  </nav>
+
+  <div class="container">
+    <div class="informacoes">
+      <div>
+        <h2>📞 Telefone para Contato</h2>
+        <p><a href="tel:(19)97122-5729">(19) 97122-5729</a></p>
+      </div>
+
+      <div>
+        <h2>📍 Localização</h2>
+        <p>Rua dos Animais, 123 - Limeira, SP</p>
+      </div>
+
+      <div>
+        <h2>🕓 Horário de Atendimento</h2>
+        <p>Segunda a Sexta, 9h às 18h</p>
+      </div>
+    </div>
+
+    <div class="contato">
+      <h1>Entre em Contato Conosco 🐾</h1>
+      <form action="#" method="post">
+        <input type="text" name="nome" placeholder="Nome completo" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="mensagem" rows="5" placeholder="Mensagem" required></textarea>
+        <button type="submit">Enviar Mensagem</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="voltar">
+    <a href="index.html">← Voltar para a página inicial</a>
+  </div>
+
+</body>
+</html>

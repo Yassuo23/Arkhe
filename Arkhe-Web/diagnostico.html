@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkhe — Diagnóstico com IA</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="brand"><span class="paw">🐾</span> ARKHE</a>
+  <nav class="nav-links">
+    <a href="index.html#ongs">Hub de ONGs</a>
+    <a href="consultas.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnostico.html" class="active">Diagnóstico IA</a>
+  </nav>
+  <div class="nav-right">
+    <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">Baixar App</a>
+  </div>
+</header>
+
+<section class="diag-section">
+  <div class="container diag-inner">
+    <div class="diag-text">
+      <h1>Diagnóstico Inteligente<br>por Foto</h1>
+      <p>Nossa tecnologia de ponta permite que você faça o upload de imagens de áreas afetadas do seu pet (como manchas na pele ou problemas oculares). A IA da Arkhe analisa os padrões e sugere possíveis condições, orientando você a buscar o veterinário mais adequado na nossa própria plataforma.</p>
+      <p style="margin-top:20px;font-size:12px;color:#a3742e;"><strong>Atenção:</strong> este diagnóstico é apenas uma triagem preliminar e não substitui a avaliação de um médico-veterinário.</p>
+    </div>
+
+    <div class="upload-box" id="uploadBox">
+      <div class="cloud">☁️⬆️</div>
+      <strong>Experimente a IA</strong>
+      <p>Arraste a foto do seu pet aqui ou clique para fazer o upload.</p>
+      <button class="btn btn-teal" onclick="document.getElementById('fileInput').click()">🖼 Enviar Foto</button>
+      <input type="file" id="fileInput" accept="image/*" onchange="handleUpload(this)">
+      <div id="uploadPreview" class="upload-preview"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="diagResult" class="diag-result">
+      <h4>Relatório preliminar</h4>
+      <p><strong>Possível condição:</strong> Dermatite alérgica leve</p>
+      <p><strong>Nível de urgência:</strong> Baixo — observação recomendada</p>
+      <p><strong>Recomendação:</strong> Evite que o pet coce a área e agende uma consulta com um dermatologista veterinário caso os sintomas persistam por mais de 3 dias.</p>
+      <a href="consultas.html" class="btn btn-teal" style="margin-top:12px;display:inline-block;">Ver veterinários disponíveis</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkhe — Veterinários Online</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="brand"><span class="paw">🐾</span> ARKHE</a>
+  <nav class="nav-links">
+    <a href="index.html#ongs" id="ongs">ONGs</a>
+    <a href="consultas.html" class="active">Consultas</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnostico.html">IA Diagnóstico</a>
+  </nav>
+  <div class="nav-right">
+    <a href="#" class="btn btn-outline" onclick="alert('Formulário de cadastro de ONG em breve!'); return false;">Cadastrar ONG</a>
+    <a href="#" class="btn btn-orange" onclick="alert('Tela de login em breve!'); return false;">Entrar</a>
+  </div>
+</header>
+
+<div class="container consultas-wrap">
+  <aside class="filters-panel">
+    <strong>🔧 Filtros</strong>
+    <h4>Disponibilidade</h4>
+    <div class="chip-group">
+      <button class="chip selected" data-filter="disp" data-val="online">Online agora</button>
+      <button class="chip" data-filter="disp" data-val="hoje">Hoje</button>
+      <button class="chip" data-filter="disp" data-val="semana">Esta semana</button>
+    </div>
+    <h4>Especialidade</h4>
+    <div class="chip-group">
+      <button class="chip" data-filter="esp" data-val="geral">Clínico geral</button>
+      <button class="chip selected" data-filter="esp" data-val="dermatologia">Dermatologia</button>
+      <button class="chip" data-filter="esp" data-val="nutricao">Nutrição</button>
+      <button class="chip" data-filter="esp" data-val="comportamento">Comportamento</button>
+      <button class="chip" data-filter="esp" data-val="oncologia">Oncologia</button>
+      <button class="chip" data-filter="esp" data-val="cardiologia">Cardiologia</button>
+    </div>
+    <h4>Animal</h4>
+    <div class="chip-group">
+      <button class="chip selected" data-filter="animal" data-val="cao">🐕 Cão</button>
+      <button class="chip" data-filter="animal" data-val="gato">🐈 Gato</button>
+      <button class="chip" data-filter="animal" data-val="exotico">🦎 Exóticos</button>
+    </div>
+    <h4>Valor da consulta</h4>
+    <input type="range" min="30" max="300" value="150" class="price-range" id="priceRange" oninput="document.getElementById('priceLabel').textContent='R$ '+this.value">
+    <div style="font-size:12px;color:var(--gray);text-align:right;">até <span id="priceLabel">R$ 150</span></div>
+  </aside>
+
+  <div class="vets-panel">
+    <div class="vets-header">
+      <div>
+        <h1>Veterinários disponíveis agora 🩺</h1>
+        <p style="color:var(--gray);font-size:14px;margin-top:6px;">Consultas por vídeo com profissionais certificados. Sem fila, sem estresse para o seu pet.</p>
+      </div>
+      <div class="online-badge"><strong>47</strong><small>Vets online agora 🟢</small></div>
+    </div>
+
+    <div id="vetList">
+      <div class="vet-card">
+        <div class="vet-photo">👩‍⚕️</div>
+        <div class="vet-info">
+          <strong>Dra. Camila Souza</strong>
+          <span class="specialty">Dermatologia Veterinária</span>
+          <span class="vet-rating">⭐ 4.9 · 8 anos · 1.2k consultas</span>
+        </div>
+        <div class="vet-price">
+          <strong>R$120/consulta</strong>
+          <button class="btn btn-teal" onclick="agendar('Dra. Camila Souza')">Agendar</button>
+        </div>
+      </div>
+      <div class="vet-card">
+        <div class="vet-photo">👨‍⚕️</div>
+        <div class="vet-info">
+          <strong>Dr. Rafael Lima</strong>
+          <span class="specialty">Clínico Geral e Nutrição</span>
+          <span class="vet-rating">⭐ 4.8 · 5 anos · 870 consultas</span>
+        </div>
+        <div class="vet-price">
+          <strong>R$89/consulta</strong>
+          <button class="btn btn-teal" onclick="agendar('Dr. Rafael Lima')">Agendar</button>
+        </div>
+      </div>
+      <div class="vet-card">
+        <div class="vet-photo">👩‍⚕️</div>
+        <div class="vet-info">
+          <strong>Dra. Ana Paula Ribeiro</strong>
+          <span class="specialty">Cardiologia Veterinária</span>
+          <span class="vet-rating">⭐ 4.7 · 10 anos · 2.1k consultas</span>
+        </div>
+        <div class="vet-price">
+          <strong>R$150/consulta</strong>
+          <button class="btn btn-teal" onclick="agendar('Dra. Ana Paula Ribeiro')">Agendar</button>
+        </div>
+      </div>
+      <div class="vet-card">
+        <div class="vet-photo">👨‍⚕️</div>
+        <div class="vet-info">
+          <strong>Dr. Bruno Tavares</strong>
+          <span class="specialty">Comportamento Animal</span>
+          <span class="vet-rating">⭐ 4.6 · 4 anos · 430 consultas</span>
+        </div>
+        <div class="vet-price">
+          <strong>R$99/consulta</strong>
+          <button class="btn btn-teal" onclick="agendar('Dr. Bruno Tavares')">Agendar</button>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:34px;color:var(--teal-dark);">ONGs parceiras</h3>
+    <div class="vet-card">
+      <div class="vet-photo">🏠</div>
+      <div class="vet-info">
+        <strong>Amigos dos Animais SP</strong>
+        <span class="specialty">145 animais cadastrados</span>
+      </div>
+      <div class="vet-price"><button class="btn btn-outline" onclick="alert('Redirecionando para contato da ONG...')">Contato</button></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
