@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld("api", {
 
     openMainPage: () => ipcRenderer.invoke('openMainPage'),
     singUp: (data) => ipcRenderer.invoke("singUp", data),
-    login: (payload) => ipcRenderer.invoke("login", payload)
-    
+    login: (payload) => ipcRenderer.invoke("login", payload),
+    PegarDados: () => ipcRenderer.invoke("PegarDados"),
+    VerificarLogado: () => ipcRenderer.invoke("VerificarLogado")
 })

@@ -5,6 +5,9 @@ const connection = require("./dataBase");
 const { resolve } = require("dns");
 
 
+let usuarioLogado = null
+let logado = false
+
 //Testa a conexão com o banco de dados
 const connectionTest = () => {
     connection.connect((erro) => {
@@ -89,12 +92,34 @@ ipcMain.handle("login", (e, payload) => {
             const usuario = resultados[0];
             const autenticado = usuario && usuario.password === payload.password;
 
-            resolve(autenticado ? {
+            if(!autenticado){
+                usuarioLogado = null
+                logado = false;
+                resolve(null);
+                return;
+            }
+
+            usuarioLogado = {
                 id: usuario.id,
                 name: usuario.name,
-                email: payload.email
-            } : null);
+                email: usuario.email
+            }
+
+            logado = true
+            resolve(usuarioLogado);
+
+        
+
         });
     });
+});
+
+ipcMain.handle("PegarDados", () => {
+    return usuarioLogado;
 })
+
+ipcMain.handle("VerificarLogado", () => {
+    return logado;
+});
+
 
