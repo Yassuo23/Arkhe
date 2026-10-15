@@ -8,7 +8,7 @@ body {
     font-family: 'Bricolage Grotesque', sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url(fundo.jpeg);
+    background-image: url("../Images/fundo.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
