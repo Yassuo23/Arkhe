@@ -47,17 +47,17 @@
                         <span class="badge bg-primary rounded-pill ms-auto sidebar-badge">3</span>
                     </a>
 
-                    <a href="#IA" class="nav-link" onclick="switchTab(event, 'perfil')">
+                    <a href="#IA" class="nav-link" onclick="switchTab(event, 'ia')">
                         <i class="bi bi-prescription2 fs-5"></i>
                         <span class="sidebar-text">ARTEMIS-AI</span>
                     </a>
 
-                    <a href="#PetMatch" class="nav-link" onclick="switchTab(event, 'configuracoes')">
+                    <a href="#PetMatch" class="nav-link" onclick="switchTab(event, 'petmatch')">
                         <i class="bi bi-bookmark-heart-fill fs-5"></i>
                         <span class="sidebar-text">PetMatch</span>
                     </a>
 
-                     <a href="#configuracoes" class="nav-link" id="botaoConfig">
+                     <a href="#configuracoes" class="nav-link" id="botaoConfig" onclick="switchTab(event, 'configuracoes')">
                         <i class="bi bi-gear fs-5"></i>
                         <span class="sidebar-text">Configurações</span>
                     </a>
@@ -68,7 +68,7 @@
             <div class="p-3 border-top border-secondary-subtle">
                 <div class="d-flex align-items-center gap-2 overflow-hidden">
                     <div class="sidebar-text lh-1">
-                        <button id="BotaoPerfil">
+                        <a id="BotaoPerfil" href="#Perfil" class="nav-link" onclick="switchTab(event, 'perfil')">
                             <div>
                                 <i class="bi bi-person-circle fs-3"></i>
                             </div>
@@ -76,7 +76,7 @@
                                <p id="label-name">Seu nome</p>
                                <p id="text-label">Ver Perfil</p>
                             </div>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -93,8 +93,9 @@
             </section>
 
             <!-- SEÇÃO 2: PROJETOS -->
+            <!-- Esta é a seção para fazer o petshop-->
             <section id="sec-projetos" class="tab-section d-none">
-                <h2 class="h4 fw-bold mb-3">Meus Projetos</h2>
+                <h2 class="h4 fw-bold mb-3">PetShop</h2>
                 <div class="card bg-dark text-light border-secondary">
                     <div class="card-body">
                         <p class="text-secondary">Lista ou gerenciador de projetos da sua aplicação.</p>
@@ -120,12 +121,30 @@
                 </div>
             </section>
 
-            <!-- SEÇÃO 3: PERFIL -->
+            <!-- SEÇÃO 3: PERFIL É pra vc codar aqui pepe kkkk!!!-->
             <section id="sec-perfil" class="tab-section d-none">
                 <h2 class="h4 fw-bold mb-3">Perfil de Usuário</h2>
-                <div class="card bg-dark text-light border-secondary">
+                <div id="containerPerfil">
                     <div class="card-body">
-                        <p class="text-secondary">Informações da conta ou preferências de usuário local.</p>
+                        <img src="../../images/Mii.jpeg" id="imagemPerfil">
+                        <div id="perfilNome">
+                            <h4>Perfil</h4>
+                            <input type="text" value="Seu nome de Perfil legal" id="nomePerfil" disabled>
+                        </div>
+                        <div>
+                            <button id="customPerfil" value="notClicked">CUSTOMIZAR PERFIL</button>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div id="containerDados">
+                    <div class="card-body">
+                        
+                        <div id="dados1">
+                            <h4>Descrição</h4>
+                            <input type="text" value="Descrevendo minha vida legal" id="descricao" disabled>
+                           
+                        
                     </div>
                 </div>
             </section>
