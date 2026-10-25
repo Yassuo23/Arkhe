@@ -1,0 +1,191 @@
+:root {
+  --teal-dark: #0e6e5f;
+  --teal: #12836f;
+  --peach-bg: #fbe7d9;
+  --orange: #e2703a;
+  --ink: #26312d;
+  --gray: #7c8b86;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --titlebar-height: 38px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 65px;
+}
+
+#sidebar button {
+  background-color: var(--teal);
+}
+
+#sidebar {
+  background-color: var(--teal);
+}
+
+body {
+  height: 100vh;
+  overflow: hidden; /* Evita rolagem na janela principal do Electron */
+  user-select: none; /* Sensação de app desktop */
+  background-color: white;
+  color: #e2e8f0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+#novoItem{
+  background-color: var(--gray);
+}
+
+/* Área de Arraste da Janela (Electron Window Drag Region) */
+.app-titlebar {
+  height: var(--titlebar-height);
+  background-color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  -webkit-app-region: drag; /* Permite arrastar a janela nativa no Electron */
+  z-index: 1050;
+}
+
+/* Botões de controle da janela precisam desabilitar o arraste */
+.window-control-btn {
+  -webkit-app-region: no-drag;
+  width: 40px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window-control-btn:hover {
+  background-color: #1e293b;
+  color: #ffffff;
+}
+
+.window-control-btn.btn-close-app:hover {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+/* Container Principal (Abaixo da Barra de Título) */
+.app-container {
+  height: calc(100vh - var(--titlebar-height));
+  display: flex;
+}
+
+/* ==========================================================================
+   2. BARRA LATERAL (SIDEBAR)
+   ========================================================================== */
+
+.app-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--teal);
+  border-right: 1px solid var(--teal-dark);
+  transition: width 0.25s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1000;
+}
+
+/* Sidebar no modo recolhido */
+.app-sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.app-sidebar.collapsed .sidebar-text,
+.app-sidebar.collapsed .sidebar-badge {
+  display: none !important;
+}
+
+.app-sidebar.collapsed .nav-link {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar-nav .nav-link {
+  color: var(--peach-bg);
+  border-radius: 8px;
+  margin: 2px 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.sidebar-nav .nav-link:hover {
+  color: #f8fafc;
+  background-color: var(--teal-dark);
+}
+
+.sidebar-nav .nav-link.active {
+  color: #ffffff;
+  background-color: var(--teal-dark); /* Bootstrap Primary Color */
+}
+
+/* ==========================================================================
+   3. ÁREA DE CONTEÚDO PRINCIPAL
+   ========================================================================== */
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: whitesmoke;
+  padding: 1.5rem;
+}
+
+/* Personalização da barra de rolagem interna */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: grey;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* 1. Formatação do botão principal */
+#BotaoPerfil {
+  display: flex; /* Coloca o ícone e o bloco de texto lado a lado */
+  align-items: center; /* Alinha o ícone e o texto verticalmente no centro */
+  gap: 12px; /* Espaço entre o ícone e o texto */
+  color: #ffffff; /* Cor do texto e ícone */
+  border: none;
+  border-radius: 8px; /* Bordas arredondadas */
+  padding: 10px 16px; /* Espaçamento interno */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+/* Efeito ao passar o mouse */
+#BotaoPerfil:hover {
+  background-color: var(--teal-dark);
+}
+
+/* 2. Organização dos textos dentro do bloco */
+#block-text {
+  display: flex;
+  flex-direction: column; /* Empilha os dois parágrafos um sobre o outro */
+  align-items: flex-start; /* Alinha os textos à esquerda */
+}
+
+/* Remove margens padrão dos parágrafos para não quebrar o layout */
+#block-text p {
+  margin: 0;
+  margin-right: 3.5rem;
+}
+
+#text-label {
+  font-size: 0.7rem;
+  color: whitesmoke;
+}
