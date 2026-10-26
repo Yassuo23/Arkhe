@@ -188,6 +188,7 @@ body {
 #text-label {
   font-size: 0.7rem;
   color: whitesmoke;
+<<<<<<< HEAD
 }
 
 #galeriaPets {
@@ -240,4 +241,6 @@ body {
   margin-top: 0.25rem;
   color: var(--gray);
   font-size: 0.85rem;
+=======
+>>>>>>> 25dd5542491e045b8bd1b2072242d0983cad61d8
 }
