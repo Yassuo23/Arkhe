@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar animal | Arkhe</title>
+    <link href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="pet-registration-page">
+    <main class="pet-registration-content">
+        <a class="pet-registration-back" href="index.html#perfil">
+            <i class="bi bi-arrow-left"></i>
+            Voltar ao perfil
+        </a>
+
+        <header class="pet-form-heading">
+            <h1 class="h4 fw-bold mb-1">Cadastrar animal</h1>
+            <p class="text-secondary mb-0">Preencha as informações do seu animal.</p>
+        </header>
+
+        <form class="pet-form-card" id="form-cadastro-animal">
+            <div class="pet-form-grid">
+                <div class="pet-form-field">
+                    <label for="animal-nome">Nome</label>
+                    <input class="form-control" id="animal-nome" name="nome" type="text" placeholder="Ex.: Luna" required>
+                </div>
+                <div class="pet-form-field">
+                    <label for="animal-cor">Cor</label>
+                    <input class="form-control" id="animal-cor" name="cor" type="text" placeholder="Ex.: Caramelo" required>
+                </div>
+                <div class="pet-form-field">
+                    <label for="animal-raca">Raça</label>
+                    <input class="form-control" id="animal-raca" name="raca" type="text" placeholder="Ex.: Vira-lata" required>
+                </div>
+                <div class="pet-form-field">
+                    <label for="animal-especie">Espécie</label>
+                    <input class="form-control" id="animal-especie" name="especie" type="text" placeholder="Ex.: Cachorro" required>
+                </div>
+                <div class="pet-form-field">
+                    <label for="animal-idade">Idade</label>
+                    <div class="input-group">
+                        <input class="form-control" id="animal-idade" name="idade" type="number" min="0" step="1" placeholder="Ex.: 3" required>
+                        <span class="input-group-text">anos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pet-form-actions">
+                <a class="pet-form-cancel" href="index.html#perfil">Cancelar</a>
+                <button class="pet-action pet-action-add" type="submit">Cadastrar animal</button>
+            </div>
+        </form>
+    </main>
+
+
+    <script src="js/cadastroAnimais.js"></script>
+</body>
+</html>

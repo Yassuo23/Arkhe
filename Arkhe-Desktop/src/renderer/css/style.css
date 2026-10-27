@@ -188,7 +188,89 @@ body {
 #text-label {
   font-size: 0.7rem;
   color: whitesmoke;
-<<<<<<< HEAD
+}
+
+#containerPerfil {
+  background-color: #ffffff;
+  color: var(--ink);
+  border: 1px solid #dfe7e3;
+  border-radius: 10px;
+}
+
+#containerPerfil .card-body {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+#imagemPerfil {
+  width: 84px;
+  height: 84px;
+  border: 2px solid #dfe7e3;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#perfilNome {
+  flex: 1;
+  min-width: 180px;
+}
+
+#perfilNome h4 {
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+#nomePerfil {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #dfe7e3;
+  border-radius: 6px;
+  background-color: #f8faf9;
+  color: var(--ink);
+}
+
+#customPerfil {
+  padding: 0.6rem 0.9rem;
+  border: 0;
+  border-radius: 6px;
+  background-color: var(--teal);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#customPerfil:hover {
+  background-color: var(--teal-dark);
+}
+
+#containerDados {
+  background-color: #ffffff;
+  color: var(--ink);
+  border: 1px solid #dfe7e3;
+  border-radius: 10px;
+}
+
+#dados1 h4 {
+  margin: 0 0 0.75rem;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+#emailPerfil,
+#nascimentoPerfil {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid #dfe7e3;
+  border-radius: 6px;
+  background-color: #f8faf9;
+  color: var(--gray);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 #galeriaPets {
@@ -198,12 +280,130 @@ body {
 }
 
 .pets-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
+.pets-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.pet-action-add {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.65rem;
+  background-color: var(--teal);
+  color: #ffffff;
+  font-size: 0.7rem;
+}
+
+.pet-action-add:hover {
+  background-color: var(--teal-dark);
+}
+
+.pet-form-heading {
+  margin-bottom: 1.25rem;
+}
+
+.pet-registration-page {
+  min-height: 100vh;
+  height: auto;
+  overflow: auto;
+  background-color: whitesmoke;
+  color: var(--ink);
+  user-select: auto;
+}
+
+.pet-registration-content {
+  width: min(100% - 2rem, 760px);
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.pet-registration-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--teal-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pet-registration-back:hover {
+  color: var(--teal);
+}
+
+.pet-form-card {
+  max-width: 760px;
+  padding: 1.5rem;
+  border: 1px solid #dfe7e3;
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: var(--ink);
+}
+
+.pet-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.pet-form-field label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pet-form-field .form-control,
+.pet-form-field .input-group-text {
+  min-height: 42px;
+  border-color: #dfe7e3;
+  background-color: #f8faf9;
+  color: var(--ink);
+}
+
+.pet-form-field .form-control:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 0.2rem rgba(18, 131, 111, 0.15);
+}
+
+.pet-form-field .input-group-text {
+  color: var(--gray);
+}
+
+.pet-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.pet-form-cancel {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #dfe7e3;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pet-form-cancel:hover {
+  background-color: #f1f5f3;
+}
+
 .pet-card {
+  flex: 0 0 250px;
+  width: 250px;
   overflow: hidden;
   border: 1px solid #dfe7e3;
   border-radius: 10px;
@@ -219,12 +419,19 @@ body {
 .pet-card img {
   display: block;
   width: 100%;
-  height: 175px;
+  height: 160px;
   object-fit: cover;
 }
 
 .pet-card-body {
   padding: 0.75rem 0.9rem;
+}
+
+.pet-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .pet-card-body h4,
@@ -241,6 +448,83 @@ body {
   margin-top: 0.25rem;
   color: var(--gray);
   font-size: 0.85rem;
-=======
->>>>>>> 25dd5542491e045b8bd1b2072242d0983cad61d8
+}
+
+.pet-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background-color: #e3f2ee;
+  color: var(--teal-dark);
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pet-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin: 0.9rem 0;
+  padding: 0.65rem 0;
+  border-top: 1px solid #e5ece9;
+  border-bottom: 1px solid #e5ece9;
+}
+
+.pet-details dt {
+  color: var(--gray);
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.pet-details dd {
+  margin: 0.15rem 0 0;
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.pet-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pet-action {
+  flex: 1;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pet-action-edit {
+  border-color: #c9e4dc;
+  background-color: #eaf5f1;
+  color: var(--teal-dark);
+}
+
+.pet-action-edit:hover {
+  background-color: #d8ece5;
+}
+
+.pet-action-remove {
+  border-color: #f1d1d1;
+  background-color: #fff1f1;
+  color: #b42318;
+}
+
+.pet-action-remove:hover {
+  background-color: #fce1e1;
+}
+
+@media (max-width: 600px) {
+  .pet-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pet-form-card {
+    padding: 1rem;
+  }
 }

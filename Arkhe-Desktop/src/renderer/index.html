@@ -29,7 +29,7 @@
             <div>
                 <!-- Botão de Expandir/Recolher Sidebar -->
                 <div class="p-2 d-flex justify-content-end">
-                    <button class="btn btn-sm text-secondary border-0" id="btn-toggle-sidebar" title="Alternar Menu">
+                    <button class="btn btn-sm text-secondary border-0" id="btn-toggle-sidebar" type="button" title="Alternar Menu" aria-expanded="true" aria-controls="sidebar">
                         <i class="bi bi-list fs-5"></i>
                     </button>
                 </div>
@@ -67,17 +67,15 @@
             <!-- Rodapé da Sidebar -->
             <div class="p-3 border-top border-secondary-subtle">
                 <div class="d-flex align-items-center gap-2 overflow-hidden">
-                    <div class="sidebar-text lh-1">
-                        <a id="BotaoPerfil" href="#Perfil" class="nav-link" onclick="switchTab(event, 'perfil')">
-                            <div>
-                                <i class="bi bi-person-circle fs-3"></i>
-                            </div>
-                            <div id="block-text">
-                               <p id="label-name">Seu nome</p>
-                               <p id="text-label">Ver Perfil</p>
-                            </div>
-                        </a>
-                    </div>
+                    <a id="BotaoPerfil" href="#Perfil" class="nav-link" onclick="switchTab(event, 'perfil')">
+                        <div>
+                            <i class="bi bi-person-circle fs-3"></i>
+                        </div>
+                        <div id="block-text" class="sidebar-text lh-1">
+                           <p id="label-name">Seu nome</p>
+                           <p id="text-label">Ver Perfil</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </aside>
@@ -86,7 +84,7 @@
         <main class="app-content">
 
             <!-- SEÇÃO 1: DASHBOARD -->
-            <section id="dashboard">
+            <section id="dashboard" class="tab-section">
 
 
 
@@ -121,71 +119,50 @@
                 </div>
             </section>
 
-<<<<<<< HEAD
             <!-- SEÇÃO 3: PERFIL -->
-=======
-            <!-- SEÇÃO 3: PERFIL É pra vc codar aqui pepe kkkk!!!-->
->>>>>>> 25dd5542491e045b8bd1b2072242d0983cad61d8
             <section id="sec-perfil" class="tab-section d-none">
                 <h2 class="h4 fw-bold mb-3">Perfil de Usuário</h2>
-                <div id="containerPerfil">
+                <div id="containerPerfil" class="card mb-3">
                     <div class="card-body">
-                        <img src="../../images/Mii.jpeg" id="imagemPerfil">
+                        <img src="../images/mii.jpeg" id="imagemPerfil" alt="Foto do perfil">
                         <div id="perfilNome">
                             <h4>Perfil</h4>
-                            <input type="text" value="Seu nome de Perfil legal" id="nomePerfil" disabled>
+                            <input type="text" id="nomePerfil" disabled>
                         </div>
                         <div>
-                            <button id="customPerfil" value="notClicked">CUSTOMIZAR PERFIL</button>
+                            <button id="customPerfil" type="button">CUSTOMIZAR PERFIL</button>
                         </div>
                         
                     </div>
                 </div>
-                <div id="containerDados">
+                <div id="containerDados" class="card mb-3">
                     <div class="card-body">
-                        
                         <div id="dados1">
-                            <h4>Descrição</h4>
-                            <input type="text" value="Descrevendo minha vida legal" id="descricao" disabled>
-<<<<<<< HEAD
+                            <h4>E-mail</h4>
+                            <p id="emailPerfil">Não informado</p>
+                        </div>
+                        <div id="dados2">
+                            <h4>Data de nascimento</h4>
+                            <p id="nascimentoPerfil">Não informado</p>
                         </div>
                     </div>
                 </div>
 
                 <div id="galeriaPets" class="card mt-4">
                     <div class="card-body">
-                        <h3 class="h5 mb-1">Meus animais</h3>
-                        <p class="text-secondary mb-4">Imagens dos seus animais</p>
-
-                        <div class="pets-grid">
-                            <article class="pet-card">
-                                <img src="../../../Arkhe-Web/Images/luna.jpg" alt="Luna">
-                                <div class="pet-card-body">
-                                    <h4>Luna</h4>
-                                    <p>Cachorra</p>
-                                </div>
-                            </article>
-
-                            <article class="pet-card">
-                                <img src="../../../Arkhe-Web/Images/bellaGata.jpeg" alt="Bella">
-                                <div class="pet-card-body">
-                                    <h4>Bella</h4>
-                                    <p>Gata</p>
-                                </div>
-                            </article>
-
-                            <article class="pet-card">
-                                <img src="../../../Arkhe-Web/Images/chico.jpg" alt="Chico">
-                                <div class="pet-card-body">
-                                    <h4>Chico</h4>
-                                    <p>Cachorro</p>
-                                </div>
-                            </article>
+                        <div class="pets-section-heading">
+                            <div>
+                                <h3 class="h5 mb-1">Meus animais</h3>
+                                <p class="text-secondary mb-0">Imagens dos seus animais</p>
+                            </div>
+                            <button class="pet-action pet-action-add" type="button" id="btnCadatrarAnimal">
+                                <i class="bi bi-plus-lg"></i> Cadastrar animal
+                            </button>
                         </div>
-=======
-                           
-                        
->>>>>>> 25dd5542491e045b8bd1b2072242d0983cad61d8
+
+                        <div class="pets-grid" id="containerPets">
+
+                        </div>
                     </div>
                 </div>
             </section>

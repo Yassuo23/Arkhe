@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const connection = require("./dataBase");
 const { resolve } = require("dns");
+let MainWindow;
 
 
 let usuarioLogado = null
@@ -22,6 +23,7 @@ const connectionTest = () => {
         console.log("Conectado com o banco de dados")
     })
 }
+
 
 
 app.whenReady().then(() => {
@@ -56,12 +58,37 @@ ipcMain.handle('openMainPage', (event) => {
     
     mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
 
+    MainWindow = mainWindow;
+
     const loginWindow = BrowserWindow.fromWebContents(event.sender);
     if (loginWindow && !loginWindow.isDestroyed()) {
         loginWindow.close();
     }
 
 })
+
+//Função para Abrir a página de Cadastro de Animais
+ipcMain.handle('modalCadastroAnimal:abrir', async (event) => {
+
+    const mainWindow = MainWindow
+
+    const modalCadastro = new BrowserWindow({
+        width: 500,
+        height: 700,
+        parent: mainWindow,
+        modal: true,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js")
+        }
+    });
+
+    await modalCadastro.loadFile(path.join(__dirname, "../renderer/cadastroAnimal.html"));
+});
+
+
+
+
+
 
 ipcMain.handle('singUp', (event, data) => {
     return new Promise((resolve, reject) => {
@@ -80,7 +107,7 @@ ipcMain.handle('singUp', (event, data) => {
 
 ipcMain.handle("login", (e, payload) => {
     return new Promise((resolve, reject) => {
-        const dbData = 'SELECT id, name, password FROM users WHERE email = ?';
+        const dbData = 'SELECT id, name, email, birthday, password FROM users WHERE email = ?';
 
         connection.query(dbData, [payload.email], (erro, resultados) => {
             if (erro) {
@@ -102,7 +129,8 @@ ipcMain.handle("login", (e, payload) => {
             usuarioLogado = {
                 id: usuario.id,
                 name: usuario.name,
-                email: usuario.email
+                email: usuario.email,
+                birthday: usuario.birthday
             }
 
             logado = true
@@ -123,3 +151,46 @@ ipcMain.handle("VerificarLogado", () => {
 });
 
 
+ipcMain.handle("animal:cadastrar", (_event, dados) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'INSERT INTO animais (nome, cor, raca, idade, especie) VALUES (?, ?, ?, ?, ?)'
+
+        connection.query(sql, [dados.nome, dados.cor, dados.raca, dados.idade, dados.especie], (erro, result) => {
+            if (erro){
+                reject(erro);
+                return;
+            }
+            resolve({ id: result.insertId, ...dados });
+            console.log("Animal Cadastrado!!!");
+        });
+    });
+});
+
+ipcMain.handle("animal:carregar", (_event, dados) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT * FROM animais ORDER BY idade DESC'
+
+        connection.query(sql, (erro, result) => {
+            if (erro){
+                reject(erro);
+                return;
+            }
+            resolve(result)
+
+        });
+    });
+});
+
+ ipcMain.handle('animal:excluir', (evento, id) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM animais WHERE id = ?';
+
+            conexao.query(sql, [id], (erro, resultado) => {
+                if (erro) {
+                    reject(erro);
+                    return;
+                }
+                resolve(resultado);
+            });
+        });
+    });
