@@ -342,7 +342,7 @@
       </form>
 
       <p class="link-login">
-        Já tem uma conta? <a href="#">Entrar</a>
+        Já tem uma conta? <a href="login.html">Fazer login</a>
       </p>
     </div>
   </div>
@@ -435,11 +435,20 @@
       return;
     }
 
+    // Salva a conta neste navegador e já conecta o usuário (cabeçalho atualiza sozinho)
+    if (window.ArkheConta) {
+      ArkheConta.cadastrar({
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value
+      });
+    }
+
     mensagemForm.textContent =
-      'Cadastro preenchido! O envio real depende da conexão com o servidor.';
+      'Cadastro realizado! Você já está conectado(a). O envio real ao servidor ainda será conectado.';
     mensagemForm.classList.add('visivel');
   });
 </script>
 
+<script src="../js/conta.js"></script>
 </body>
 </html>

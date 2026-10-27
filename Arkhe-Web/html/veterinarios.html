@@ -18,7 +18,7 @@
     <a href="ongs.html">Hub de ONGs</a>
     <a href="veterinarios.html">Vet Online</a>
     <a href="marketplace.html">Marketplace</a>
-    <a href="diagnostico.html">Diagnóstico IA</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
   </nav>
 
   <div class="nav-right">
@@ -39,7 +39,7 @@
 
 <div class="container consultas-wrap">
   <aside class="filters-panel">
-    <strong>🔧 Filtros</strong>
+    <strong> Filtros</strong>
     <h4>Disponibilidade</h4>
     <div class="chip-group">
       <button class="chip selected" data-filter="disp" data-val="online">Online agora</button>
@@ -57,26 +57,29 @@
     </div>
     <h4>Animal</h4>
     <div class="chip-group">
-      <button class="chip selected" data-filter="animal" data-val="cao">🐕 Cão</button>
-      <button class="chip" data-filter="animal" data-val="gato">🐈 Gato</button>
-      <button class="chip" data-filter="animal" data-val="exotico">🦎 Exóticos</button>
+      <button class="chip selected" data-filter="animal" data-val="cao"> Cão</button>
+      <button class="chip" data-filter="animal" data-val="gato"> Gato</button>
+      <button class="chip" data-filter="animal" data-val="exotico"> Exóticos</button>
     </div>
     <h4>Valor da consulta</h4>
     <input type="range" min="30" max="300" value="150" class="price-range" id="priceRange" oninput="document.getElementById('priceLabel').textContent='R$ '+this.value">
     <div style="font-size:12px;color:var(--gray);text-align:right;">até <span id="priceLabel">R$ 150</span></div>
+    <button type="button" class="filters-clear" id="clearFilters">Limpar filtros</button>
   </aside>
 
   <div class="vets-panel">
     <div class="vets-header">
       <div>
-        <h1>Veterinários disponíveis agora 🩺</h1>
+        <h1>Veterinários disponíveis agora </h1>
         <p style="color:var(--gray);font-size:14px;margin-top:6px;">Consultas por vídeo com profissionais certificados. Sem fila, sem estresse para o seu pet.</p>
       </div>
       <div class="online-badge"><strong>47</strong><small>Vets online agora 🟢</small></div>
     </div>
 
+    <p class="vets-count" id="vetCount" aria-live="polite"></p>
+
     <div id="vetList">
-      <div class="vet-card">
+      <div class="vet-card" data-esp="dermatologia" data-animal="cao gato" data-disp="online" data-preco="120">
         <div class="vet-photo">👩‍⚕️</div>
         <div class="vet-info">
           <strong>Dra. Camila Souza</strong>
@@ -88,7 +91,7 @@
           <button class="btn btn-teal" onclick="agendar('Dra. Camila Souza')">Agendar</button>
         </div>
       </div>
-      <div class="vet-card">
+      <div class="vet-card" data-esp="geral nutricao" data-animal="cao gato exotico" data-disp="online" data-preco="89">
         <div class="vet-photo">👨‍⚕️</div>
         <div class="vet-info">
           <strong>Dr. Rafael Lima</strong>
@@ -100,7 +103,7 @@
           <button class="btn btn-teal" onclick="agendar('Dr. Rafael Lima')">Agendar</button>
         </div>
       </div>
-      <div class="vet-card">
+      <div class="vet-card" data-esp="cardiologia" data-animal="cao gato" data-disp="hoje" data-preco="150">
         <div class="vet-photo">👩‍⚕️</div>
         <div class="vet-info">
           <strong>Dra. Ana Paula Ribeiro</strong>
@@ -112,7 +115,7 @@
           <button class="btn btn-teal" onclick="agendar('Dra. Ana Paula Ribeiro')">Agendar</button>
         </div>
       </div>
-      <div class="vet-card">
+      <div class="vet-card" data-esp="comportamento" data-animal="cao gato" data-disp="semana" data-preco="99">
         <div class="vet-photo">👨‍⚕️</div>
         <div class="vet-info">
           <strong>Dr. Bruno Tavares</strong>
@@ -124,6 +127,11 @@
           <button class="btn btn-teal" onclick="agendar('Dr. Bruno Tavares')">Agendar</button>
         </div>
       </div>
+    </div>
+
+    <div class="vets-empty" id="vetEmpty" style="display:none;">
+      <p>Nenhum veterinário encontrado com esses filtros.</p>
+      <button type="button" class="filters-clear" id="clearFiltersEmpty">Limpar filtros</button>
     </div>
 
     <h3 style="margin-top:34px;color:var(--teal-dark);">ONGs parceiras</h3>
@@ -144,5 +152,91 @@
 </footer>
 
 <script src="../js/app.js"></script>
+
+<script>
+/* ---------- FILTROS DOS VETERINÁRIOS ---------- */
+(function () {
+  const painel = document.querySelector('.filters-panel');
+  const cards = Array.from(document.querySelectorAll('#vetList .vet-card'));
+  const faixa = document.getElementById('priceRange');
+  const rotuloPreco = document.getElementById('priceLabel');
+  const contagem = document.getElementById('vetCount');
+  const vazio = document.getElementById('vetEmpty');
+
+  // Quanto menor o número, mais rápido o veterinário atende
+  const NIVEL = { online: 0, hoje: 1, semana: 2 };
+
+  function selecionados(grupo) {
+    return Array.from(painel.querySelectorAll('.chip.selected[data-filter="' + grupo + '"]'))
+      .map(c => c.dataset.val);
+  }
+
+  function filtrar() {
+    const disp = selecionados('disp')[0];     // só uma opção por vez
+    const esps = selecionados('esp');         // várias (basta uma bater)
+    const animais = selecionados('animal');   // várias (basta uma bater)
+    const max = Number(faixa.value);
+
+    let visiveis = 0;
+
+    cards.forEach(card => {
+      const ok =
+        (!disp || NIVEL[card.dataset.disp] <= NIVEL[disp]) &&
+        (!esps.length || card.dataset.esp.split(' ').some(e => esps.includes(e))) &&
+        (!animais.length || card.dataset.animal.split(' ').some(a => animais.includes(a))) &&
+        Number(card.dataset.preco) <= max;
+
+      card.style.display = ok ? '' : 'none';
+      if (ok) visiveis++;
+    });
+
+    contagem.textContent = visiveis === 1
+      ? '1 veterinário encontrado'
+      : visiveis + ' veterinários encontrados';
+    vazio.style.display = visiveis ? 'none' : '';
+  }
+
+  // Clique nos chips (capture: evita que outro script também alterne o chip)
+  painel.addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    e.stopPropagation();
+
+    if (chip.dataset.filter === 'disp' && !chip.classList.contains('selected')) {
+      painel.querySelectorAll('.chip[data-filter="disp"]').forEach(c => {
+        c.classList.remove('selected');
+        c.setAttribute('aria-pressed', 'false');
+      });
+    }
+
+    chip.classList.toggle('selected');
+    chip.setAttribute('aria-pressed', String(chip.classList.contains('selected')));
+    filtrar();
+  }, true);
+
+  // Valor da consulta
+  faixa.addEventListener('input', filtrar);
+
+  // Limpar filtros
+  function limpar() {
+    painel.querySelectorAll('.chip').forEach(c => {
+      c.classList.remove('selected');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    faixa.value = faixa.max;
+    rotuloPreco.textContent = 'R$ ' + faixa.max;
+    filtrar();
+  }
+  document.getElementById('clearFilters').addEventListener('click', limpar);
+  document.getElementById('clearFiltersEmpty').addEventListener('click', limpar);
+
+  // Marca o estado inicial dos chips e aplica os filtros já selecionados
+  painel.querySelectorAll('.chip').forEach(c => {
+    c.setAttribute('aria-pressed', String(c.classList.contains('selected')));
+  });
+  filtrar();
+})();
+</script>
+<script src="../js/conta.js"></script>
 </body>
 </html>

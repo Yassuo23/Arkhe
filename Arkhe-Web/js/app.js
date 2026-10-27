@@ -1,3 +1,187 @@
+/* =========================================================
+   Conta do usuário (círculo no cabeçalho, ao lado do "Baixar App")
+   ---------------------------------------------------------
+   Simulação feita só no navegador (localStorage/sessionStorage),
+   enquanto não existe um servidor. Não guarda senha.
+   Inclua em cada página:  <script src="../js/conta.js"></script>
+   ========================================================= */
+(function () {
+  'use strict';
+
+  var K_CONTA = 'arkhe_conta';   // { nome, email } da conta cadastrada
+  var K_SESSAO = 'arkhe_sessao'; // e-mail de quem está conectado
+
+  /* ---------- armazenamento ---------- */
+  function lerLocal(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lerSessao(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+
+  function conta() {
+    try {
+      var c = JSON.parse(lerLocal(K_CONTA));
+      return c && c.email ? c : null;
+    } catch (e) { return null; }
+  }
+
+  function usuarioLogado() {
+    var c = conta();
+    if (!c) return null;
+    var s = lerLocal(K_SESSAO) || lerSessao(K_SESSAO);
+    return s === c.email ? c : null;
+  }
+
+  function iniciarSessao(email, manter) {
+    try {
+      localStorage.removeItem(K_SESSAO);
+      sessionStorage.removeItem(K_SESSAO);
+      (manter ? localStorage : sessionStorage).setItem(K_SESSAO, email);
+    } catch (e) {}
+  }
+
+  var normalizar = function (email) { return String(email || '').trim().toLowerCase(); };
+
+  /* ---------- API usada por cadastro.html e login.html ---------- */
+  function cadastrar(dados) {
+    var c = { nome: String(dados.nome || '').trim(), email: normalizar(dados.email) };
+    try { localStorage.setItem(K_CONTA, JSON.stringify(c)); } catch (e) {}
+    iniciarSessao(c.email, true);
+    atualizar();
+    return c;
+  }
+
+  function entrar(email, manter) {
+    var c = conta();
+    if (!c || c.email !== normalizar(email)) return { ok: false };
+    iniciarSessao(c.email, !!manter);
+    atualizar();
+    return { ok: true, nome: c.nome };
+  }
+
+  function sair() {
+    try {
+      localStorage.removeItem(K_SESSAO);
+      sessionStorage.removeItem(K_SESSAO);
+    } catch (e) {}
+    atualizar();
+  }
+
+  /* ---------- interface ---------- */
+  var btn, painel;
+
+  function el(tag, classe, texto) {
+    var n = document.createElement(tag);
+    if (classe) n.className = classe;
+    if (texto !== undefined) n.textContent = texto;
+    return n;
+  }
+
+  function link(href, classe, texto) {
+    var a = el('a', classe, texto);
+    a.href = href;
+    return a;
+  }
+
+  function atualizar() {
+    if (!btn) return;
+    var c = conta();
+    var logado = usuarioLogado();
+
+    painel.replaceChildren();
+
+    if (logado) {
+      btn.textContent = (logado.nome || logado.email).charAt(0).toUpperCase();
+      btn.classList.add('logado');
+      btn.setAttribute('aria-label', 'Minha conta: ' + (logado.nome || logado.email));
+
+      var perfil = el('div', 'conta-perfil');
+      var info = el('div');
+      info.append(el('div', 'conta-nome', logado.nome || 'Minha conta'), el('div', 'conta-email', logado.email));
+      perfil.append(el('div', 'conta-avatar', btn.textContent), info);
+
+      var sairBtn = el('button', 'conta-acao secundaria', 'Sair');
+      sairBtn.type = 'button';
+      sairBtn.addEventListener('click', function () { sair(); fechar(); });
+
+      painel.append(el('h3', 'conta-titulo', 'Minha conta'), perfil, sairBtn);
+      return;
+    }
+
+    btn.textContent = '👤';
+    btn.classList.remove('logado');
+    btn.setAttribute('aria-label', 'Minha conta');
+
+    painel.appendChild(el('h3', 'conta-titulo', 'Minha conta'));
+
+    if (c) {
+      /* existe cadastro neste navegador, mas ninguém está conectado */
+      painel.append(
+        el('p', 'conta-texto', 'Encontramos a conta de ' + c.email + '. Entre para continuar.'),
+        link('login.html', 'conta-acao primaria', 'Entrar'),
+        link('cadastro.html', 'conta-acao secundaria', 'Criar outra conta')
+      );
+    } else {
+      /* nenhum login cadastrado */
+      painel.append(
+        el('p', 'conta-texto', 'Você ainda não tem uma conta. Cadastre-se para salvar seus pets favoritos e acompanhar seus pedidos.'),
+        link('cadastro.html', 'conta-acao primaria', 'Cadastre-se'),
+        link('login.html', 'conta-acao secundaria', 'Já tenho conta · Entrar')
+      );
+    }
+  }
+
+  function abrir(mostrar) {
+    painel.hidden = !mostrar;
+    btn.setAttribute('aria-expanded', String(mostrar));
+  }
+  function fechar() { abrir(false); }
+
+  function montar() {
+    var destino = document.querySelector('.nav-right');
+    if (!destino || document.getElementById('contaBtn')) return;
+
+    var wrap = el('div', 'conta-wrap');
+
+    btn = el('button', 'conta-btn');
+    btn.type = 'button';
+    btn.id = 'contaBtn';
+    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', 'contaPanel');
+
+    painel = el('div', 'conta-panel');
+    painel.id = 'contaPanel';
+    painel.setAttribute('role', 'dialog');
+    painel.setAttribute('aria-label', 'Minha conta');
+    painel.hidden = true;
+
+    wrap.append(btn, painel);
+    destino.appendChild(wrap);
+
+    btn.addEventListener('click', function () { abrir(painel.hidden); });
+    document.addEventListener('click', function (e) {
+      if (!painel.hidden && !e.target.closest('.conta-wrap')) fechar();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') fechar();
+    });
+    window.addEventListener('storage', atualizar); // outra aba entrou/saiu
+
+    atualizar();
+  }
+
+  window.ArkheConta = {
+    conta: conta,
+    usuarioLogado: usuarioLogado,
+    cadastrar: cadastrar,
+    entrar: entrar,
+    sair: sair,
+    atualizar: atualizar
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
+  else montar();
+})();
+
+
 // ============ DIAGNOSTICO PAGE ============
 function handleUpload(input){
   const preview = document.getElementById('uploadPreview');

@@ -6,6 +6,7 @@
 <title>Arkhe — Marketplace</title>
 <link rel="stylesheet" href="../CSS/style.css">
 <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+<script src="/js/app.js"></script>
 </head>
 <body>
 
@@ -17,7 +18,7 @@
     <a href="ongs.html">Hub de ONGs</a>
     <a href="veterinarios.html">Vet Online</a>
     <a href="marketplace.html">Marketplace</a>
-    <a href="diagnostico.html">Diagnóstico IA</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
   </nav>
 
   <div class="nav-right">
@@ -39,21 +40,41 @@
 <section class="market-hero">
   <div class="container">
     <span class="eyebrow">MARKETPLACE</span>
-    <h1>Os melhores produtos para seu pet 🛍️</h1>
+    <h1>Os melhores produtos para seu pet </h1>
     <p style="color:var(--gray);">Petshops e marcas selecionadas com entrega rápida para todo o Brasil.</p>
 
     <div class="promo-banner">
       <div class="promo-left">
-        <strong>🔥 Promoções do dia</strong>
+        <strong>Promoções do dia</strong>
         <p>Até 40% off em produtos selecionados</p>
       </div>
       <div class="promo-search">
-        <input type="text" id="productSearch" placeholder="🔍 Buscar produtos..." oninput="filterProducts()">
+        <input type="text" id="productSearch" placeholder=" Buscar produtos..." oninput="filterProducts()">
         <select id="sortSelect" onchange="filterProducts()">
           <option value="relevancia">Relevância</option>
           <option value="menor">Menor preço</option>
           <option value="maior">Maior preço</option>
         </select>
+
+        <div class="cart-wrap">
+          <button type="button" class="cart-btn" id="cartBtn" aria-label="Abrir carrinho" aria-expanded="false" aria-controls="cartPanel">
+            🛒<span class="cart-badge" id="cartBadge" hidden>0</span>
+          </button>
+
+          <div class="cart-panel" id="cartPanel" role="dialog" aria-label="Carrinho de compras" hidden>
+            <h3 class="cart-title">Carrinho de compras (<span id="cartCount">0</span>)</h3>
+            <ul class="cart-list" id="cartList"></ul>
+
+            <div class="cart-footer">
+              <div class="cart-total">
+                <span id="cartItemsText">Total: 0 itens</span>
+                <strong id="cartTotal">R$ 0,00</strong>
+              </div>
+              <button type="button" class="cart-checkout" id="cartCheckout">Finalizar compra</button>
+              <button type="button" class="cart-clear" id="cartClear">Limpar carrinho</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,13 +82,13 @@
 
 <div class="container">
   <div class="cat-row" id="catRow">
-    <button class="cat-chip active" data-cat="racao" onclick="setCategory(this)">🍖 Ração</button>
-    <button class="cat-chip" data-cat="brinquedos" onclick="setCategory(this)">🧸 Brinquedos</button>
-    <button class="cat-chip" data-cat="higiene" onclick="setCategory(this)">🧴 Higiene</button>
-    <button class="cat-chip" data-cat="saude" onclick="setCategory(this)">💊 Saúde</button>
-    <button class="cat-chip" data-cat="caminhas" onclick="setCategory(this)">🛏️ Caminhas</button>
-    <button class="cat-chip" data-cat="acessorios" onclick="setCategory(this)">🎀 Acessórios</button>
-    <button class="cat-chip" data-cat="aquario" onclick="setCategory(this)">🐟 Aquário</button>
+    <button class="cat-chip active" data-cat="racao" onclick="setCategory(this)"> Ração</button>
+    <button class="cat-chip" data-cat="brinquedos" onclick="setCategory(this)"> Brinquedos</button>
+    <button class="cat-chip" data-cat="higiene" onclick="setCategory(this)"> Higiene</button>
+    <button class="cat-chip" data-cat="saude" onclick="setCategory(this)"> Saúde</button>
+    <button class="cat-chip" data-cat="caminhas" onclick="setCategory(this)"> Caminhas</button>
+    <button class="cat-chip" data-cat="acessorios" onclick="setCategory(this)"> Acessórios</button>
+    <button class="cat-chip" data-cat="aquario" onclick="setCategory(this)"> Aquário</button>
   </div>
 
   <div class="product-grid" id="productGrid">
@@ -77,7 +98,7 @@
       <div class="product-body">
         <strong>Ração Premium Cães Adultos 15kg</strong>
         <span class="price">R$ 189,90</span><span class="old-price">R$ 237,00</span>
-        <button class="btn btn-teal" onclick="addToCart('Ração Premium Cães Adultos')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="racao" data-price="79">
@@ -85,7 +106,7 @@
       <div class="product-body">
         <strong>Ração Gatos Filhotes Salmão 3kg</strong>
         <span class="price">R$ 79,90</span>
-        <button class="btn btn-teal" onclick="addToCart('Ração Gatos Filhotes Salmão')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="brinquedos" data-price="34">
@@ -93,7 +114,7 @@
       <div class="product-body">
         <strong>Kit Bolinhas Mordedoras</strong>
         <span class="price">R$ 34,90</span>
-        <button class="btn btn-teal" onclick="addToCart('Kit Bolinhas Mordedoras')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="higiene" data-price="42">
@@ -102,7 +123,7 @@
       <div class="product-body">
         <strong>Shampoo Neutro Cães e Gatos</strong>
         <span class="price">R$ 42,00</span><span class="old-price">R$ 49,90</span>
-        <button class="btn btn-teal" onclick="addToCart('Shampoo Neutro')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="saude" data-price="58">
@@ -110,7 +131,7 @@
       <div class="product-body">
         <strong>Antipulgas e Carrapatos Oral</strong>
         <span class="price">R$ 58,50</span>
-        <button class="btn btn-teal" onclick="addToCart('Antipulgas Oral')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="caminhas" data-price="129">
@@ -118,7 +139,7 @@
       <div class="product-body">
         <strong>Caminha Ortopédica Tamanho G</strong>
         <span class="price">R$ 129,90</span>
-        <button class="btn btn-teal" onclick="addToCart('Caminha Ortopédica')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="acessorios" data-price="27">
@@ -126,7 +147,7 @@
       <div class="product-body">
         <strong>Coleira Ajustável com Guia</strong>
         <span class="price">R$ 27,90</span>
-        <button class="btn btn-teal" onclick="addToCart('Coleira Ajustável')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
     <div class="product-card" data-cat="aquario" data-price="65">
@@ -134,7 +155,7 @@
       <div class="product-body">
         <strong>Filtro para Aquário 60L</strong>
         <span class="price">R$ 65,00</span>
-        <button class="btn btn-teal" onclick="addToCart('Filtro Aquário 60L')">Adicionar</button>
+        <button class="btn btn-teal" data-add>Adicionar</button>
       </div>
     </div>
   </div>
@@ -146,5 +167,164 @@
 </footer>
 
 <script src="../js/app.js"></script>
+
+<script>
+/* ---------- CARRINHO DE COMPRAS ---------- */
+(function () {
+  const CHAVE = 'arkhe_carrinho';
+  let itens = [];
+
+  try {
+    const salvo = JSON.parse(localStorage.getItem(CHAVE));
+    if (Array.isArray(salvo)) {
+      itens = salvo.filter(i => i && i.nome && Number.isFinite(i.preco) && i.qtd > 0);
+    }
+  } catch (e) { itens = []; }
+
+  const $ = id => document.getElementById(id);
+  const btn = $('cartBtn'), painel = $('cartPanel'), badge = $('cartBadge');
+  const lista = $('cartList'), contador = $('cartCount');
+  const textoItens = $('cartItemsText'), totalEl = $('cartTotal');
+  const finalizar = $('cartCheckout'), limpar = $('cartClear');
+
+  const brl = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  function salvar() {
+    try { localStorage.setItem(CHAVE, JSON.stringify(itens)); } catch (e) {}
+  }
+
+  function el(tag, classe, texto) {
+    const n = document.createElement(tag);
+    if (classe) n.className = classe;
+    if (texto !== undefined) n.textContent = texto;
+    return n;
+  }
+
+  function render() {
+    const qtdTotal = itens.reduce((s, i) => s + i.qtd, 0);
+    const valorTotal = itens.reduce((s, i) => s + i.qtd * i.preco, 0);
+
+    badge.textContent = qtdTotal > 99 ? '99+' : qtdTotal;
+    badge.hidden = qtdTotal === 0;
+    contador.textContent = qtdTotal;
+    textoItens.textContent = 'Total: ' + qtdTotal + (qtdTotal === 1 ? ' item' : ' itens');
+    totalEl.textContent = brl(valorTotal);
+    finalizar.disabled = qtdTotal === 0;
+    limpar.hidden = qtdTotal === 0;
+
+    lista.replaceChildren();
+
+    if (!itens.length) {
+      lista.appendChild(el('li', 'cart-empty', 'Seu carrinho está vazio 🐾'));
+      return;
+    }
+
+    itens.forEach(item => {
+      const li = el('li', 'cart-item');
+      li.dataset.nome = item.nome;
+
+      const info = el('div', 'cart-info');
+      info.appendChild(el('div', 'cart-name', item.nome));
+      info.appendChild(el('div', 'cart-price', brl(item.preco)));
+
+      const qtd = el('div', 'cart-qty');
+      const menos = el('button', '', '−');
+      menos.type = 'button'; menos.dataset.acao = 'menos';
+      menos.setAttribute('aria-label', 'Diminuir quantidade');
+      const mais = el('button', '', '+');
+      mais.type = 'button'; mais.dataset.acao = 'mais';
+      mais.setAttribute('aria-label', 'Aumentar quantidade');
+      qtd.append(menos, el('span', '', item.qtd), mais);
+      info.appendChild(qtd);
+
+      const remover = el('button', 'cart-remove', '✕');
+      remover.type = 'button'; remover.dataset.acao = 'remover';
+      remover.setAttribute('aria-label', 'Remover ' + item.nome);
+
+      li.append(el('div', 'cart-thumb', item.emoji || '🐾'), info, remover);
+      lista.appendChild(li);
+    });
+  }
+
+  function adicionar(card) {
+    const nome = card.querySelector('strong').textContent.trim();
+    const preco = parseFloat(
+      card.querySelector('.price').textContent.replace(/[^\d,]/g, '').replace(',', '.')
+    );
+    const emoji = card.querySelector('.product-img').textContent.trim();
+
+    const existente = itens.find(i => i.nome === nome);
+    if (existente) existente.qtd++;
+    else itens.push({ nome, preco, emoji, qtd: 1 });
+
+    salvar();
+    render();
+
+    btn.classList.remove('bump');
+    void btn.offsetWidth;
+    btn.classList.add('bump');
+  }
+
+  function abrir(abrirPainel) {
+    painel.hidden = !abrirPainel;
+    btn.setAttribute('aria-expanded', String(abrirPainel));
+  }
+
+  // Botões "Adicionar" dos produtos
+  $('productGrid').addEventListener('click', e => {
+    const b = e.target.closest('[data-add]');
+    if (!b) return;
+    adicionar(b.closest('.product-card'));
+
+    const original = b.textContent;
+    b.textContent = '✓ Adicionado';
+    setTimeout(() => { b.textContent = original; }, 900);
+  });
+
+  // Abrir / fechar painel
+  btn.addEventListener('click', () => abrir(painel.hidden));
+  document.addEventListener('click', e => {
+    if (!painel.hidden && !e.target.closest('.cart-wrap')) abrir(false);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') abrir(false);
+  });
+
+  // + / − / remover dentro da lista
+  lista.addEventListener('click', e => {
+    const b = e.target.closest('button[data-acao]');
+    if (!b) return;
+    const nome = b.closest('.cart-item').dataset.nome;
+    const item = itens.find(i => i.nome === nome);
+    if (!item) return;
+
+    if (b.dataset.acao === 'mais') item.qtd++;
+    if (b.dataset.acao === 'menos') item.qtd--;
+    if (b.dataset.acao === 'remover') item.qtd = 0;
+
+    itens = itens.filter(i => i.qtd > 0);
+    salvar();
+    render();
+  });
+
+  limpar.addEventListener('click', () => {
+    itens = [];
+    salvar();
+    render();
+  });
+
+  finalizar.addEventListener('click', () => {
+    const qtd = itens.reduce((s, i) => s + i.qtd, 0);
+    const total = itens.reduce((s, i) => s + i.qtd * i.preco, 0);
+    alert('Pedido com ' + qtd + (qtd === 1 ? ' item' : ' itens') + ' (' + brl(total) + ') registrado! O pagamento ainda será conectado.');
+    itens = [];
+    salvar();
+    render();
+    abrir(false);
+  });
+
+  render();
+})();
+</script>
 </body>
 </html>
