@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arkhe</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+<style>
+  /* Estilos específicos para a simulação de vídeo */
+  .video-section {
+    background: #fbe3b8;
+    padding: 60px 0;
+    min-height: calc(100vh - 250px);
+  }
+  .video-inner {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .video-text {
+    flex: 1;
+    min-width: 280px;
+  }
+  .video-text h1 {
+    font-size: 32px;
+    color: var(--orange);
+    margin: 0 0 16px;
+  }
+  .video-text p {
+    color: #5b4c33;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .video-box {
+    flex: 1;
+    min-width: 320px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+  .video-box h3 {
+    margin-top: 0;
+    color: var(--teal-dark);
+  }
+  .form-group {
+    margin-bottom: 18px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 6px;
+  }
+  .form-group select, .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+  }
+  .form-group select:focus, .form-group input:focus {
+    border-color: var(--teal);
+  }
+  
+  /* Relatório Simulado */
+  .video-result {
+    display: none;
+    margin-top: 24px;
+    padding: 20px;
+    background: #f8fbf9;
+    border-left: 4px solid var(--teal);
+    border-radius: 8px;
+  }
+  .video-result.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+  }
+  .video-result h4 {
+    margin: 0 0 10px;
+    color: var(--teal-dark);
+  }
+  .video-result p {
+    margin: 6px 0;
+    font-size: 13px;
+    color: #444;
+  }
+  .video-result strong {
+    color: var(--teal-dark);
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <a href="index.html" class="brand">ARKHE</a>
+  <nav class="nav-links">
+    <a href="ongs.html">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
+  </nav>
+  <div class="nav-right">
+    <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">Baixar App</a>
+  </div>
+  <button class="nav-toggle" type="button" aria-label="Abrir menu">☰</button>
+</header>
+
+<section class="video-section">
+  <div class="container video-inner">
+    <div class="video-text">
+      <h1>Pré-atendimento<br>por Vídeo</h1>
+      <p>Nossa IA analisa os sintomas relatados e gera um pré-diagnóstico para otimizar sua consulta. Preencha os dados abaixo para que possamos direcionar você ao veterinário mais adequado.</p>
+      <p style="margin-top:20px;font-size:12px;color:#a3742e;"><strong>Atenção:</strong> Este sistema é apenas uma simulação de triagem inicial e não substitui uma consulta real.</p>
+    </div>
+
+    <div class="video-box">
+      <h3>Simulador de Sintomas</h3>
+      <p style="font-size: 13px; color: #777; margin-bottom: 20px;">Preencha os campos para simular o pré-atendimento.</p>
+      
+      <div class="form-group">
+        <label for="petType">Qual o tipo de animal?</label>
+        <select id="petType">
+          <option value="cao">Cão</option>
+          <option value="gato">Gato</option>
+          <option value="exotico">Exótico (Ave, Réptil, etc.)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="symptom">Qual o sintoma principal?</label>
+        <select id="symptom">
+          <option value="pele">Problemas de pele (coceira, queda de pelo)</option>
+          <option value="vomito">Vômito ou diarreia</option>
+          <option value="comportamento">Mudança de comportamento</option>
+          <option value="respiratorio">Problemas respiratórios</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="urgency">Nível de Urgência</label>
+        <select id="urgency">
+          <option value="baixo">Baixo (Observação)</option>
+          <option value="medio">Médio (Nas próximas 24h)</option>
+          <option value="alto">Alto (Imediato)</option>
+        </select>
+      </div>
+
+      <button class="btn btn-teal" style="width: 100%; margin-top: 10px;" onclick="gerarPreDiagnostico()">Simular Pré-diagnóstico</button>
+
+      <div id="videoResult" class="video-result">
+        <h4>Relatório Preliminar</h4>
+        <p id="resEspecie"></p>
+        <p id="resSintoma"></p>
+        <p id="resUrgencia"></p>
+        <p id="resRecomendacao" style="margin-top: 10px; font-weight: 600;"></p>
+        <a href="#" class="btn btn-orange" style="display: block; text-align: center; margin-top: 15px;" onclick="alert('Redirecionando para a sala de vídeo do veterinário...')">Entrar na Sala de Vídeo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+<script>
+function gerarPreDiagnostico() {
+  // Captura os valores selecionados
+  const pet = document.getElementById('petType').value;
+  const symptom = document.getElementById('symptom').value;
+  const urgency = document.getElementById('urgency').value;
+  
+  // Mapeamento de textos amigáveis
+  const petNames = { cao: 'Cão', gato: 'Gato', exotico: 'Animal Exótico' };
+  const symptomNames = { 
+    pele: 'Problemas dermatológicos', 
+    vomito: 'Distúrbios gastrointestinais', 
+    comportamento: 'Alteração comportamental', 
+    respiratorio: 'Problemas respiratórios' 
+  };
+  const urgencyNames = { baixo: 'Baixa', medio: 'Média', alto: 'Alta' };
+
+  // Lógica de recomendação (Simulação da API)
+  let recomendacao = '';
+  if (urgency === 'alto') {
+    recomendacao = 'Procure atendimento de emergência imediatamente. Não espere.';
+  } else if (urgency === 'medio') {
+    recomendacao = 'Agende uma consulta via vídeo o quanto antes para avaliação.';
+  } else {
+    recomendacao = 'Monitore o pet em casa e agende uma consulta de rotina.';
+  }
+
+  // Atualiza o DOM com os resultados
+  document.getElementById('resEspecie').innerHTML = `<strong>Paciente:</strong> ${petNames[pet]}`;
+  document.getElementById('resSintoma').innerHTML = `<strong>Queixa Principal:</strong> ${symptomNames[symptom]}`;
+  document.getElementById('resUrgencia').innerHTML = `<strong>Nível de Urgência:</strong> ${urgencyNames[urgency]}`;
+  document.getElementById('resRecomendacao').innerHTML = `<strong>Recomendação:</strong> ${recomendacao}`;
+
+  // Mostra a caixa de resultado com animação
+  const resultBox = document.getElementById('videoResult');
+  resultBox.classList.add('show');
+  
+  // Rola suavemente até o resultado
+  resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+
+<!-- Scripts do app.js para manter o menu mobile e a conta funcionando -->
+<script src="../js/app.js"></script>
+</body>
+</html>

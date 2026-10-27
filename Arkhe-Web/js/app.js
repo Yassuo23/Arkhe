@@ -1,9 +1,5 @@
 /* =========================================================
    Conta do usuário (círculo no cabeçalho, ao lado do "Baixar App")
-   ---------------------------------------------------------
-   Simulação feita só no navegador (localStorage/sessionStorage),
-   enquanto não existe um servidor. Não guarda senha.
-   Inclua em cada página:  <script src="../js/conta.js"></script>
    ========================================================= */
 (function () {
   'use strict';
@@ -112,14 +108,12 @@
     painel.appendChild(el('h3', 'conta-titulo', 'Minha conta'));
 
     if (c) {
-      /* existe cadastro neste navegador, mas ninguém está conectado */
       painel.append(
         el('p', 'conta-texto', 'Encontramos a conta de ' + c.email + '. Entre para continuar.'),
         link('login.html', 'conta-acao primaria', 'Entrar'),
         link('cadastro.html', 'conta-acao secundaria', 'Criar outra conta')
       );
     } else {
-      /* nenhum login cadastrado */
       painel.append(
         el('p', 'conta-texto', 'Você ainda não tem uma conta. Cadastre-se para salvar seus pets favoritos e acompanhar seus pedidos.'),
         link('cadastro.html', 'conta-acao primaria', 'Cadastre-se'),
@@ -163,7 +157,7 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') fechar();
     });
-    window.addEventListener('storage', atualizar); // outra aba entrou/saiu
+    window.addEventListener('storage', atualizar);
 
     atualizar();
   }
@@ -181,6 +175,21 @@
   else montar();
 })();
 
+/* =========================================================
+   GUARDA DE ROTA: PETMATCH (Apenas checa as preferências)
+   ========================================================= */
+window.ArkheAcessarPetMatch = function() {
+  // Verifica se o usuário já respondeu ao quiz de preferências
+  const prefs = localStorage.getItem('arkhe_preferencias_petmatch');
+  
+  if (prefs) {
+    // Se já tem preferências salvas, vai direto para o PetMatch real (o novo que fizemos)
+    window.location.href = 'petmatch.html';
+  } else {
+    // Se não tem, vai para o Quiz de Preferências primeiro
+    window.location.href = 'preferencias.html';
+  }
+};
 
 // ============ DIAGNOSTICO PAGE ============
 function handleUpload(input){
@@ -195,7 +204,6 @@ function handleUpload(input){
     }, 900);
   }
 }
-// drag & drop support
 document.addEventListener('DOMContentLoaded', ()=>{
   const box = document.getElementById('uploadBox');
   if(box){

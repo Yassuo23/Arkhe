@@ -6,7 +6,7 @@
 <title>Arkhe</title>
 <link rel="stylesheet" href="../css/style.css">
 <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
-<script src="/js/app.js"></script>
+<!-- O app.js é carregado no final do body, não precisa aqui no head -->
 </head>
 <body>
 
@@ -16,7 +16,7 @@
     <a href="ongs.html">Hub de ONGs</a>
     <a href="veterinarios.html">Vet Online</a>
     <a href="marketplace.html">Marketplace</a>
-    <a href="diagnostico.html">Diagnóstico IA</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
   </nav>
   <div class="nav-right">
     <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">Baixar App</a>
@@ -73,11 +73,16 @@
         <h3>Consultas por vídeo</h3>
         <p>Veterinários certificados disponíveis online agora, sem filas e sem estresse para o seu pet.</p>
       </div>
-      <div class="feature-card" onclick="location.href='petmatch.html'">
+      
+      <!-- REDIRECIONAMENTO DIRETO E SEGURO -->
+      <div class="feature-card" onclick="location.href='preferencias.html'">
         <div class="icon">🐾</div>
         <h3>PetMatch</h3>
         <p>Encontre o pet ideal para adoção com nosso sistema de compatibilidade estilo match.</p>
+        <br>
+        <button class="btn btn-teal" onclick="acessarPetMatch(); event.stopPropagation();">Caso tivessem dados:</button>
       </div>
+      
     </div>
   </div>
 </section>
@@ -88,5 +93,21 @@
 </footer>
 
 <script src="../js/app.js"></script>
+
+<!-- SCRIPT DE REDIRECIONAMENTO INJETADO DIRETO NA PÁGINA -->
+<script>
+  function acessarPetMatch() {
+    // Verifica se as preferências já estão salvas no navegador
+    const prefs = localStorage.getItem('arkhe_preferencias_petmatch');
+    
+    if (prefs) {
+      // Se já fez o quiz, vai direto para o PetMatch
+      window.location.href = 'petmatch.html';
+    } else {
+      // Se não fez, vai para o Quiz de Preferências
+      window.location.href = 'preferencias.html';
+    }
+  }
+</script>
 </body>
 </html>

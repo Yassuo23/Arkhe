@@ -3,69 +3,659 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PetMatch</title>
+<title>PetMatch | Arkhe</title>
 <link rel="stylesheet" href="../css/style.css">
 <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+<script>
+  // ===== TRAVA DE ROTA =====
+  const prefs = localStorage.getItem('arkhe_preferencias_petmatch');
+  if (!prefs) {
+    window.location.href = 'preferencias.html';
+  }
+</script>
+<style>
+  /* ===== LAYOUT GERAL ===== */
+  body {
+    background-color: var(--cream, #f3efe6);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .match-app {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 28px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 32px 40px;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1;
+  }
+
+  /* ===== COLUNA 1 ===== */
+  .sidebar-left {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(32, 78, 73, 0.06);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: calc(100vh - 200px);
+    min-height: 600px;
+  }
+
+  .sidebar-header {
+    padding: 28px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .sidebar-header h2 {
+    margin: 0 0 24px;
+    font-size: 24px;
+    color: var(--teal-dark, #1f6b5c);
+  }
+
+  /* Carrossel */
+  .carousel-wrapper { position: relative; }
+
+  .carousel-btn {
+    position: absolute;
+    top: calc(50% - 14px);
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    color: var(--teal-dark, #1f6b5c);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    opacity: 0.8; transition: all 0.2s;
+  }
+  .carousel-btn:hover { opacity: 1; background: #f9fbfb; transform: translateY(-50%) scale(1.05); }
+  .carousel-btn.prev { left: -18px; }
+  .carousel-btn.next { right: -18px; }
+  .carousel-btn svg { width: 20px; height: 20px; stroke-width: 2.5; }
+
+  .recent-matches-carousel {
+    display: flex; gap: 20px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; padding: 4px 0 12px;
+    scroll-behavior: smooth;
+  }
+  .recent-matches-carousel::-webkit-scrollbar { display: none; } 
+
+  .recent-match-item {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    cursor: pointer; min-width: 84px; scroll-snap-align: start; transition: transform 0.2s;
+  }
+  .recent-match-item:hover { transform: translateY(-3px); }
+  
+  /* AVATAR DO CARROSSEL */
+  .recent-match-item .avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: #e6f0ee;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    border: 3px solid var(--teal, #3a8d7d);
+    box-shadow: 0 4px 10px rgba(58, 141, 125, 0.2);
+    overflow: hidden; 
+  }
+  .recent-match-item .avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .recent-match-item span { font-size: 14px; color: #444; font-weight: 600; }
+
+  /* Lista de Mensagens (ONGs) */
+  .messages-list { flex: 1; overflow-y: auto; padding: 12px 0; }
+  .message-item {
+    display: flex; align-items: center; gap: 18px; padding: 20px 28px;
+    cursor: pointer; transition: background 0.2s; border-left: 4px solid transparent;
+  }
+  .message-item:hover { background: #f9fbfb; }
+  .message-item.active { background: #eef5f4; border-left-color: var(--teal, #3a8d7d); }
+  
+  /* AVATAR DA ONG NA LISTA */
+  .message-item .avatar {
+    width: 60px; height: 60px; border-radius: 50%; background: #f3efe6;
+    display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0;
+    overflow: hidden;
+  }
+  .message-item .avatar img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+
+  .message-content { flex: 1; min-width: 0; }
+  .message-content strong { display: block; font-size: 16px; color: #333; margin-bottom: 4px; }
+  .message-content p { margin: 0; font-size: 14px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .message-time { font-size: 13px; color: #aaa; white-space: nowrap; align-self: flex-start; margin-top: 4px; }
+
+  /* ===== COLUNA 2: CARD CENTRAL ===== */
+  .main-match {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; height: calc(100vh - 200px); min-height: 600px;
+  }
+
+  .match-card {
+    width: 100%; height: calc(100% - 100px); min-height: 520px;
+    background: #fff; border-radius: 28px; box-shadow: 0 16px 50px rgba(32, 78, 73, 0.15);
+    overflow: hidden; position: relative; display: flex; flex-direction: column;
+  }
+
+  .pet-image {
+    flex: 1;
+    background: linear-gradient(135deg, #dcebe5 0%, #b2d8ce 100%);
+    position: relative;
+  }
+  .pet-image img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .pet-image .fallback-emoji {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 220px;
+  }
+  .pet-image::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 65%;
+    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    pointer-events: none;
+  }
+
+  .distance-badge {
+    position: absolute; top: 28px; left: 28px;
+    background: rgba(255,255,255,0.95); padding: 10px 18px; border-radius: 24px;
+    font-size: 14px; font-weight: 700; color: #333; z-index: 2;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .pet-info {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; color: #fff; z-index: 2;
+  }
+  .pet-info h2 { margin: 0; font-size: 36px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+  .pet-info .status-dot { width: 16px; height: 16px; background: #00f0ff; border-radius: 50%; display: inline-block; }
+  .pet-info p { margin: 8px 0 0; font-size: 17px; opacity: 0.9; }
+  .match-tags { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+  .match-tag {
+    background: rgba(255,255,255,0.2); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.5); padding: 8px 16px; border-radius: 20px;
+    font-size: 13px; font-weight: 600;
+  }
+
+  /* BOTÕES */
+  .action-buttons { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 16px; }
+  .btn-swipe {
+    border-radius: 50%; border: none; background: #fff; box-shadow: 0 6px 20px rgba(32, 78, 73, 0.15);
+    cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .btn-swipe:hover { transform: scale(1.1); }
+  .btn-swipe.dislike { width: 56px; height: 56px; font-size: 24px; color: #e0574f; }
+  .btn-swipe.super { width: 64px; height: 64px; font-size: 28px; color: #f5b041; }
+  .btn-swipe.like { width: 72px; height: 72px; font-size: 32px; background: var(--teal-dark, #1f6b5c); color: #fff; }
+  .btn-swipe.like:hover { background: var(--teal, #3a8d7d); box-shadow: 0 8px 25px rgba(31, 107, 92, 0.4); }
+
+  /* ===== COLUNA 3 ===== */
+  .sidebar-right {
+    background: #fff; border-radius: 20px; box-shadow: 0 4px 24px rgba(32, 78, 73, 0.06);
+    padding: 32px; display: flex; flex-direction: column; overflow-y: auto;
+    height: calc(100vh - 200px); min-height: 600px;
+  }
+  .sidebar-right h3 { margin: 0 0 8px; font-size: 24px; color: var(--teal-dark, #1f6b5c); }
+  .sidebar-right > p { margin: 0 0 28px; font-size: 15px; color: #888; }
+  .pref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .pref-box {
+    background: #fbfbfb; border: 1px solid #f0f0f0; border-radius: 16px;
+    padding: 24px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  }
+  .pref-box .icon { font-size: 32px; }
+  .pref-box strong { font-size: 15px; color: #333; }
+  .pref-box span { font-size: 13px; color: #777; line-height: 1.4; }
+  
+  .btn-alterar-pref {
+    margin-top: auto; width: 100%; padding: 18px; background: #f4f4f4; color: var(--teal-dark, #1f6b5c);
+    border: 1px solid #e0e0e0; border-radius: 14px; font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 10px;
+  }
+  .btn-alterar-pref:hover { background: #eef5f4; border-color: var(--teal, #3a8d7d); }
+
+  /* ===== MODAIS ===== */
+  .chat-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+  .chat-modal.show { display: flex; }
+  .chat-box { background: #fff; width: 100%; max-width: 600px; height: 700px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  
+  .chat-header { padding: 24px; background: var(--teal-dark, #1f6b5c); color: #fff; display: flex; align-items: center; gap: 18px; }
+  
+  /* AVATAR DA ONG NO CHAT */
+  .chat-header .avatar { 
+    width: 54px; height: 54px; background: #fff; border-radius: 50%; 
+    display: flex; align-items: center; justify-content: center; font-size: 28px; 
+    overflow: hidden; flex-shrink: 0;
+  }
+  .chat-header .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .chat-header h3 { margin: 0; font-size: 20px; }
+  .chat-header p { margin: 4px 0 0; font-size: 14px; opacity: 0.8; }
+  .chat-close { margin-left: auto; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; }
+  .chat-messages { flex: 1; padding: 24px; overflow-y: auto; background: #f9fbfb; display: flex; flex-direction: column; gap: 18px; }
+  .msg { max-width: 80%; padding: 16px 20px; border-radius: 18px; font-size: 16px; line-height: 1.5; }
+  .msg.received { background: #fff; color: #333; border: 1px solid #eaeaea; align-self: flex-start; border-bottom-left-radius: 6px; }
+  .msg.sent { background: var(--teal, #3a8d7d); color: #fff; align-self: flex-end; border-bottom-right-radius: 6px; }
+  .chat-input-area { padding: 24px; background: #fff; border-top: 1px solid #eaeaea; display: flex; gap: 16px; }
+  .chat-input-area input { flex: 1; padding: 16px 24px; border: 1px solid #ddd; border-radius: 30px; font-size: 16px; outline: none; }
+  .chat-input-area input:focus { border-color: var(--teal, #3a8d7d); }
+  .chat-input-area button { background: var(--orange, #e2703a); color: #fff; border: none; border-radius: 30px; padding: 0 28px; font-weight: 700; font-size: 16px; cursor: pointer; transition: background 0.2s; }
+  .chat-input-area button:hover { background: #c95c2a; }
+
+  .match-modal { display: none; position: fixed; inset: 0; background: rgba(32, 78, 73, 0.95); z-index: 110; align-items: center; justify-content: center; }
+  .match-modal.show { display: flex; }
+  .match-modal-inner { text-align: center; color: #fff; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .match-modal-inner h1 { font-size: 64px; margin: 0 0 12px; color: #fff; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  .match-modal-inner p { font-size: 20px; margin: 0 0 40px; opacity: 0.9; }
+  .match-modal-photos { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; }
+  .match-modal-photos span {
+    width: 140px; height: 140px; background: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 70px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  .match-modal-photos img { width: 100%; height: 100%; object-fit: cover; }
+
+  @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* Responsividade */
+  @media (max-width: 1200px) {
+    .match-app { grid-template-columns: 1fr 1fr; }
+    .sidebar-right { display: none; }
+  }
+  @media (max-width: 768px) {
+    .match-app { grid-template-columns: 1fr; padding: 16px; }
+    .sidebar-left { display: none; }
+    .main-match { height: auto; }
+    .match-card { height: 500px; }
+  }
+</style>
 </head>
 <body>
 
-<header class="navbar pm-header">
-<a href="index.html" class="brand">ARKHE</a>
+<header class="navbar">
+  <a href="index.html" class="brand">ARKHE</a>
   <nav class="nav-links">
-    <a href="petmatch.html" class="active">Match</a>
-    <a href="#" onclick="alert('Página de perfil em breve!'); return false;">Perfil</a>
-    <a href="#" onclick="alert('Sem mensagens novas.'); return false;">Mensagens</a>
-    <a href="consultas.html#ongs">Abrigos</a>
+    <a href="ongs.html">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
   </nav>
-  <div class="nav-right"></div>
+  <div class="nav-right">
+    <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">Baixar App</a>
+  </div>
+  <button class="nav-toggle" type="button" aria-label="Abrir menu">☰</button>
 </header>
 
-<div class="container pm-wrap">
-  <div class="pm-main">
-    <div class="pm-card" id="pmCard">
-      <div class="pm-photo" id="pmPhoto">🐕</div>
-      <h2 id="pmName">Simba</h2>
-      <p class="sub" id="pmDesc">Cachorro Caramelo - 2 anos - Dócil &amp; Brincalhão</p>
-      <div class="pm-tags" id="pmTags">
-        <span class="pm-tag">Vacinado</span>
-        <span class="pm-tag">Castrado</span>
-        <span class="pm-tag">Dócil</span>
+<div class="match-app">
+  
+  <aside class="sidebar-left">
+    <div class="sidebar-header">
+      <h2>Conversas</h2>
+      
+      <div class="carousel-wrapper">
+        <button class="carousel-btn prev" onclick="moverCarrossel(-1)" aria-label="Anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+        
+        <div class="recent-matches-carousel" id="matchesCarousel">
+          <div class="recent-match-item" onclick="alert('Abrir perfil de Thor')">
+            <div class="avatar"><img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" alt="Thor"></div>
+            <span>Thor</span>
+          </div>
+          <div class="recent-match-item" onclick="alert('Abrir perfil de Mel')">
+            <div class="avatar"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=150&q=80" alt="Mel"></div>
+            <span>Mel</span>
+          </div>
+          <div class="recent-match-item" onclick="alert('Abrir perfil de Bidu')">
+            <div class="avatar"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80" alt="Bidu"></div>
+            <span>Bidu</span>
+          </div>
+          <div class="recent-match-item" onclick="alert('Abrir perfil de Nina')">
+            <div class="avatar"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=150&q=80" alt="Nina"></div>
+            <span>Nina</span>
+          </div>
+          <div class="recent-match-item" onclick="alert('Abrir perfil de Luna')">
+            <div class="avatar"><img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=150&q=80" alt="Luna"></div>
+            <span>Luna</span>
+          </div>
+        </div>
+
+        <button class="carousel-btn next" onclick="moverCarrossel(1)" aria-label="Próximo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+        </button>
       </div>
     </div>
-    <div class="pm-actions">
-      <button class="pm-round no" onclick="pmSwipe('no')">✕</button>
-      <button class="pm-round info" onclick="alert('Mostrando mais detalhes deste pet...')">ⓘ</button>
-      <button class="pm-round yes" onclick="pmSwipe('yes')">♥</button>
+
+    <!-- LISTA DE MENSAGENS COM FOTOS DAS ONGS -->
+    <div class="messages-list">
+      
+      <div class="message-item active" onclick="openChat('Amigos dos Animais SP', 'Simba')">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=100&q=80" alt="Amigos dos Animais"></div>
+        <div class="message-content">
+          <strong>Amigos dos Animais SP</strong>
+          <p>Ele está disponível para adoção!</p>
+        </div>
+        <div class="message-time">Agora</div>
+      </div>
+      
+      <div class="message-item" onclick="openChat('Patas do Bem', 'Luna')">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=100&q=80" alt="Patas do Bem"></div>
+        <div class="message-content">
+          <strong>Patas do Bem</strong>
+          <p>A Luna é muito carinhosa.</p>
+        </div>
+        <div class="message-time">15 min</div>
+      </div>
+
+      <div class="message-item" onclick="openChat('Vida Animal', 'Tunico')">
+        <div class="avatar"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=150&q=80" alt="Vida Animal"></div>
+        <div class="message-content">
+          <strong>Vida Animal</strong>
+          <p>Você tem outros gatos em casa?</p>
+        </div>
+        <div class="message-time">1h</div>
+      </div>
+
     </div>
-  </div>
-
-  <aside class="pm-side">
-    <h4>Matches Recentes</h4>
-    <div class="match-mini"><span class="thumb">🐕</span><div><strong>Max</strong></div><span class="status">Ativo</span></div>
-    <div class="match-mini"><span class="thumb">🐈</span><div><strong>Luna</strong></div><span class="status">Calmo</span></div>
-
-    <h4>Animais Salvos</h4>
-    <div class="match-mini"><span class="thumb">🐈</span><div><strong>Tunico</strong></div></div>
-    <div class="match-mini"><span class="thumb">🐕</span><div><strong>Bob</strong></div></div>
   </aside>
+
+  <main class="main-match">
+    <div class="match-card" id="matchCard">
+      <div class="pet-image" id="petImage">
+        <div class="distance-badge">📍 5 km de distância</div>
+      </div>
+      <div class="pet-info">
+        <h2 id="petName">Carregando... <span class="status-dot"></span></h2>
+        <p id="petDesc">Buscando informações do pet</p>
+        
+        <div class="match-tags" id="matchTags">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-swipe dislike" onclick="swipe('no')">✕</button>
+      <button class="btn-swipe super" onclick="swipe('super')">⭐</button>
+      <button class="btn-swipe like" onclick="swipe('yes')">♥</button>
+    </div>
+  </main>
+
+  <aside class="sidebar-right">
+    <h3>Minhas Preferências</h3>
+    <p>Baseado no seu Quiz</p>
+
+    <div class="pref-grid">
+      <div class="pref-box">
+        <div class="icon">🐶</div>
+        <strong id="prefEspecie">Cão</strong>
+        <span>Espécie desejada</span>
+      </div>
+      <div class="pref-box">
+        <div class="icon">📏</div>
+        <strong id="prefPorte">Médio</strong>
+        <span>Porte ideal</span>
+      </div>
+      <div class="pref-box">
+        <div class="icon">⚡</div>
+        <strong id="prefEnergia">Moderado</strong>
+        <span>Nível de energia</span>
+      </div>
+      <div class="pref-box">
+        <div class="icon">🏠</div>
+        <strong id="prefRotina">Home office</strong>
+        <span>Sua rotina</span>
+      </div>
+    </div>
+    
+    <div style="margin-top: 32px; font-size: 14px; color: #888; background: #f9fbfb; padding: 20px; border-radius: 14px; line-height: 1.5; border: 1px solid #eef5f4;">
+      💡 <strong>Dica:</strong> Animais com mais tags verdes no card têm maior compatibilidade com você.
+    </div>
+
+    <button class="btn-alterar-pref" onclick="alterarPreferencias()">
+      <span>⚙️</span> Alterar Preferências
+    </button>
+  </aside>
+
 </div>
 
 <footer>
-  Sobre &nbsp;·&nbsp; Contato &nbsp;·&nbsp; Privacidade &nbsp;·&nbsp; Ajuda
-  <br><small>© 2026 Arkhe</small>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
 </footer>
 
-<div class="pm-modal" id="pmModal">
-  <div class="pm-modal-inner">
-    <h1>DEU<br>MATCH!</h1>
-    <p>você e seu bichinho são<br>100% compatíveis!</p>
-    <div class="pm-modal-photos">
-      <span id="pmModalPet">🐕</span><span>💔</span><span>👩</span>
+<!-- MODAL DE CHAT -->
+<div class="chat-modal" id="chatModal">
+  <div class="chat-box">
+    <div class="chat-header">
+      <!-- Avatar da ONG no chat (Injetado via JS) -->
+      <div class="avatar" id="chatOngIcon"></div>
+      <div>
+        <h3 id="chatOngName">Nome da ONG</h3>
+        <p>Falando sobre: <span id="chatPetName">Simba</span></p>
+      </div>
+      <button class="chat-close" onclick="closeChat()">✕</button>
     </div>
-    <button class="btn btn-teal" style="width:100%;" onclick="closePmModal()">Continuar</button>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="handleEnter(event)">
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE MATCH -->
+<div class="match-modal" id="matchModal">
+  <div class="match-modal-inner">
+    <h1>DEU MATCH!</h1>
+    <p>Você e <span id="matchedPetName">Simba</span> são compatíveis!</p>
+    <div class="match-modal-photos">
+      <span id="modalPetImage"><img src="" alt="Pet"></span>
+      <span style="font-size: 50px; background: none; box-shadow: none;">💖</span>
+      <span>👩</span>
+    </div>
+    <button class="btn btn-teal" style="width: 240px; margin: 0 auto; display: block; padding: 18px; border-radius: 30px; font-size: 18px; border:none; background: var(--teal-dark); color:#fff; cursor:pointer;" onclick="closeMatchModal()">Continuar</button>
   </div>
 </div>
 
 <script src="../js/app.js"></script>
+<script>
+  // ===== BANCO DE DADOS SIMULADO =====
+  const deck = [
+    { 
+      id: 1, 
+      nome: 'Simba', 
+      imagem: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=600&q=80', 
+      desc: 'Cachorro Caramelo • 2 anos • Dócil & Brincalhão', 
+      especie: 'Cão', porte: 'Médio', energia: 'Moderado' 
+    },
+    { 
+      id: 2, 
+      nome: 'Tunico', 
+      imagem: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80', 
+      desc: 'Gato Laranja • 1 ano • Calmo & Curioso', 
+      especie: 'Gato', porte: 'Pequeno', energia: 'Calmo' 
+    },
+    { 
+      id: 3, 
+      nome: 'Luna', 
+      imagem: 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80', 
+      desc: 'Gata Cinza • 2 anos • Carinhosa', 
+      especie: 'Gato', porte: 'Pequeno', energia: 'Calmo' 
+    },
+    { 
+      id: 4, 
+      nome: 'Max', 
+      imagem: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80', 
+      desc: 'Vira-lata • 3 anos • Ativo & Leal', 
+      especie: 'Cão', porte: 'Grande', energia: 'Muito ativo' 
+    }
+  ];
+
+  // Dicionário de imagens para as ONGs
+  const ongsAvatares = {
+    'Amigos dos Animais SP': 'https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=150&q=80',
+    'Patas do Bem': 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=150&q=80',
+    'Vida Animal': 'https://images.unsplash.com/photo-1537151608804-ea2f1414736f?auto=format&fit=crop&w=150&q=80'
+  };
+
+  let currentIndex = 0;
+  let userPrefs = [];
+
+  // ===== CARROSSEL =====
+  function moverCarrossel(direcao) {
+    const carousel = document.getElementById('matchesCarousel');
+    const item = carousel.querySelector('.recent-match-item');
+    if (!item) return;
+    const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
+    const distancia = item.getBoundingClientRect().width + gap;
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+
+    if (direcao === 1 && carousel.scrollLeft >= maxScroll - 5) {
+      carousel.scrollTo({ left: 0, behavior: 'smooth' });
+    } else if (direcao === -1 && carousel.scrollLeft <= 5) {
+      carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
+    } else {
+      carousel.scrollBy({ left: distancia * direcao, behavior: 'smooth' });
+    }
+  }
+
+  // ===== PREFERÊNCIAS =====
+  function carregarPreferencias() {
+    const savedPrefs = localStorage.getItem('arkhe_preferencias_petmatch');
+    if (savedPrefs) {
+      try {
+        const answers = JSON.parse(savedPrefs);
+        userPrefs = [
+          answers[0] === 0 ? 'Cão' : answers[0] === 1 ? 'Gato' : answers[0] === 2 ? 'Exótico' : 'Qualquer',
+          ['Pequeno', 'Médio', 'Grande', 'Indiferente'][answers[1]],
+          ['Trabalho fora', 'Home office', 'Agitada', 'Tempo livre'][answers[2]],
+          ['Muito ativo', 'Moderado', 'Calmo', 'Indiferente'][answers[3]]
+        ];
+        
+        document.getElementById('prefEspecie').textContent = userPrefs[0] || 'Qualquer';
+        document.getElementById('prefPorte').textContent = userPrefs[1] || 'Qualquer';
+        document.getElementById('prefRotina').textContent = userPrefs[2] || 'Qualquer';
+        document.getElementById('prefEnergia').textContent = userPrefs[3] || 'Qualquer';
+
+      } catch (e) { console.error("Erro ao ler preferências", e); }
+    }
+  }
+
+  // ===== RENDERIZAR CARD CENTRAL =====
+  function renderCard() {
+    const pet = deck[currentIndex % deck.length];
+    
+    const cardEl = document.getElementById('matchCard');
+    cardEl.style.transition = 'transform 0.3s, opacity 0.3s';
+    cardEl.style.transform = 'translateY(20px) scale(0.95)';
+    cardEl.style.opacity = '0';
+
+    setTimeout(() => {
+      const petImageContainer = document.getElementById('petImage');
+      petImageContainer.innerHTML = `
+        <img src="${pet.imagem}" alt="${pet.nome}" onerror="this.style.display='none'; this.parentElement.innerHTML += '<div class=\\'fallback-emoji\\'>🐾</div>';">
+        <div class="distance-badge">📍 5 km de distância</div>
+      `;
+      
+      document.getElementById('petName').innerHTML = pet.nome + ' <span class="status-dot"></span>';
+      document.getElementById('petDesc').textContent = pet.desc;
+
+      const matchTags = [];
+      if (userPrefs[0] === 'Qualquer' || userPrefs[0] === pet.especie) matchTags.push(`✅ ${pet.especie}`);
+      if (userPrefs[1] === 'Indiferente' || userPrefs[1] === pet.porte) matchTags.push(`✅ Porte ${pet.porte}`);
+      if (userPrefs[3] === 'Indiferente' || userPrefs[3] === pet.energia) matchTags.push(`✅ Energia ${pet.energia}`);
+
+      document.getElementById('matchTags').innerHTML = matchTags.map(t => `<span class="match-tag">${t}</span>`).join('');
+
+      cardEl.style.transform = 'translateY(0) scale(1)';
+      cardEl.style.opacity = '1';
+    }, 300);
+  }
+
+  // ===== SWIPE =====
+  function swipe(action) {
+    const pet = deck[currentIndex % deck.length];
+
+    if (action === 'yes') {
+      document.getElementById('matchedPetName').textContent = pet.nome;
+      document.getElementById('modalPetImage').innerHTML = `<img src="${pet.imagem}" alt="${pet.nome}">`;
+      document.getElementById('matchModal').classList.add('show');
+    } 
+    
+    currentIndex++;
+    renderCard();
+  }
+
+  function closeMatchModal() {
+    document.getElementById('matchModal').classList.remove('show');
+  }
+
+  // ===== CHAT =====
+  function openChat(ongName, petName) {
+    document.getElementById('chatOngName').textContent = ongName;
+    document.getElementById('chatPetName').textContent = petName;
+    
+    // Injeta a foto da ONG no cabeçalho do chat
+    const ongIconContainer = document.getElementById('chatOngIcon');
+    const ongFoto = ongsAvatares[ongName] || 'https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=150&q=80';
+    ongIconContainer.innerHTML = `<img src="${ongFoto}" alt="${ongName}">`;
+    
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.innerHTML = `
+      <div class="msg received">Olá! Temos o ${petName} disponível. Ele é muito dócil e se dá bem com outros animais.</div>
+      <div class="msg received">Você gostaria de agendar uma visita para conhecê-lo?</div>
+    `;
+
+    document.getElementById('chatModal').classList.add('show');
+    document.getElementById('chatInput').focus();
+  }
+
+  function closeChat() {
+    document.getElementById('chatModal').classList.remove('show');
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const chatMessages = document.getElementById('chatMessages');
+    const msgUser = document.createElement('div');
+    msgUser.className = 'msg sent';
+    msgUser.textContent = text;
+    chatMessages.appendChild(msgUser);
+    
+    input.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    setTimeout(() => {
+      const msgOng = document.createElement('div');
+      msgOng.className = 'msg received';
+      msgOng.textContent = 'Perfeito! Vou verificar a disponibilidade da agenda e já te retorno com os próximos passos para a adoção. 🐾';
+      chatMessages.appendChild(msgOng);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 1500);
+  }
+
+  function handleEnter(e) {
+    if (e.key === 'Enter') sendMessage();
+  }
+
+  // ===== ALTERAR PREFERÊNCIAS =====
+  function alterarPreferencias() {
+    localStorage.removeItem('arkhe_preferencias_petmatch');
+    window.location.href = 'preferencias.html';
+  }
+
+  // ===== INICIALIZAÇÃO =====
+  carregarPreferencias();
+  renderCard();
+</script>
 </body>
 </html>
