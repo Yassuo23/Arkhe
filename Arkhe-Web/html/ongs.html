@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -121,13 +120,7 @@
           vulnerabilidade. Aqui você pode encontrar projetos,
           apoiar causas e conhecer o trabalho de cada ONG.
         </p>
-
-        <a
-          href="#parceiras"
-          class="inline-block mt-6 bg-teal text-white px-6 py-3 rounded-lg hover:bg-teal-dark transition"
-        >
-          Conhecer ONGs
-        </a>
+        
       </div>
 
       <div>
@@ -146,47 +139,50 @@
   <section id="parceiras" class="py-14 md:py-16">
     <div class="max-w-6xl mx-auto px-5">
 
-      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-8">
-        <div>
-          <h2 class="text-2xl md:text-3xl font-bold">
-            Nossas ONGs parceiras
-          </h2>
+      <div class="mb-5">
+        <h2 class="text-2xl md:text-3xl font-bold">
+          Nossas ONGs parceiras
+        </h2>
 
-          <p class="text-gray-600 mt-2">
-            Conheça o trabalho de cada organização.
-          </p>
-        </div>
-
-        <div class="flex gap-2">
-          <button
-            id="prevBtn"
-            type="button"
-            aria-label="ONG anterior"
-            class="border border-teal text-teal rounded-lg px-4 py-2 hover:bg-teal hover:text-white"
-          >
-            Anterior
-          </button>
-
-          <button
-            id="nextBtn"
-            type="button"
-            aria-label="Próxima ONG"
-            class="border border-teal text-teal rounded-lg px-4 py-2 hover:bg-teal hover:text-white"
-          >
-            Próxima
-          </button>
-        </div>
+        <p class="text-gray-600 mt-2">
+          Conheça o trabalho de cada organização.
+        </p>
       </div>
+
+      <!-- Carrossel com setas -->
+      <div class="relative">
+
+        <button
+          id="prevBtn"
+          type="button"
+          aria-label="ONG anterior"
+          class="absolute top-[calc(50%-6px)] -translate-y-1/2 -left-4 z-10 w-12 h-12 rounded-full bg-white border border-sand text-teal-dark shadow-md flex items-center justify-center opacity-60 hover:opacity-80 active:opacity-0 transition-opacity duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <button
+          id="nextBtn"
+          type="button"
+          aria-label="Próxima ONG"
+          class="absolute top-[calc(50%-6px)] -translate-y-1/2 -right-4 z-10 w-12 h-12 rounded-full bg-white border border-sand text-teal-dark shadow-md flex items-center justify-center opacity-60 hover:opacity-80 active:opacity-0 transition-opacity duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
 
       <div
         id="carousel"
-        class="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4"
+        class="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pt-3 pb-6"
         tabindex="0"
         aria-label="Lista de ONGs parceiras"
       >
 
         <!-- ONG 1 -->
-        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden">
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
           <img
             src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80"
             alt="Cachorro"
@@ -216,7 +212,7 @@
         </article>
 
         <!-- ONG 2 -->
-        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden">
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
           <img
             src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80"
             alt="Cachorro em um parque"
@@ -246,7 +242,7 @@
         </article>
 
         <!-- ONG 3 -->
-        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden">
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
           <img
             src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80"
             alt="Gato"
@@ -276,7 +272,7 @@
         </article>
 
         <!-- ONG 4 -->
-        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden">
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
           <img
             src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600&q=80"
             alt="Dois cães juntos"
@@ -306,8 +302,9 @@
         </article>
 
       </div>
+      </div>
 
-      <p class="text-sm text-gray-500 mt-2">
+      <p class="text-sm text-gray-500">
         Você também pode deslizar para o lado para ver outras ONGs.
       </p>
 
@@ -505,30 +502,27 @@
 
   <!-- JavaScript -->
   <script>
-    // Menu para celular
-    const menuBtn = document.getElementById('menuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
+    // Menu para celular (cabeçalho Arkhe)
+    const navbar = document.querySelector('.navbar');
+    const navToggle = document.querySelector('.nav-toggle');
 
-    menuBtn.addEventListener('click', () => {
-      const aberto = !mobileMenu.classList.contains('hidden');
+    function fecharMenu() {
+      navbar.classList.remove('menu-aberto');
+      navToggle.textContent = '☰';
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Abrir menu');
+    }
 
-      mobileMenu.classList.toggle('hidden');
+    navToggle.addEventListener('click', () => {
+      const aberto = navbar.classList.toggle('menu-aberto');
 
-      menuBtn.textContent = aberto ? '☰' : '✕';
-      menuBtn.setAttribute('aria-expanded', String(!aberto));
-      menuBtn.setAttribute(
-        'aria-label',
-        aberto ? 'Abrir menu' : 'Fechar menu'
-      );
+      navToggle.textContent = aberto ? '✕' : '☰';
+      navToggle.setAttribute('aria-expanded', String(aberto));
+      navToggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
     });
 
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        menuBtn.textContent = '☰';
-        menuBtn.setAttribute('aria-expanded', 'false');
-        menuBtn.setAttribute('aria-label', 'Abrir menu');
-      });
+    navbar.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', fecharMenu);
     });
 
     // Carrossel de ONGs
