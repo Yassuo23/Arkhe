@@ -1,5 +1,7 @@
 let animaisCadastrados
 
+//função para carregar os dados do usuário
+
 const CarregarDados = async () => {
     console.log("CarregarDados iniciou");
 
@@ -22,17 +24,27 @@ const CarregarDados = async () => {
         const emailPerfil = document.querySelector("#emailPerfil");
         const nascimentoPerfil = document.querySelector("#nascimentoPerfil");
 
-        if (botaoPerfil && dados) {
-            botaoPerfil.textContent = dados.name || "Usuário";
-            nomePerfil.value = dados.name || "";
-            emailPerfil.textContent = dados.email || "Não informado";
+        if (dados) {
+            const nome = dados.name || dados.nome || "Usuário";
+
+            if (botaoPerfil) {
+                botaoPerfil.textContent = nome;
+            }
+            if (nomePerfil) {
+                nomePerfil.value = dados.name || dados.nome || "";
+            }
+            if (emailPerfil) {
+                emailPerfil.textContent = dados.email || "Não informado";
+            }
 
             const nascimento = dados.birthday
                 ? String(dados.birthday).slice(0, 10)
                 : "";
-            nascimentoPerfil.textContent = /^\d{4}-\d{2}-\d{2}$/.test(nascimento)
-                ? nascimento.split("-").reverse().join("/")
-                : nascimento || "Não informado";
+            if (nascimentoPerfil) {
+                nascimentoPerfil.textContent = /^\d{4}-\d{2}-\d{2}$/.test(nascimento)
+                    ? nascimento.split("-").reverse().join("/")
+                    : nascimento || "Não informado";
+            }
         }
     } catch (erro) {
         console.error("Erro ao carregar os dados:", erro);
@@ -42,7 +54,7 @@ const CarregarDados = async () => {
 CarregarDados();
 
 
-//Função para navegar entre as abas da página
+//Função para navegar entre as abas da página principal
 
 const sidebar = document.querySelector('#sidebar');
 const btnToggleSidebar = document.querySelector('#btn-toggle-sidebar');
@@ -85,40 +97,114 @@ function switchTab(event, aba) {
 
 const btnCadastroAnimais = document.querySelector("#btnCadatrarAnimal");
 
-btnCadastroAnimais.addEventListener("click", async () => {
-    await window.api.abrirCadastroAnimal();
-});
+if (btnCadastroAnimais) {
+    btnCadastroAnimais.addEventListener("click", async () => {
+        try {
+            await window.api.abrirCadastroAnimal();
+        } catch (erro) {
+            console.error("Não foi possível abrir o cadastro do animal:", erro);
+        }
+    });
+}
 
 const carregarAnimais = async () => {
-    animaisCadastrados = await window.api.carregarAnimais();
+    const containerPets = document.querySelector("#containerPets");
+    if (!containerPets) {
+        return;
+    }
 
-    const codigoCards = animaisCadastrados.map((animal) => `
-        <article class="pet-card">
-            <img src="../../../Arkhe-Web/Images/luna.jpg" alt="Luna">
-            <div class="pet-card-body">
-                <div class="pet-card-heading">
-                    <div>
-                        <h4>${animal.nome}</h4>
+    try {
+        animaisCadastrados = await window.api.carregarAnimais();
+        if (!Array.isArray(animaisCadastrados)) {
+            throw new TypeError("A resposta do banco não contém uma lista de animais.");
+        }
+
+        containerPets.replaceChildren(...animaisCadastrados.map((animal) => {
+            const card = document.createElement("article");
+            card.className = "pet-card";
+            card.innerHTML = `
+                <img src="../../../Arkhe-Web/Images/luna.jpg" alt="">
+                <div class="pet-card-body">
+                    <div class="pet-card-heading"><h4 class="pet-name"></h4></div>
+                    <dl class="pet-details">
+                        <div><dt>Espécie</dt><dd class="pet-species"></dd></div>
+                        <div><dt>Idade</dt><dd class="pet-age"></dd></div>
+                        <div><dt>Cor</dt><dd class="pet-color"></dd></div>
+                    </dl>
+                    <div class="pet-card-actions">
+                        <button class="pet-action pet-action-edit" type="button">
+                            <i class="bi bi-pencil"></i> Editar
+                        </button>
+                        <button class="pet-action pet-action-remove" type="button">
+                            <i class="bi bi-trash"></i> Remover
+                        </button>
                     </div>
                 </div>
-                <dl class="pet-details">
-                    <div><dt>Espécie</dt><dd>${animal.especie}</dd></div>
-                    <div><dt>Idade</dt><dd>${animal.idade}</dd></div>
-                    <div><dt>Cor</dt><dd>${animal.cor}</dd></div>
-                </dl>
-                <div class="pet-card-actions">
-                    <button class="pet-action pet-action-edit" type="button">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
-                    <button class="pet-action pet-action-remove" type="button">
-                        <i class="bi bi-trash"></i> Remover
-                    </button>
-                </div>
-            </div>
-        </article>
-    `).join('')
+            `;
 
-    document.querySelector("#containerPets").innerHTML = codigoCards;
-}
+            card.querySelector(".pet-name").textContent = animal.nome ?? "";
+            card.querySelector(".pet-species").textContent = animal.especie ?? "";
+            card.querySelector(".pet-age").textContent = animal.idade ?? "";
+            card.querySelector(".pet-color").textContent = animal.cor ?? "";
+            card.querySelector(".pet-action-remove").dataset.animalId = animal.id;
+
+            const especie = String(animal.especie ?? "").trim().toLocaleLowerCase("pt-BR");
+            const imagemPorEspecie = {
+                gato: "../images/gato.jpg",
+                gata: "../images/gato.jpg",
+                cachorro: "../images/cachorro.jpeg",
+                cachorra: "../images/cachorro.jpeg"
+            };
+            const imagem = card.querySelector("img");
+            imagem.src = imagemPorEspecie[especie] || "../../../Arkhe-Web/Images/luna.jpg";
+            imagem.alt = animal.nome ? `Foto de ${animal.nome}` : "Foto do animal";
+
+            return card;
+        }));
+    } catch (erro) {
+        console.error("Não foi possível carregar os animais:", erro);
+    }
+};
+
+let idAnimalParaExcluir = null;
+const modalConfirmarExclusaoElement = document.querySelector('#modalConfirmarExclusao');
+const modalConfirmarExclusao = modalConfirmarExclusaoElement
+    ? new bootstrap.Modal(modalConfirmarExclusaoElement)
+    : null;
+
+document.querySelector("#containerPets")?.addEventListener("click", (event) => {
+    const botaoRemover = event.target.closest(".pet-action-remove[data-animal-id]");
+    if (!botaoRemover || !modalConfirmarExclusao) {
+        return;
+    }
+
+    idAnimalParaExcluir = botaoRemover.dataset.animalId;
+    const animal = animaisCadastrados.find(
+        (item) => String(item.id) === idAnimalParaExcluir
+    );
+
+    if (!animal) {
+        console.error("O animal selecionado não foi encontrado.");
+        return;
+    }
+
+    document.querySelector('#nomeInsumoExcluir').textContent = animal.nome;
+    modalConfirmarExclusao.show();
+});
+
+document.querySelector('#btnConfirmarExclusao')?.addEventListener('click', async () => {
+    if (idAnimalParaExcluir === null) {
+        return;
+    }
+
+    try {
+        await window.api.excluirAnimal(idAnimalParaExcluir);
+        idAnimalParaExcluir = null;
+        modalConfirmarExclusao.hide();
+        await carregarAnimais();
+    } catch (erro) {
+        console.error("Não foi possível excluir o animal:", erro);
+    }
+});
 
 carregarAnimais();

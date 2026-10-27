@@ -1,275 +1,491 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arkhe</title>
+  <title>Quiz de Preferências | Arkhe</title>
+  <!-- Certifique-se de que o caminho para o CSS está correto -->
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
+    /* ===== FUNDO E ESTRUTURA PRINCIPAL (Tema Arkhe) ===== */
     body {
-      height: 100vh;
-      overflow: hidden;
-      margin: 0;  
-      padding: 0;
-      font-family: 'Bricolage Grotesque', sans-serif;
-      background: #F7EFE6;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 36px;
-      color: #C24E2E;
-      margin-top: 50px;
-    }
-
-    h2 {
-      font-size: 24px;
-      margin-top: 20px;
-      color: #333;
-      font-weight: 600;
-    }
-
-    .principal {
+      background-color: #f3efe6; /* Cor creme padrão do Arkhe */
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(58, 141, 125, 0.08) 0%, transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(226, 112, 58, 0.08) 0%, transparent 30%);
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 80px;
-      margin-top: 40px;
-    }
-
-    button {
-      background-color: #D45A33;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      cursor: pointer;
-      font-size: 25px;
-      border-radius: 10px;
-      transition: 0.3s;
-    }
-
-    button a {
-      color: white;
-      text-decoration: none;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-      background-color: #fafafa;
-      box-shadow: 0 4px 15px rgba(212, 90, 51, 0.2);
-      color: #D45A33;
-    }
-
-    button a:hover {
-      color: #D45A33;
-    }
-
-    .voltar {
-      margin: 30px 0;
-      font-size: 25px;
-    }
-
-    .voltar a {
-      color: #e6332a;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .imagens {
-      width: 300px;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 15px;
-    }
-
-    .esquerda, .direita {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
-      gap: 20px;
-      box-sizing: border-box;
-      background-color: rgba(250, 170, 116, 0.15);
-      border-radius: 15px;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      margin: 0;
+      overflow-x: hidden;
     }
 
-    @media screen and (max-width: 1366px) and (min-width: 1025px) {
-      .principal {
-        gap: 60px;
-      }
-
-      .imagens {
-        width: 400px;
-        height: 250px;
-      }
-
-      button {
-        font-size: 22px;
-        padding: 10px 18px;
-      }
-
-      h1 {
-        font-size: 32px;
-      }
-
-      h2 {
-        font-size: 22px;
-      }
+    /* Formas geométricas de fundo */
+    .shape { position: absolute; z-index: 0; pointer-events: none; }
+    .shape-triangle {
+      top: 10%; left: 5%; width: 0; height: 0;
+      border-left: 30px solid transparent; border-right: 30px solid transparent;
+      border-bottom: 50px solid #3a8d7d; transform: rotate(15deg); opacity: 0.15;
+    }
+    .shape-circle {
+      top: 15%; right: 10%; width: 40px; height: 40px;
+      background: #e2703a; border-radius: 50%; opacity: 0.15;
+    }
+    .shape-dots {
+      bottom: 10%; right: 5%; display: grid; grid-template-columns: repeat(4, 10px);
+      gap: 8px; opacity: 0.2;
+    }
+    .shape-dots div { width: 10px; height: 10px; background: #1f6b5c; border-radius: 50%; }
+    .shape-arrow {
+      bottom: 20%; left: 8%; width: 0; height: 0;
+      border-top: 15px solid transparent; border-bottom: 15px solid transparent;
+      border-left: 25px solid #e2703a; transform: rotate(-30deg); opacity: 0.15;
     }
 
-    @media screen and (max-width: 1024px) and (min-width: 769px) {
-      .principal {
-        gap: 40px;
-      }
-
-      .imagens {
-        width: 300px;
-        height: 220px;
-      }
-
-      button {
-        font-size: 20px;
-        padding: 8px 16px;
-      }
-
-      h1 {
-        font-size: 30px;
-      }
-
-      h2 {
-        font-size: 20px;
-      }
+    /* Container Central (Card Branco) */
+    .quiz-wrapper {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .quiz-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 15px 40px rgba(32, 78, 73, 0.08);
+      display: flex;
+      flex-direction: column;
     }
 
-    @media screen and (max-width: 768px) and (min-width: 481px) {
-      .principal {
-        flex-direction: column;
-        gap: 25px;
-      }
+    /* ===== CABEÇALHO DO QUIZ ===== */
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #f0f0f0;
+      padding-bottom: 20px;
+    }
+    .quiz-title h2 { margin: 0; font-size: 18px; color: #1f6b5c; }
+    .quiz-title span { font-size: 13px; color: #888; }
 
-      .imagens {
-        width: 100%;
-        height: 100%;
-      }
-
-      .direita {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .esquerda {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      button {
-        width: auto;
-        font-size: 18px;
-        padding: 8px 14px;
-      }
-
-      h1 {
-        font-size: 28px;
-        margin-top: 30px;
-      }
-
-      h2 {
-        font-size: 19px;
-      }
-
-      .voltar {
-        margin: 20px 0;
-      }
-
-      .voltar a {
-        font-size: 20px;
-      }
+    /* Barra de Progresso */
+    .progress-container {
+      flex: 1;
+      margin: 0 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .progress-text { font-size: 12px; color: #3a8d7d; font-weight: 700; margin-bottom: 6px; }
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e8e8e8;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #3a8d7d;
+      width: 0%; /* Inicia em 0% */
+      transition: width 0.3s ease;
     }
 
-    @media screen and (max-width: 480px) {
-      .principal {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .imagens {
-        width: 95%;
-        height: 180px;
-      }
-
-      button {
-        width: 90%;
-        font-size: 18px;
-        padding: 8px 14px;
-      }
-
-      h1 {
-        font-size: 26px;
-        margin-top: 25px;
-      }
-
-      h2 {
-        font-size: 18px;
-      }
-
-      .voltar {
-        margin: 15px 0;
-      }
-
-      .voltar a {
-        font-size: 18px;
-      }
+    /* ===== CORPO DA PERGUNTA ===== */
+    .quiz-body {
+      flex: 1;
+      padding: 10px 0;
+      min-height: 300px;
+    }
+    .question-number {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    .question-text {
+      font-size: 20px;
+      color: #2b2b2b;
+      margin-bottom: 30px;
+      font-weight: 500;
+      line-height: 1.4;
     }
 
-    @media screen and (max-width: 320px) {
-      .imagens {
-        height: 150px;
-      }
+    /* Opções */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+      position: relative;
+    }
+    .option-item:hover {
+      border-color: #3a8d7d;
+      background: #fcfdfc;
+    }
+    .option-item.selected {
+      border-color: #3a8d7d;
+      background: #f4f9f8;
+      box-shadow: 0 0 0 1px #3a8d7d;
+    }
+    .option-item.selected::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 15%; bottom: 15%;
+      width: 4px;
+      background: #1f6b5c;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    /* Radio button */
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .option-item.selected .option-radio {
+      border-color: #3a8d7d;
+    }
+    .option-item.selected .option-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: #3a8d7d;
+      border-radius: 50%;
+    }
+    
+    .option-text {
+      font-size: 15px;
+      color: #444;
+    }
 
-      button {
-        font-size: 16px;
-        padding: 6px 12px;
-      }
+    /* ===== RODAPÉ / BOTÕES ===== */
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .btn-nav {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-prev {
+      background: #f4f4f4;
+      color: #666;
+    }
+    .btn-prev:hover { background: #e0e0e0; }
+    .btn-prev:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .btn-next {
+      background: #1f6b5c;
+      color: #fff;
+    }
+    .btn-next:hover { background: #3a8d7d; }
 
-      h1 {
-        font-size: 22px;
-      }
-
-      h2 {
-        font-size: 16px;
-      }
-
-      .voltar a {
-        font-size: 16px;
-      }
+    .btn-finish {
+      background: #e2703a;
+      color: #fff;
+      padding: 12px 30px;
+      border-radius: 25px;
+    }
+    .btn-finish:hover { background: #c95c2a; box-shadow: 0 4px 12px rgba(226, 112, 58, 0.4); }
+    
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .quiz-card { padding: 25px; }
+      .quiz-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+      .progress-container { width: 100%; margin: 10px 0; }
+      .question-text { font-size: 17px; }
+      .quiz-footer { flex-direction: column; gap: 15px; }
+      .quiz-footer button { width: 100%; justify-content: center; }
+      .btn-finish { margin-top: 10px; }
     }
   </style>
 </head>
 <body>
+  <header class="navbar">
 
-  <h1>Web Shelter</h1>
-  <h2>Qual animal você deseja adotar?</h2>
+  <a href="index.html" class="brand">ARKHE</a>
 
-  <div class="principal">
-    <div class="esquerda">
-      <img class="imagens" src="../Images/coitado.jpeg" alt="Cachorro">
-      <button class="botao"><a href="cachorros.html">Cachorro</a></button>
-    </div>
+  <nav class="nav-links">
+  </nav>
 
-    <div class="direita">
-      <img class="imagens" src="../Images/gatoCoitado.jpeg" alt="Gato">
-      <button class="botao"><a href="gatos.html">Gato</a></button>
+  <div class="nav-right">
+    <a
+      href="#"
+      class="btn btn-orange"
+      onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
+    >
+      Baixar App
+    </a>
+  </div>
+
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
+
+</header>
+  <!-- Formas de fundo -->
+  <div class="shape shape-triangle"></div>
+  <div class="shape shape-circle"></div>
+  <div class="shape shape-arrow"></div>
+  <div class="shape-dots">
+    <div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div>
+  </div>
+
+  <div class="quiz-wrapper">
+    <div class="quiz-card">
+      
+      <!-- Cabeçalho (Sem Timer) -->
+      <div class="quiz-header">
+        <div class="quiz-title">
+          <h2>Arkhe PetMatch</h2>
+          <span>Quiz de Preferências</span>
+        </div>
+        
+        <div class="progress-container">
+          <span class="progress-text" id="progressText">0%</span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Corpo da Pergunta -->
+      <div class="quiz-body" id="quizBody">
+        <div class="question-number" id="qNumber">Pergunta 1 de 5</div>
+        <div class="question-text" id="qText">Qual tipo de animal você está procurando para adotar?</div>
+        
+        <div class="options-list" id="optionsList">
+          <!-- Opções injetadas via JS -->
+        </div>
+      </div>
+
+      <!-- Rodapé -->
+      <div class="quiz-footer">
+        <button class="btn-nav btn-prev" id="btnPrev" onclick="prevQuestion()" disabled>
+          ← Anterior
+        </button>
+        
+        <button class="btn-nav btn-next" id="btnNext" onclick="nextQuestion()">
+          Próximo →
+        </button>
+
+        <button class="btn-nav btn-finish" id="btnFinish" onclick="finishQuiz()" style="display: none;">
+          Finalizar
+        </button>
+      </div>
+
     </div>
   </div>
 
-  <div class="voltar">
-    <a href="cadastro.html">← Voltar para o cadastro</a>
-  </div>
+  <script>
+    // Dados das Perguntas
+    const questions = [
+      {
+        text: "Qual tipo de animal você está procurando para adotar?",
+        options: [
+          "Cão (Qualquer raça ou vira-lata)",
+          "Gato (Qualquer raça ou SRD)",
+          "Exóticos (Aves, Répteis, Roedores)",
+          "Ainda não sei, quero me surpreender"
+        ]
+      },
+      {
+        text: "Qual o porte do animal que você prefere?",
+        options: [
+          "Pequeno (Até 10kg)",
+          "Médio (10kg a 25kg)",
+          "Grande (Acima de 25kg)",
+          "Indiferente"
+        ]
+      },
+      {
+        text: "Como é a sua rotina em casa?",
+        options: [
+          "Trabalho fora e passo o dia todo fora",
+          "Trabalho home office / Fico em casa",
+          "Tenho uma rotina muito agitada",
+          "Estou sempre em casa e tenho tempo livre"
+        ]
+      },
+      {
+        text: "Qual nível de energia você espera do seu novo amigo?",
+        options: [
+          "Muito ativo (Precisa de exercícios diários)",
+          "Moderado (Gosta de brincar, mas também dorme muito)",
+          "Calmo (Ideal para apartamentos ou idosos)",
+          "Tanto faz, me adapto"
+        ]
+      },
+      {
+        text: "Você tem crianças ou outros animais em casa?",
+        options: [
+          "Sim, tenho crianças pequenas",
+          "Sim, tenho outros cães/gatos",
+          "Tenho ambos (crianças e outros animais)",
+          "Não, moro sozinho(a) ou sem animais"
+        ]
+      }
+    ];
 
+    let currentQuestion = 0;
+    let answers = new Array(questions.length).fill(null);
+
+    // Elementos do DOM
+    const qNumber = document.getElementById('qNumber');
+    const qText = document.getElementById('qText');
+    const optionsList = document.getElementById('optionsList');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnFinish = document.getElementById('btnFinish');
+
+    // Atualiza a barra de progresso com base nas respostas já salvas
+    function updateProgress() {
+      const respondidas = answers.filter(a => a !== null).length;
+      const percent = Math.round((respondidas / questions.length) * 100);
+      progressFill.style.width = `${percent}%`;
+      progressText.textContent = `${percent}%`;
+    }
+
+    // Renderiza a pergunta atual
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      qNumber.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+      qText.textContent = q.text;
+
+      optionsList.innerHTML = '';
+      q.options.forEach((opt, index) => {
+        const div = document.createElement('div');
+        div.className = 'option-item';
+        if (answers[currentQuestion] === index) {
+          div.classList.add('selected');
+        }
+        
+        div.innerHTML = `
+          <span class="option-text">${opt}</span>
+          <div class="option-radio"></div>
+        `;
+        
+        div.onclick = () => selectOption(index);
+        optionsList.appendChild(div);
+      });
+
+      // Controle dos botões
+      btnPrev.disabled = currentQuestion === 0;
+      
+      if (currentQuestion === questions.length - 1) {
+        btnNext.style.display = 'none';
+        btnFinish.style.display = 'flex';
+      } else {
+        btnNext.style.display = 'flex';
+        btnFinish.style.display = 'none';
+      }
+    }
+
+    // Seleciona uma opção
+    function selectOption(index) {
+      answers[currentQuestion] = index;
+      const items = optionsList.querySelectorAll('.option-item');
+      items.forEach((item, i) => {
+        if (i === index) item.classList.add('selected');
+        else item.classList.remove('selected');
+      });
+    }
+
+    // Avança para a próxima pergunta
+    function nextQuestion() {
+      if (answers[currentQuestion] === null) {
+        alert('Por favor, selecione uma opção para continuar.');
+        return;
+      }
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        updateProgress(); // Atualiza a barra
+        renderQuestion();
+      }
+    }
+
+    // Volta para a pergunta anterior
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        updateProgress(); // Atualiza a barra
+        renderQuestion();
+      }
+    }
+
+    // Finaliza o quiz
+    function finishQuiz() {
+      if (answers[currentQuestion] === null) {
+        alert('Por favor, selecione uma opção para continuar.');
+        return;
+      }
+      
+      btnFinish.textContent = 'Processando...';
+      btnFinish.disabled = true;
+
+      setTimeout(() => {
+        // Salva as preferências no navegador
+        try {
+          localStorage.setItem('arkhe_preferencias_petmatch', JSON.stringify(answers));
+        } catch (e) {}
+        
+        alert('Perfil de adoção criado com sucesso! Buscando pets compatíveis...');
+        window.location.href = 'petmatch.html';
+      }, 1500);
+    }
+
+    // Inicializa a página
+    updateProgress();
+    renderQuestion();
+
+  </script>
+  <script src="../js/app.js"></script>
 </body>
 </html>

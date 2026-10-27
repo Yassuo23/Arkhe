@@ -3,20 +3,22 @@ const FormCadastro = document.querySelector("#FormSingUp")
 FormCadastro.addEventListener("submit", async (e) =>{
     e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(e.target));
-    data.name = String(data.name);
-    data.email = String(data.email);
-    data.password = String(data.password);
-    data.birthday = String(data.birthday);
-    data.tel = Number(data.tel);
+    const campos = Object.fromEntries(new FormData(e.target));
+    const data = {
+        name: String(campos.nome || "").trim(),
+        email: String(campos.email || "").trim(),
+        password: String(campos.senha || ""),
+        birthday: String(campos.aniversario || ""),
+        tel: String(campos.tel || "").trim()
+    };
 
     try{
-        const answer = await window.api.singUp(data);
+        await window.api.signUp(data);
         console.log("Usuário cadastrado!!!");
         e.target.reset();
     }
     catch (erro){
-        console.log("Fudeu, não deu pra cadastrar");
+        console.error("Não foi possível cadastrar o usuário:", erro);
     }
 
 

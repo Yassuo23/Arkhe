@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arkhe</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            teal: {
+              DEFAULT: '#287D73',
+              dark: '#204E49',
+              light: '#DCEBE5'
+            },
+            orange: '#F47C45',
+            cream: '#FAF6EE',
+            sand: '#F1E6D4'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    #carousel {
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ong-card {
+      flex: 0 0 85%;
+      scroll-snap-align: start;
+    }
+
+    @media (min-width: 640px) {
+      .ong-card {
+        flex-basis: 48%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .ong-card {
+        flex-basis: 32%;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-cream text-teal-dark font-sans">
+
+ 
+<!-- Cabeçalho Arkhe -->
+<header class="navbar">
+
+  <a href="index.html" class="brand">ARKHE</a>
+
+  <nav class="nav-links">
+    <a href="ongs.html" class="active">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
+  </nav>
+
+  <div class="nav-right">
+    <a
+      href="#"
+      class="btn btn-orange"
+      onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
+    >
+      Baixar App
+    </a>
+  </div>
+
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
+
+</header>
+
+
+
+
+  <!-- Apresentação -->
+  <section class="bg-sand">
+    <div class="max-w-6xl mx-auto px-5 py-12 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+
+      <div>
+        <h1 class="text-3xl md:text-5xl font-bold leading-tight">
+          Conheça nossas
+          <span class="text-teal">ONGs parceiras</span>
+        </h1>
+
+        <p class="text-gray-600 mt-5 leading-relaxed">
+          Conheça organizações que ajudam animais em situação de
+          vulnerabilidade. Aqui você pode encontrar projetos,
+          apoiar causas e conhecer o trabalho de cada ONG.
+        </p>
+        
+      </div>
+
+      <div>
+        <img
+          src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=900&q=80"
+          alt="Cães e gatos"
+          class="w-full h-64 md:h-80 object-cover rounded-2xl"
+        >
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Carrossel -->
+  <section id="parceiras" class="py-14 md:py-16">
+    <div class="max-w-6xl mx-auto px-5">
+
+      <div class="mb-5">
+        <h2 class="text-2xl md:text-3xl font-bold">
+          Nossas ONGs parceiras
+        </h2>
+
+        <p class="text-gray-600 mt-2">
+          Conheça o trabalho de cada organização.
+        </p>
+      </div>
+
+      <!-- Carrossel com setas -->
+      <div class="relative">
+
+        <button
+          id="prevBtn"
+          type="button"
+          aria-label="ONG anterior"
+          class="absolute top-[calc(50%-6px)] -translate-y-1/2 -left-4 z-10 w-12 h-12 rounded-full bg-white border border-sand text-teal-dark shadow-md flex items-center justify-center opacity-60 hover:opacity-80 active:opacity-0 transition-opacity duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <button
+          id="nextBtn"
+          type="button"
+          aria-label="Próxima ONG"
+          class="absolute top-[calc(50%-6px)] -translate-y-1/2 -right-4 z-10 w-12 h-12 rounded-full bg-white border border-sand text-teal-dark shadow-md flex items-center justify-center opacity-60 hover:opacity-80 active:opacity-0 transition-opacity duration-300"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+      <div
+        id="carousel"
+        class="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pt-3 pb-6"
+        tabindex="0"
+        aria-label="Lista de ONGs parceiras"
+      >
+
+        <!-- ONG 1 -->
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80"
+            alt="Cachorro"
+            loading="lazy"
+            class="w-full h-48 object-cover"
+          >
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold">Patas do Bem</h3>
+
+            <p class="text-sm text-teal mt-2">
+              São Paulo - SP
+            </p>
+
+            <p class="text-gray-600 mt-4 leading-relaxed">
+              Organização dedicada ao resgate e à adoção responsável
+              de animais abandonados.
+            </p>
+
+            <a
+              href="#cadastro"
+              class="inline-block mt-5 text-teal font-bold hover:text-orange"
+            >
+              Saiba mais →
+            </a>
+          </div>
+        </article>
+
+        <!-- ONG 2 -->
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80"
+            alt="Cachorro em um parque"
+            loading="lazy"
+            class="w-full h-48 object-cover"
+          >
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold">Amigos de 4 Patas</h3>
+
+            <p class="text-sm text-teal mt-2">
+              Curitiba - PR
+            </p>
+
+            <p class="text-gray-600 mt-4 leading-relaxed">
+              Trabalha no acolhimento de animais e na busca por
+              famílias que desejam adotar.
+            </p>
+
+            <a
+              href="#cadastro"
+              class="inline-block mt-5 text-teal font-bold hover:text-orange"
+            >
+              Saiba mais →
+            </a>
+          </div>
+        </article>
+
+        <!-- ONG 3 -->
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80"
+            alt="Gato"
+            loading="lazy"
+            class="w-full h-48 object-cover"
+          >
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold">Vida Animal</h3>
+
+            <p class="text-sm text-teal mt-2">
+              Belo Horizonte - MG
+            </p>
+
+            <p class="text-gray-600 mt-4 leading-relaxed">
+              Incentiva a proteção dos animais, a castração e
+              a adoção responsável.
+            </p>
+
+            <a
+              href="#cadastro"
+              class="inline-block mt-5 text-teal font-bold hover:text-orange"
+            >
+              Saiba mais →
+            </a>
+          </div>
+        </article>
+
+        <!-- ONG 4 -->
+        <article class="ong-card bg-white rounded-xl border border-sand overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+          <img
+            src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600&q=80"
+            alt="Dois cães juntos"
+            loading="lazy"
+            class="w-full h-48 object-cover"
+          >
+
+          <div class="p-5">
+            <h3 class="text-xl font-bold">Laços de Amor</h3>
+
+            <p class="text-sm text-teal mt-2">
+              Campinas - SP
+            </p>
+
+            <p class="text-gray-600 mt-4 leading-relaxed">
+              Grupo de voluntários que oferece cuidados e
+              oportunidades para animais resgatados.
+            </p>
+
+            <a
+              href="#cadastro"
+              class="inline-block mt-5 text-teal font-bold hover:text-orange"
+            >
+              Saiba mais →
+            </a>
+          </div>
+        </article>
+
+      </div>
+      </div>
+
+      <p class="text-sm text-gray-500">
+        Você também pode deslizar para o lado para ver outras ONGs.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- Cadastro -->
+  <section id="cadastro" class="bg-sand py-14 md:py-16">
+    <div class="max-w-6xl mx-auto px-5 grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold">
+          Seja uma de nossas
+          <span class="text-teal">ONGs parceiras</span>
+        </h2>
+
+        <p class="text-gray-600 mt-5 leading-relaxed">
+          Faça parte da Arkhe e divulgue o trabalho da sua organização.
+          Queremos conectar ONGs a pessoas que desejam ajudar os animais.
+        </p>
+
+        <div class="mt-8 space-y-5">
+
+          <div>
+            <h3 class="font-bold text-lg">Mais visibilidade</h3>
+            <p class="text-gray-600">
+              Divulgue sua causa para mais pessoas.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-bold text-lg">Novas oportunidades</h3>
+            <p class="text-gray-600">
+              Conecte-se com possíveis voluntários e apoiadores.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="font-bold text-lg">Ajude mais animais</h3>
+            <p class="text-gray-600">
+              Amplie o alcance das suas ações de proteção animal.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- Formulário -->
+      <div class="bg-white rounded-xl p-5 sm:p-8 border border-sand">
+
+        <h3 class="text-2xl font-bold">Cadastro de ONGs</h3>
+
+        <p class="text-gray-600 mt-2 mb-6">
+          Preencha os campos para solicitar sua parceria.
+        </p>
+
+        <form id="ongForm" class="space-y-5">
+
+          <div>
+            <label for="nome" class="block font-semibold text-sm mb-2">
+              Nome da ONG *
+            </label>
+
+            <input
+              type="text"
+              id="nome"
+              name="nome"
+              required
+              placeholder="Nome da organização"
+              class="w-full min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-teal"
+            >
+          </div>
+
+          <div>
+            <label for="cnpj" class="block font-semibold text-sm mb-2">
+              CNPJ
+            </label>
+
+            <input
+              type="text"
+              id="cnpj"
+              name="cnpj"
+              inputmode="numeric"
+              placeholder="00.000.000/0000-00"
+              class="w-full min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-teal"
+            >
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+            <div class="min-w-0">
+              <label for="email" class="block font-semibold text-sm mb-2">
+                E-mail *
+              </label>
+
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="E-mail de contato"
+                class="w-full min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-teal"
+              >
+            </div>
+
+            <div class="min-w-0">
+              <label for="telefone" class="block font-semibold text-sm mb-2">
+                Telefone *
+              </label>
+
+              <input
+                type="tel"
+                id="telefone"
+                name="telefone"
+                required
+                placeholder="(00) 00000-0000"
+                class="w-full min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-teal"
+              >
+            </div>
+
+          </div>
+
+          <div>
+            <label for="cidade" class="block font-semibold text-sm mb-2">
+              Cidade e estado *
+            </label>
+
+            <input
+              type="text"
+              id="cidade"
+              name="cidade"
+              required
+              placeholder="Ex.: Campinas - SP"
+              class="w-full min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-teal"
+            >
+          </div>
+
+          <div>
+            <label for="causa" class="block font-semibold text-sm mb-2">
+              Sobre a ONG *
+            </label>
+
+            <textarea
+              id="causa"
+              name="causa"
+              rows="4"
+              required
+              placeholder="Conte um pouco sobre o trabalho da organização..."
+              class="w-full min-w-0 border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-teal resize-y"
+            ></textarea>
+          </div>
+
+          <label class="flex items-start gap-3 text-sm text-gray-600">
+            <input
+              type="checkbox"
+              name="autorizacao"
+              required
+              class="mt-1 accent-teal"
+            >
+
+            <span>
+              Autorizo o contato da equipe Arkhe sobre minha solicitação.
+            </span>
+          </label>
+
+          <button
+            type="submit"
+            class="w-full bg-teal text-white py-3 rounded-lg font-bold hover:bg-teal-dark transition"
+          >
+            Enviar cadastro
+          </button>
+
+          <p
+            id="formMessage"
+            class="hidden text-sm text-teal"
+            role="status"
+            aria-live="polite"
+          ></p>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Rodapé -->
+  <footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+
+  <!-- JavaScript -->
+  <script>
+    // Menu para celular (cabeçalho Arkhe)
+    const navbar = document.querySelector('.navbar');
+    const navToggle = document.querySelector('.nav-toggle');
+
+    function fecharMenu() {
+      navbar.classList.remove('menu-aberto');
+      navToggle.textContent = '☰';
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Abrir menu');
+    }
+
+    navToggle.addEventListener('click', () => {
+      const aberto = navbar.classList.toggle('menu-aberto');
+
+      navToggle.textContent = aberto ? '✕' : '☰';
+      navToggle.setAttribute('aria-expanded', String(aberto));
+      navToggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+    });
+
+    navbar.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', fecharMenu);
+    });
+
+    // Carrossel de ONGs
+    const carousel = document.getElementById('carousel');
+
+    function moverCarrossel(direcao) {
+      const card = carousel.querySelector('.ong-card');
+      const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
+      const distancia = card.getBoundingClientRect().width + gap;
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+
+      if (direcao === 1 && carousel.scrollLeft >= maxScroll - 5) {
+        carousel.scrollTo({ left: 0, behavior: 'smooth' });
+      } else if (direcao === -1 && carousel.scrollLeft <= 5) {
+        carousel.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      } else {
+        carousel.scrollBy({
+          left: distancia * direcao,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      moverCarrossel(1);
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      moverCarrossel(-1);
+    });
+
+    // Validação visual do formulário
+    // Para receber os dados, é necessário conectar um backend.
+    const ongForm = document.getElementById('ongForm');
+    const formMessage = document.getElementById('formMessage');
+
+    ongForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (!ongForm.checkValidity()) {
+        ongForm.reportValidity();
+        return;
+      }
+
+      formMessage.textContent =
+        'Cadastro preenchido! O envio real depende da conexão com o servidor.';
+      formMessage.classList.remove('hidden');
+    });
+  </script>
+
+</body>
+</html>

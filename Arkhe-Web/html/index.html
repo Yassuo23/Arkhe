@@ -6,16 +6,17 @@
 <title>Arkhe</title>
 <link rel="stylesheet" href="../css/style.css">
 <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+<!-- O app.js é carregado no final do body, não precisa aqui no head -->
 </head>
 <body>
 
 <header class="navbar">
-  <a href="index.html" class="brand"><span class="paw">🐾</span> ARKHE</a>
-  <nav class="nav-links">
+<a href="index.html" class="brand">ARKHE</a>  
+<nav class="nav-links">
     <a href="ongs.html">Hub de ONGs</a>
     <a href="veterinarios.html">Vet Online</a>
     <a href="marketplace.html">Marketplace</a>
-    <a href="diagnostico.html">Diagnóstico IA</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
   </nav>
   <div class="nav-right">
     <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">Baixar App</a>
@@ -28,7 +29,6 @@
     <div class="hero-text">
       <h1>BEM-VINDO AO<span class="accent">ARKHE</span></h1>
       <p>Conectando amor e tecnologia. Encontre ONGs, veterinários, lojas e obtenha diagnósticos inteligentes por imagem para o seu melhor amigo.</p>
-      <a href="#sobre" class="btn btn-teal">Descubra o Ecossistema</a>
     </div>
     <div class="hero-image">
       <div class="ph"><img src="../Images/pets.jpg" alt="Hero Image"></div>
@@ -36,16 +36,16 @@
   </div>
 </section>
 
-<section class="section" id="ongs">
+<section class="section" id="servicos">
   <div class="container">
     <h2>Tudo o que seu pet precisa</h2>
     <div class="feature-grid">
-      <a href="consultas.html#ongs" class="feature-card">
+      <a href="ongs.html" class="feature-card">
         <div class="icon">💛</div>
         <h3>Hub de ONGs</h3>
         <p>Espaço dedicado para cadastro e divulgação de ONGs. Conectamos quem quer ajudar, doar ou adotar com quem mais precisa.</p>
       </a>
-      <a href="consultas.html" class="feature-card">
+      <a href="veterinarios.html" class="feature-card">
         <div class="icon">🩺</div>
         <h3>Veterinários Online</h3>
         <p>Agende consultas virtuais de forma rápida e segura. Tire dúvidas sobre a saúde do seu pet sem sair do conforto de casa.</p>
@@ -59,25 +59,30 @@
   </div>
 </section>
 
-<section class="section" id="sobre" style="background:#fff;">
+<section class="section" id="sobre">
   <div class="container">
     <h2>Por que escolher o Arkhe?</h2>
     <div class="feature-grid">
-      <div class="feature-card" onclick="location.href='diagnostico.html'">
+      <div class="feature-card" onclick="location.href='diagnosticoIA.html'">
         <div class="icon">🤖</div>
         <h3>Diagnóstico com IA</h3>
         <p>Envie uma foto do seu pet e receba uma triagem preliminar inteligente antes de procurar um veterinário.</p>
       </div>
-      <div class="feature-card" onclick="location.href='consultas.html'">
+      <div class="feature-card" onclick="location.href='consultaVideo.html'">
         <div class="icon">📹</div>
         <h3>Consultas por vídeo</h3>
         <p>Veterinários certificados disponíveis online agora, sem filas e sem estresse para o seu pet.</p>
       </div>
-      <div class="feature-card" onclick="location.href='petmatch.html'">
+      
+      <!-- REDIRECIONAMENTO DIRETO E SEGURO -->
+      <div class="feature-card" onclick="location.href='preferencias.html'">
         <div class="icon">🐾</div>
         <h3>PetMatch</h3>
         <p>Encontre o pet ideal para adoção com nosso sistema de compatibilidade estilo match.</p>
+        <br>
+        <button class="btn btn-teal" onclick="acessarPetMatch(); event.stopPropagation();">Caso tivessem dados:</button>
       </div>
+      
     </div>
   </div>
 </section>
@@ -88,5 +93,21 @@
 </footer>
 
 <script src="../js/app.js"></script>
+
+<!-- SCRIPT DE REDIRECIONAMENTO INJETADO DIRETO NA PÁGINA -->
+<script>
+  function acessarPetMatch() {
+    // Verifica se as preferências já estão salvas no navegador
+    const prefs = localStorage.getItem('arkhe_preferencias_petmatch');
+    
+    if (prefs) {
+      // Se já fez o quiz, vai direto para o PetMatch
+      window.location.href = 'petmatch.html';
+    } else {
+      // Se não fez, vai para o Quiz de Preferências
+      window.location.href = 'preferencias.html';
+    }
+  }
+</script>
 </body>
 </html>

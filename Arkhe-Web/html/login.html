@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arkhe</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+
+  <style>
+    /* ===== Página de login: visual branco e suave ===== */
+    body {
+      background: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .login-page {
+      --c-teal: #287D73;
+      --c-teal-dark: #204E49;
+      --c-teal-light: #DCEBE5;
+      --c-orange: #F47C45;
+      --c-orange-dark: #E0642D;
+      --c-text: #2f3b3a;
+      --c-muted: #8a9593;
+
+      min-height: calc(100vh - 160px);
+      background: linear-gradient(180deg, #ffffff 0%, #f5f9f7 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+
+    .login-page *,
+    .login-page *::before,
+    .login-page *::after {
+      box-sizing: border-box;
+    }
+
+    /* ----- Cartão principal ----- */
+    .login-card {
+      width: 100%;
+      max-width: 980px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      box-shadow: 0 24px 60px rgba(32, 78, 73, 0.10),
+                  0 2px 8px rgba(32, 78, 73, 0.05);
+    }
+
+    /* ----- Lado da imagem ----- */
+    .login-imagem {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 520px;
+      background: #f1f4f3;
+    }
+
+    .login-imagem img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .login-marca {
+      position: absolute;
+      top: 24px;
+      left: 26px;
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    /* ----- Lado do formulário ----- */
+    .login-form-area {
+      padding: 40px 36px 36px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-form-area h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 500;
+      color: #1d2625;
+    }
+
+    .login-sub {
+      margin: 6px 0 28px;
+      font-size: 13px;
+      color: var(--c-muted);
+    }
+
+    .login-sub a {
+      color: var(--c-teal-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .login-sub a:hover {
+      color: var(--c-orange);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .login-campo {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .login-campo input[type="email"],
+    .login-campo input[type="password"],
+    .login-campo input[type="text"] {
+      width: 100%;
+      border: 1px solid #dfe4e2;
+      border-radius: 999px;
+      background: #ffffff;
+      padding: 13px 20px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--c-text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .login-campo input::placeholder {
+      color: #b4bcba;
+    }
+
+    .login-campo input:focus {
+      border-color: var(--c-teal);
+      box-shadow: 0 0 0 3px rgba(40, 125, 115, 0.12);
+    }
+
+    .login-campo input:user-invalid {
+      border-color: var(--c-orange);
+    }
+
+    .login-campo.com-botao input {
+      padding-right: 84px;
+    }
+
+    .ver-senha {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: var(--c-teal);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .ver-senha:hover {
+      color: var(--c-orange);
+    }
+
+    .manter-conectado {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 18px 0 20px;
+      font-size: 12px;
+      color: #5d6866;
+      cursor: pointer;
+    }
+
+    .manter-conectado input {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--c-teal);
+    }
+
+    .login-botao {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 999px;
+      background: var(--c-orange);
+      color: #ffffff;
+      padding: 13px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .login-botao:hover {
+      background: var(--c-orange-dark);
+    }
+
+    .login-botao:active {
+      transform: scale(0.98);
+    }
+
+    .esqueceu {
+      display: block;
+      margin-top: 16px;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a5654;
+      text-decoration: none;
+    }
+
+    .esqueceu:hover {
+      color: var(--c-orange);
+    }
+
+    .mensagem-form {
+      display: none;
+      margin: 14px 0 0;
+      font-size: 13px;
+      color: var(--c-teal);
+    }
+
+    .mensagem-form.visivel {
+      display: block;
+    }
+
+    /* ===== Responsivo ===== */
+    @media (max-width: 860px) {
+      .login-card {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        gap: 0;
+      }
+
+      .login-imagem {
+        min-height: 200px;
+        height: 200px;
+      }
+
+      .login-form-area {
+        padding: 28px 22px 26px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .login-page {
+        padding: 28px 14px;
+      }
+
+      .login-form-area h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Cabeçalho Arkhe -->
+<header class="navbar">
+
+  <a href="index.html" class="brand">ARKHE</a>
+
+  <nav class="nav-links">
+    <a href="ongs.html">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
+  </nav>
+
+  <div class="nav-right">
+    <a
+      href="#"
+      class="btn btn-orange"
+      onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
+    >
+      Baixar App
+    </a>
+  </div>
+
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
+
+</header>
+
+
+<!-- Login -->
+<main class="login-page">
+
+  <div class="login-card">
+
+    <!-- Imagem -->
+    <div class="login-imagem">
+      <img
+        src="../Images/patinhasLogin.jpg"
+        onerror="this.onerror=null;this.src='../Images/patinhasLogin.png'"
+        alt="Patinha de gato tocando a pata de um cachorro"
+      >
+      <span class="login-marca">ARKHE</span>
+    </div>
+
+    <!-- Formulário -->
+    <div class="login-form-area">
+
+      <h1>Entrar</h1>
+      <p class="login-sub">
+        Ainda não tem conta? <a href="cadastro.html">Cadastre-se</a>
+      </p>
+
+      <form id="loginForm" novalidate>
+
+        <div class="login-campo">
+          <label for="email" class="sr-only">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            required
+            placeholder="E-mail"
+          >
+        </div>
+
+        <div class="login-campo com-botao">
+          <label for="senha" class="sr-only">Senha</label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            autocomplete="current-password"
+            required
+            placeholder="Senha"
+          >
+          <button type="button" class="ver-senha" id="verSenha" aria-label="Mostrar senha">
+            Mostrar
+          </button>
+        </div>
+
+        <label class="manter-conectado">
+          <input type="checkbox" name="manter">
+          Manter conectado
+        </label>
+
+        <button type="submit" class="login-botao">Entrar</button>
+
+        <a href="#" class="esqueceu">Esqueceu a senha?</a>
+
+        <p id="mensagemForm" class="mensagem-form" role="status" aria-live="polite"></p>
+
+      </form>
+
+
+    </div>
+  </div>
+
+</main>
+
+
+<!-- Rodapé -->
+<footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+
+<!-- JavaScript -->
+<script>
+  // Menu para celular (cabeçalho Arkhe)
+  const navbar = document.querySelector('.navbar');
+  const navToggle = document.querySelector('.nav-toggle');
+
+  function fecharMenu() {
+    navbar.classList.remove('menu-aberto');
+    navToggle.textContent = '☰';
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Abrir menu');
+  }
+
+  navToggle.addEventListener('click', () => {
+    const aberto = navbar.classList.toggle('menu-aberto');
+
+    navToggle.textContent = aberto ? '✕' : '☰';
+    navToggle.setAttribute('aria-expanded', String(aberto));
+    navToggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+  });
+
+  navbar.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', fecharMenu);
+  });
+
+  // Mostrar / ocultar senha
+  const senha = document.getElementById('senha');
+  const verSenha = document.getElementById('verSenha');
+
+  verSenha.addEventListener('click', () => {
+    const mostrando = senha.type === 'text';
+    senha.type = mostrando ? 'password' : 'text';
+    verSenha.textContent = mostrando ? 'Mostrar' : 'Ocultar';
+    verSenha.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+  });
+
+  // Validação visual do formulário
+  // Para fazer o login de verdade, é necessário conectar um backend.
+  const form = document.getElementById('loginForm');
+  const mensagemForm = document.getElementById('mensagemForm');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    mensagemForm.textContent =
+      'Dados preenchidos! O login real depende da conexão com o servidor.';
+    mensagemForm.classList.add('visivel');
+  });
+
+</script>
+
+</body>
+</html>

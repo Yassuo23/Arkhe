@@ -9,18 +9,32 @@
 </head>
 <body>
 
+
 <header class="navbar">
-  <a href="index.html" class="brand"><span class="paw">🐾</span> ARKHE</a>
+  <a href="index.html" class="brand">ARKHE</a>
+
   <nav class="nav-links">
-    <a href="index.html#ongs">Hub de ONGs</a>
-    <a href="consultas.html">Vet Online</a>
+    <a href="ongs.html">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
     <a href="marketplace.html">Marketplace</a>
-    <a href="diagnostico.html" class="active">Diagnóstico IA</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
   </nav>
+
   <div class="nav-right">
-    <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">Baixar App</a>
+    <a
+      href="#"
+      class="btn btn-orange"
+      onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
+    >
+      Baixar App
+    </a>
   </div>
+
+  <button class="nav-toggle" type="button" aria-label="Abrir menu">
+    ☰
+  </button>
 </header>
+
 
 <section class="diag-section">
   <div class="container diag-inner">
@@ -31,10 +45,9 @@
     </div>
 
     <div class="upload-box" id="uploadBox">
-      <div class="cloud">☁️⬆️</div>
       <strong>Experimente a IA</strong>
       <p>Arraste a foto do seu pet aqui ou clique para fazer o upload.</p>
-      <button class="btn btn-teal" onclick="document.getElementById('fileInput').click()">🖼 Enviar Foto</button>
+      <button class="btn btn-teal" onclick="document.getElementById('fileInput').click()">Enviar Foto</button>
       <input type="file" id="fileInput" accept="image/*" onchange="handleUpload(this)">
       <div id="uploadPreview" class="upload-preview"></div>
     </div>
@@ -46,7 +59,7 @@
       <p><strong>Possível condição:</strong> Dermatite alérgica leve</p>
       <p><strong>Nível de urgência:</strong> Baixo — observação recomendada</p>
       <p><strong>Recomendação:</strong> Evite que o pet coce a área e agende uma consulta com um dermatologista veterinário caso os sintomas persistam por mais de 3 dias.</p>
-      <a href="consultas.html" class="btn btn-teal" style="margin-top:12px;display:inline-block;">Ver veterinários disponíveis</a>
+      <a href="consultaVideo.html" class="btn btn-teal" style="margin-top:12px;display:inline-block;">Ver veterinários disponíveis</a>
     </div>
   </div>
 </section>

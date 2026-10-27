@@ -67,15 +67,15 @@ ipcMain.handle('openMainPage', (event) => {
 
 })
 
-//Função para Abrir a página de Cadastro de Animais
-ipcMain.handle('modalCadastroAnimal:abrir', async (event) => {
-
-    const mainWindow = MainWindow
+ipcMain.handle('modalCadastroAnimal:abrir', async () => {
+    if (!MainWindow || MainWindow.isDestroyed()) {
+        throw new Error('A janela principal não está disponível para abrir o cadastro.');
+    }
 
     const modalCadastro = new BrowserWindow({
         width: 500,
         height: 700,
-        parent: mainWindow,
+        parent: MainWindow,
         modal: true,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
@@ -85,16 +85,11 @@ ipcMain.handle('modalCadastroAnimal:abrir', async (event) => {
     await modalCadastro.loadFile(path.join(__dirname, "../renderer/cadastroAnimal.html"));
 });
 
-
-
-
-
-
-ipcMain.handle('singUp', (event, data) => {
+ipcMain.handle('signUp', (event, data) => {
     return new Promise((resolve, reject) => {
-        const sql = 'INSERT INTO users (name, email, password, birthday) VALUES (?, ?, ?, ?)'
+        const sql = 'INSERT INTO users (name, email, password, birthday, tel) VALUES (?, ?, ?, ?, ?)'
     
-        connection.query(sql, [data.name, data.email, data.password, data.birthday], (erro, result) => {
+        connection.query(sql, [data.name, data.email, data.password, data.birthday || null, data.tel || null], (erro, result) => {
             if (erro){
                 reject(erro);
                 return;
@@ -107,7 +102,7 @@ ipcMain.handle('singUp', (event, data) => {
 
 ipcMain.handle("login", (e, payload) => {
     return new Promise((resolve, reject) => {
-        const dbData = 'SELECT id, name, email, birthday, password FROM users WHERE email = ?';
+        const dbData = 'SELECT id, name, email, password, birthday, tel FROM users WHERE email = ?';
 
         connection.query(dbData, [payload.email], (erro, resultados) => {
             if (erro) {
@@ -130,13 +125,12 @@ ipcMain.handle("login", (e, payload) => {
                 id: usuario.id,
                 name: usuario.name,
                 email: usuario.email,
-                birthday: usuario.birthday
+                birthday: usuario.birthday,
+                tel: usuario.tel
             }
 
             logado = true
             resolve(usuarioLogado);
-
-        
 
         });
     });
@@ -181,16 +175,16 @@ ipcMain.handle("animal:carregar", (_event, dados) => {
     });
 });
 
- ipcMain.handle('animal:excluir', (evento, id) => {
-        return new Promise((resolve, reject) => {
-            const sql = 'DELETE FROM animais WHERE id = ?';
+ipcMain.handle('animal:excluir', (_event, id) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'DELETE FROM animais WHERE id = ?';
 
-            conexao.query(sql, [id], (erro, resultado) => {
-                if (erro) {
-                    reject(erro);
-                    return;
-                }
-                resolve(resultado);
-            });
+        connection.query(sql, [id], (erro, resultado) => {
+            if (erro) {
+                reject(erro);
+                return;
+            }
+            resolve(resultado);
         });
     });
+});

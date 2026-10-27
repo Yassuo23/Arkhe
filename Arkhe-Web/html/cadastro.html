@@ -2,29 +2,453 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Arkhe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../css/cadastro.css">
+  <title>Cadastro | Arkhe</title>
+
+  <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
+
+  <style>
+    /* ===== Página de cadastro: visual mais branco e suave ===== */
+    body {
+      background: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .cadastro-page {
+      --c-teal: #287D73;
+      --c-teal-dark: #204E49;
+      --c-teal-light: #DCEBE5;
+      --c-orange: #F47C45;
+      --c-text: #2f3b3a;
+      --c-muted: #8a9593;
+
+      min-height: calc(100vh - 160px);
+      background: linear-gradient(180deg, #ffffff 0%, #f7faf8 100%);
+      display: grid;
+      grid-template-columns: minmax(320px, 440px) 1fr;
+      align-items: center;
+      gap: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    /* ----- Coluna do formulário ----- */
+    .cadastro-title {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 400;
+      letter-spacing: 0.45em;
+      color: #111;
+      margin: 0 0 28px;
+      padding-left: 0.45em; /* compensa o espaçamento da última letra */
+    }
+
+    .cadastro-card {
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 36px 36px 30px;
+      box-shadow: 0 18px 40px rgba(32, 78, 73, 0.10),
+                  0 2px 6px rgba(32, 78, 73, 0.05);
+    }
+
+    .cadastro-card h2 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--c-teal-dark);
+      text-align: center;
+    }
+
+    .cadastro-card .sub {
+      margin: 0 0 24px;
+      font-size: 13px;
+      color: var(--c-muted);
+      text-align: center;
+    }
+
+    .campo {
+      margin-bottom: 20px;
+    }
+
+    .campo label {
+      display: block;
+      font-size: 12px;
+      color: var(--c-muted);
+      margin-bottom: 2px;
+    }
+
+    .campo input {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #d9dedc;
+      background: transparent;
+      padding: 8px 2px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--c-text);
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+    }
+
+    .campo input::placeholder {
+      color: #b7bfbd;
+    }
+
+    .campo input:focus {
+      border-bottom-color: var(--c-teal);
+    }
+
+    .campo input:user-invalid {
+      border-bottom-color: var(--c-orange);
+    }
+
+    .campo-senha {
+      position: relative;
+    }
+
+    .campo-senha input {
+      padding-right: 52px;
+    }
+
+    .ver-senha {
+      position: absolute;
+      right: 0;
+      bottom: 6px;
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: var(--c-teal);
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .ver-senha:hover {
+      color: var(--c-orange);
+    }
+
+    .botao-cadastro {
+      display: block;
+      width: 100%;
+      margin-top: 28px;
+      padding: 12px;
+      border: none;
+      border-radius: 999px;
+      background: var(--c-teal-dark);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .botao-cadastro:hover {
+      background: var(--c-teal);
+    }
+
+    .botao-cadastro:active {
+      transform: scale(0.98);
+    }
+
+    .mensagem-form {
+      display: none;
+      margin: 14px 0 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--c-teal);
+    }
+
+    .mensagem-form.visivel {
+      display: block;
+    }
+
+    .link-login {
+      margin: 20px 0 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--c-muted);
+    }
+
+    .link-login a {
+      color: var(--c-teal-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .link-login a:hover {
+      color: var(--c-orange);
+    }
+
+    /* ----- Coluna da imagem ----- */
+    .cadastro-imagem {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+
+    .cadastro-imagem img {
+      width: 100%;
+      max-width: 420px;
+      max-height: 620px;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* ===== Responsivo ===== */
+    @media (max-width: 860px) {
+      .cadastro-page {
+        grid-template-columns: 1fr;
+        padding: 32px 18px;
+        gap: 24px;
+        max-width: 480px;
+      }
+
+      /* No celular, o cachorro aparece menor, abaixo do formulário */
+      .cadastro-imagem {
+        justify-content: center;
+        order: 2;
+      }
+
+      .cadastro-imagem img {
+        max-width: 220px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .cadastro-card {
+        padding: 28px 22px 24px;
+      }
+
+      .cadastro-title {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <div class="tudo">
-  <header>
-    <h1>Web Shelter</h1>
-    <h3>Cadastre-se para Adotar um Amigo</h3>
-  </header>
-  <form action="#" method="post">
-    <label>Nome completo: <input type="text" name="nome" required></label><br><br>
-    <label>Email: <input type="email" name="email" required></label><br><br>
-    <label>Data de nascimento: <input type="date" name="nascimento"></label><br><br>
-    <label>Telefone: <input type="tel" name="telefone"></label><br><br>
-  <div id="botoes">
-    <button type="submit"><a href="preferencias.html">Cadastrar</a></button>
+
+<!-- Cabeçalho Arkhe -->
+<header class="navbar">
+ <a href="index.html" class="brand">ARKHE</a>
+
+  <nav class="nav-links">
+    <a href="ongs.html">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnosticoIA.html">Diagnóstico IA</a>
+  </nav>
+
+  <div class="nav-right">
+    <a
+      href="#"
+      class="btn btn-orange"
+      onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
+    >
+      Baixar App
+    </a>
   </div>
-  </form>
-  <div class="voltar">
-    <a href="index.html">← Voltar para a página inicial</a>
+
+  <button class="nav-toggle" type="button" aria-label="Abrir menu">
+    ☰
+  </button>
+</header>
+
+
+<!-- Cadastro -->
+<main class="cadastro-page">
+
+  <div>
+    <h1 class="cadastro-title">ARKHE</h1>
+
+    <div class="cadastro-card">
+      <h2>Crie sua conta</h2>
+      <p class="sub">Preencha os dados abaixo para se cadastrar.</p>
+
+      <form id="cadastroForm" novalidate>
+
+        <div class="campo">
+          <label for="nome">Nome completo</label>
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            autocomplete="name"
+            required
+            placeholder="Digite seu nome"
+          >
+        </div>
+
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="email"
+            required
+            placeholder="Digite seu e-mail"
+          >
+        </div>
+
+        <div class="campo campo-senha">
+          <label for="senha">Senha</label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            autocomplete="new-password"
+            minlength="8"
+            required
+            placeholder="Mínimo de 8 caracteres"
+          >
+          <button type="button" class="ver-senha" id="verSenha" aria-label="Mostrar senha">
+            Mostrar
+          </button>
+        </div>
+
+        <div class="campo">
+          <label for="aniversario">Data de aniversário</label>
+          <input
+            type="date"
+            id="aniversario"
+            name="aniversario"
+            autocomplete="bday"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="telefone">Telefone</label>
+          <input
+            type="tel"
+            id="telefone"
+            name="telefone"
+            autocomplete="tel"
+            inputmode="numeric"
+            required
+            placeholder="(00) 00000-0000"
+            maxlength="15"
+          >
+        </div>
+
+        <button type="submit" class="botao-cadastro">Cadastrar</button>
+
+        <p id="mensagemForm" class="mensagem-form" role="status" aria-live="polite"></p>
+
+      </form>
+
+      <p class="link-login">
+        Já tem uma conta? <a href="login.html">Fazer login</a>
+      </p>
+    </div>
   </div>
+
+  <div class="cadastro-imagem">
+    <img
+      src="../Images/salsichaCadastro.png"
+      alt="Cachorro salsicha de coleira olhando para o lado"
+    >
   </div>
+
+</main>
+
+
+<!-- Rodapé -->
+<footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
+
+
+<!-- JavaScript -->
+<script>
+  // Menu para celular (cabeçalho Arkhe)
+  const navbar = document.querySelector('.navbar');
+  const navToggle = document.querySelector('.nav-toggle');
+
+  function fecharMenu() {
+    navbar.classList.remove('menu-aberto');
+    navToggle.textContent = '☰';
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Abrir menu');
+  }
+
+  navToggle.addEventListener('click', () => {
+    const aberto = navbar.classList.toggle('menu-aberto');
+
+    navToggle.textContent = aberto ? '✕' : '☰';
+    navToggle.setAttribute('aria-expanded', String(aberto));
+    navToggle.setAttribute('aria-label', aberto ? 'Fechar menu' : 'Abrir menu');
+  });
+
+  navbar.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', fecharMenu);
+  });
+
+  // Mostrar / ocultar senha
+  const senha = document.getElementById('senha');
+  const verSenha = document.getElementById('verSenha');
+
+  verSenha.addEventListener('click', () => {
+    const mostrando = senha.type === 'text';
+    senha.type = mostrando ? 'password' : 'text';
+    verSenha.textContent = mostrando ? 'Mostrar' : 'Ocultar';
+    verSenha.setAttribute('aria-label', mostrando ? 'Mostrar senha' : 'Ocultar senha');
+  });
+
+  // Máscara do telefone: (00) 00000-0000
+  const telefone = document.getElementById('telefone');
+
+  telefone.addEventListener('input', () => {
+    let n = telefone.value.replace(/\D/g, '').slice(0, 11);
+
+    if (n.length > 6) {
+      const meio = n.length > 10 ? 7 : 6;
+      n = `(${n.slice(0, 2)}) ${n.slice(2, meio)}-${n.slice(meio)}`;
+    } else if (n.length > 2) {
+      n = `(${n.slice(0, 2)}) ${n.slice(2)}`;
+    } else if (n.length > 0) {
+      n = `(${n}`;
+    }
+
+    telefone.value = n;
+  });
+
+  // Data de aniversário: não permite datas no futuro
+  const aniversario = document.getElementById('aniversario');
+  aniversario.max = new Date().toISOString().split('T')[0];
+
+  // Validação visual do formulário
+  // Para salvar os dados de verdade, é necessário conectar um backend.
+  const form = document.getElementById('cadastroForm');
+  const mensagemForm = document.getElementById('mensagemForm');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    // Salva a conta neste navegador e já conecta o usuário (cabeçalho atualiza sozinho)
+    if (window.ArkheConta) {
+      ArkheConta.cadastrar({
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value
+      });
+    }
+
+    mensagemForm.textContent =
+      'Cadastro realizado! Você já está conectado(a). O envio real ao servidor ainda será conectado.';
+    mensagemForm.classList.add('visivel');
+  });
+</script>
+
+<script src="../js/conta.js"></script>
 </body>
 </html>
