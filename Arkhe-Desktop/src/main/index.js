@@ -63,11 +63,11 @@ ipcMain.handle('openMainPage', (event) => {
 
 })
 
-ipcMain.handle('singUp', (event, data) => {
+ipcMain.handle('signUp', (event, data) => {
     return new Promise((resolve, reject) => {
-        const sql = 'INSERT INTO users (name, email, password, birthday) VALUES (?, ?, ?, ?)'
+        const sql = 'INSERT INTO usuarios (nome, email, senha, aniversario, tel) VALUES (?, ?, ?, ?, ?)'
     
-        connection.query(sql, [data.name, data.email, data.password, data.birthday], (erro, result) => {
+        connection.query(sql, [data.nome, data.email, data.senha, data.aniversario, data.tel], (erro, result) => {
             if (erro){
                 reject(erro);
                 return;
@@ -80,7 +80,7 @@ ipcMain.handle('singUp', (event, data) => {
 
 ipcMain.handle("login", (e, payload) => {
     return new Promise((resolve, reject) => {
-        const dbData = 'SELECT id, name, password FROM users WHERE email = ?';
+        const dbData = 'SELECT id, nome, senha, tel FROM usuarios WHERE email = ?';
 
         connection.query(dbData, [payload.email], (erro, resultados) => {
             if (erro) {
@@ -90,7 +90,7 @@ ipcMain.handle("login", (e, payload) => {
             }
 
             const usuario = resultados[0];
-            const autenticado = usuario && usuario.password === payload.password;
+            const autenticado = usuario && usuario.senha === payload.senha;
 
             if(!autenticado){
                 usuarioLogado = null
@@ -101,14 +101,13 @@ ipcMain.handle("login", (e, payload) => {
 
             usuarioLogado = {
                 id: usuario.id,
-                name: usuario.name,
-                email: usuario.email
+                nome: usuario.nome,
+                email: usuario.email,
+                tel: usuario.tel
             }
 
             logado = true
             resolve(usuarioLogado);
-
-        
 
         });
     });
