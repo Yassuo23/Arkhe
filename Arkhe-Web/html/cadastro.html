@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Arkhe</title>
@@ -7,24 +8,43 @@
   <link rel="stylesheet" href="../css/cadastro.css">
   <link rel="icon" href="../Images/favicon.png" type="image/x-icon">
 </head>
+
 <body>
-  <div class="tudo">
-  <header>
-    <h1>Web Shelter</h1>
-    <h3>Cadastre-se para Adotar um Amigo</h3>
+  <header class="navbar">
+    <a href="index.html" class="brand">ARKHE</a>
+
+    <nav class="nav-links">
+      <a href="ongs.html">Hub de ONGs</a>
+      <a href="veterinarios.html">Vet Online</a>
+      <a href="marketplace.html">Marketplace</a>
+      <a href="diagnostico.html">Diagnóstico IA</a>
+    </nav>
+
+    <div class="nav-right">
+      <a href="#" class="btn btn-orange" onclick="alert('Redirecionando para a loja de aplicativos...'); return false;">
+        Baixar App
+      </a>
+    </div>
+
+    <button class="nav-toggle" type="button" aria-label="Abrir menu">
+      ☰
+    </button>
   </header>
-  <form action="#" method="post">
-    <label>Nome completo: <input type="text" name="nome" required></label><br><br>
-    <label>Email: <input type="email" name="email" required></label><br><br>
-    <label>Data de nascimento: <input type="date" name="nascimento"></label><br><br>
-    <label>Telefone: <input type="tel" name="telefone"></label><br><br>
-  <div id="botoes">
-    <button type="submit"><a href="preferencias.html">Cadastrar</a></button>
-  </div>
-  </form>
-  <div class="voltar">
-    <a href="index.html">← Voltar para a página inicial</a>
-  </div>
+
+  <div class="tudo">
+    <form action="#" method="post">
+      <label>Nome completo: <input type="text" name="nome" required></label><br><br>
+      <label>Email: <input type="email" name="email" required></label><br><br>
+      <label>Data de nascimento: <input type="date" name="nascimento"></label><br><br>
+      <label>Telefone: <input type="tel" name="telefone"></label><br><br>
+      <div id="botoes">
+        <button type="submit"><a href="preferencias.html">Cadastrar</a></button>
+      </div>
+    </form>
+    <div class="voltar">
+      <a href="index.html">← Voltar para a página inicial</a>
+    </div>
   </div>
 </body>
+
 </html>

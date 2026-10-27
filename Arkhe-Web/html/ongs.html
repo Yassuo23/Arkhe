@@ -69,60 +69,40 @@
 
 <body class="bg-cream text-teal-dark font-sans">
 
-  <!-- Menu -->
  
-<!-- Cabeçalho -->
-<header class="bg-cream border-b border-sand">
-  <div class="w-full px-5 sm:px-8 lg:px-10 py-4 flex justify-between items-center">
+<!-- Cabeçalho Arkhe -->
+<header class="navbar">
 
-    <!-- Logo mais à esquerda -->
-    <a href="index.html" class="text-2xl font-bold text-teal shrink-0">
-      ARKHE
-    </a>
+  <a href="index.html" class="brand">ARKHE</a>
 
-    <!-- Links centralizados -->
-    <nav class="hidden md:flex items-center gap-5 lg:gap-8 text-sm">
-      <a href="ongs.html" class="text-teal font-bold">Hub de ONGs</a>
-      <a href="veterinarios.html" class="hover:text-orange">Vet Online</a>
-      <a href="marketplace.html" class="hover:text-orange">Marketplace</a>
-      <a href="diagnostico.html" class="hover:text-orange">Diagnóstico IA</a>
-    </nav>
+  <nav class="nav-links">
+    <a href="ongs.html" class="active">Hub de ONGs</a>
+    <a href="veterinarios.html">Vet Online</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="diagnostico.html">Diagnóstico IA</a>
+  </nav>
 
-    <!-- Botão à direita -->
+  <div class="nav-right">
     <a
       href="#"
+      class="btn btn-orange"
       onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
-      class="hidden sm:inline-block bg-orange hover:bg-orange/90 text-white px-6 py-3 rounded-full font-bold transition shrink-0"
     >
       Baixar App
     </a>
-
-    <!-- Menu para celular -->
-    <button
-      id="menuBtn"
-      class="md:hidden text-2xl px-2"
-      type="button"
-      aria-label="Abrir menu"
-      aria-expanded="false"
-    >
-      ☰
-    </button>
-
   </div>
 
-  <!-- Menu mobile -->
-  <nav id="mobileMenu" class="hidden md:hidden px-5 pb-4">
-    <a href="ongs.html" class="block py-2 text-teal font-bold">Hub de ONGs</a>
-    <a href="veterinarios.html" class="block py-2">Vet Online</a>
-    <a href="marketplace.html" class="block py-2">Marketplace</a>
-    <a href="diagnostico.html" class="block py-2">Diagnóstico IA</a>
-    <a href="#"
-       onclick="alert('Redirecionando para a loja de aplicativos...'); return false;"
-       class="inline-block mt-2 bg-orange text-white px-5 py-3 rounded-full font-bold">
-      Baixar App
-    </a>
-  </nav>
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-label="Abrir menu"
+    aria-expanded="false"
+  >
+    ☰
+  </button>
+
 </header>
+
 
 
 
@@ -517,23 +497,10 @@
 
 
   <!-- Rodapé -->
-  <footer class="bg-teal-dark text-white py-8">
-    <div class="max-w-6xl mx-auto px-5 text-center">
-
-      <a href="index.html" class="text-2xl font-bold">
-        ARKHE
-      </a>
-
-      <p class="text-sm text-white/80 mt-3">
-        Conectando pessoas e animais.
-      </p>
-
-      <p class="text-xs text-white/60 mt-5">
-        Desenvolvido com carinho para todos os pets. © 2026 Arkhe.
-      </p>
-
-    </div>
-  </footer>
+  <footer>
+  <div class="brand">🐾 ARKHE</div>
+  <small>Desenvolvido com carinho para todos os pets. © 2026 Arkhe.</small>
+</footer>
 
 
   <!-- JavaScript -->
