@@ -1,23 +1,15 @@
-let animaisCadastrados
+let animaisCadastrados: Animal[] = [];
 
 //função para carregar os dados do usuário
 
 const CarregarDados = async () => {
-    console.log("CarregarDados iniciou");
-
     try {
-        console.log("Chamando VerificarLogado...");
         const logado = await window.api.VerificarLogado();
-        console.log("VerificarLogado retornou:", logado);
-
         if (!logado) {
-            console.log("Nenhum usuário está logado");
             return;
         }
 
-        console.log("Chamando PegarDados...");
         const dados = await window.api.PegarDados();
-        console.log("PegarDados retornou:", dados);
 
         const botaoPerfil = document.querySelector("#label-name");
         const nomePerfil = document.querySelector("#nomePerfil");
@@ -30,16 +22,23 @@ const CarregarDados = async () => {
             if (botaoPerfil) {
                 botaoPerfil.textContent = nome;
             }
-            if (nomePerfil) {
-                nomePerfil.value = dados.name || dados.nome || "";
+                if (nomePerfil instanceof HTMLInputElement) {
+                    nomePerfil.value = dados.name || dados.nome || "";
             }
             if (emailPerfil) {
                 emailPerfil.textContent = dados.email || "Não informado";
             }
 
-            const nascimento = dados.birthday
-                ? String(dados.birthday).slice(0, 10)
-                : "";
+            let nascimento = "";
+            if (dados.birthday instanceof Date) {
+                nascimento = [
+                    dados.birthday.getFullYear(),
+                    String(dados.birthday.getMonth() + 1).padStart(2, "0"),
+                    String(dados.birthday.getDate()).padStart(2, "0")
+                ].join("-");
+            } else if (dados.birthday) {
+                nascimento = String(dados.birthday).slice(0, 10);
+            }
             if (nascimentoPerfil) {
                 nascimentoPerfil.textContent = /^\d{4}-\d{2}-\d{2}$/.test(nascimento)
                     ? nascimento.split("-").reverse().join("/")
@@ -59,7 +58,14 @@ CarregarDados();
 const sidebar = document.querySelector('#sidebar');
 const btnToggleSidebar = document.querySelector('#btn-toggle-sidebar');
 
-const secoesPorAba = {
+if (sidebar instanceof HTMLElement && btnToggleSidebar instanceof HTMLButtonElement) {
+    btnToggleSidebar.addEventListener("click", () => {
+        const collapsed = sidebar.classList.toggle("collapsed");
+        btnToggleSidebar.setAttribute("aria-expanded", String(!collapsed));
+    });
+}
+
+const secoesPorAba: Record<string, string> = {
     dashboard: 'dashboard',
     projetos: 'sec-projetos',
     ia: 'sec-ai',
@@ -68,7 +74,7 @@ const secoesPorAba = {
     perfil: 'sec-perfil'
 };
 
-function switchTab(event, aba) {
+function switchTab(event: Event, aba: string) {
     event.preventDefault();
 
     const idSecao = secoesPorAba[aba];
@@ -84,14 +90,24 @@ function switchTab(event, aba) {
     });
     secaoSelecionada.classList.remove('d-none');
 
-    const linkAtivo = event.currentTarget.matches('.nav-link')
-        ? event.currentTarget
+    const target = event.currentTarget as HTMLElement | null;
+    const linkAtivo = target?.matches('.nav-link')
+        ? target
         : document.querySelector('#BotaoPerfil');
 
-    sidebar.querySelectorAll('.nav-link').forEach((link) => {
+    sidebar?.querySelectorAll('.nav-link').forEach((link) => {
         link.classList.toggle('active', link === linkAtivo);
     });
 }
+
+document.querySelectorAll<HTMLElement>("[data-tab]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+        const aba = link.dataset.tab;
+        if (aba) {
+            switchTab(event, aba);
+        }
+    });
+});
 
 
 
@@ -142,22 +158,29 @@ const carregarAnimais = async () => {
                 </div>
             `;
 
-            card.querySelector(".pet-name").textContent = animal.nome ?? "";
-            card.querySelector(".pet-species").textContent = animal.especie ?? "";
-            card.querySelector(".pet-age").textContent = animal.idade ?? "";
-            card.querySelector(".pet-color").textContent = animal.cor ?? "";
-            card.querySelector(".pet-action-remove").dataset.animalId = animal.id;
+            const petName = card.querySelector(".pet-name");
+            const petSpecies = card.querySelector(".pet-species");
+            const petAge = card.querySelector(".pet-age");
+            const petColor = card.querySelector(".pet-color");
+            const petRemove = card.querySelector<HTMLElement>(".pet-action-remove");
+            petName && (petName.textContent = animal.nome ?? "");
+            petSpecies && (petSpecies.textContent = animal.especie ?? "");
+            petAge && (petAge.textContent = String(animal.idade ?? ""));
+            petColor && (petColor.textContent = animal.cor ?? "");
+            petRemove && (petRemove.dataset.animalId = String(animal.id ?? ""));
 
             const especie = String(animal.especie ?? "").trim().toLocaleLowerCase("pt-BR");
-            const imagemPorEspecie = {
+            const imagemPorEspecie: Record<string, string> = {
                 gato: "../images/gato.jpg",
                 gata: "../images/gato.jpg",
                 cachorro: "../images/cachorro.jpeg",
                 cachorra: "../images/cachorro.jpeg"
             };
-            const imagem = card.querySelector("img");
-            imagem.src = imagemPorEspecie[especie] || "../../../Arkhe-Web/Images/luna.jpg";
-            imagem.alt = animal.nome ? `Foto de ${animal.nome}` : "Foto do animal";
+            const imagem = card.querySelector<HTMLImageElement>("img");
+            if (imagem) {
+                imagem.src = imagemPorEspecie[especie] || "../../../Arkhe-Web/Images/luna.jpg";
+                imagem.alt = animal.nome ? `Foto de ${animal.nome}` : "Foto do animal";
+            }
 
             return card;
         }));
@@ -166,19 +189,20 @@ const carregarAnimais = async () => {
     }
 };
 
-let idAnimalParaExcluir = null;
+let idAnimalParaExcluir: string | null = null;
 const modalConfirmarExclusaoElement = document.querySelector('#modalConfirmarExclusao');
 const modalConfirmarExclusao = modalConfirmarExclusaoElement
     ? new bootstrap.Modal(modalConfirmarExclusaoElement)
     : null;
 
-document.querySelector("#containerPets")?.addEventListener("click", (event) => {
-    const botaoRemover = event.target.closest(".pet-action-remove[data-animal-id]");
+document.querySelector("#containerPets")?.addEventListener("click", (event: Event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    const botaoRemover = target?.closest<HTMLElement>(".pet-action-remove[data-animal-id]");
     if (!botaoRemover || !modalConfirmarExclusao) {
         return;
     }
 
-    idAnimalParaExcluir = botaoRemover.dataset.animalId;
+    idAnimalParaExcluir = botaoRemover.dataset.animalId ?? null;
     const animal = animaisCadastrados.find(
         (item) => String(item.id) === idAnimalParaExcluir
     );
@@ -188,7 +212,10 @@ document.querySelector("#containerPets")?.addEventListener("click", (event) => {
         return;
     }
 
-    document.querySelector('#nomeInsumoExcluir').textContent = animal.nome;
+    const nomeInsumoExcluir = document.querySelector<HTMLElement>('#nomeInsumoExcluir');
+    if (nomeInsumoExcluir) {
+        nomeInsumoExcluir.textContent = animal.nome;
+    }
     modalConfirmarExclusao.show();
 });
 
@@ -200,7 +227,7 @@ document.querySelector('#btnConfirmarExclusao')?.addEventListener('click', async
     try {
         await window.api.excluirAnimal(idAnimalParaExcluir);
         idAnimalParaExcluir = null;
-        modalConfirmarExclusao.hide();
+        modalConfirmarExclusao?.hide();
         await carregarAnimais();
     } catch (erro) {
         console.error("Não foi possível excluir o animal:", erro);

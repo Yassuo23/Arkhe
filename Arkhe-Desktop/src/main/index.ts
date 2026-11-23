@@ -1,13 +1,40 @@
-const { BrowserWindow, Menu, Tray, app, ipcMain, dialog } = require("electron");
-const fs = require("fs");
-const path = require("path");
-const connection = require("./dataBase");
-const { resolve } = require("dns");
-let MainWindow;
+import { BrowserWindow, app, ipcMain, dialog, IpcMainInvokeEvent } from "electron";
+import path from "path";
+import connection from "./dataBase";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 
+interface Usuario {
+    id: number;
+    name: string;
+    email: string;
+    birthday?: string | null;
+    tel?: string | null;
+}
 
-let usuarioLogado = null
-let logado = false
+interface CadastroUsuario {
+    name: string;
+    email: string;
+    password: string;
+    birthday: string;
+    tel: string;
+}
+
+interface LoginPayload {
+    email: string;
+    password: string;
+}
+
+interface Animal {
+    nome: string;
+    cor: string;
+    raca: string;
+    idade: number;
+    especie: string;
+}
+
+let MainWindow: BrowserWindow | null = null;
+let usuarioLogado: Usuario | null = null;
+let logado = false;
 
 //Testa a conexão com o banco de dados
 const connectionTest = () => {
@@ -34,9 +61,14 @@ app.whenReady().then(() => {
         width: 500,
         height: 700,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, "preload.js"),
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: true
         }
     });
+
+    devTools: windowLogin.webContents.openDevTools();
 
 
     windowLogin.loadFile(path.join(__dirname, "../renderer/login.html"));
@@ -52,7 +84,10 @@ ipcMain.handle('openMainPage', (event) => {
         width: 1000,
         height: 700,
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: true
         }
     }) 
     
@@ -78,18 +113,21 @@ ipcMain.handle('modalCadastroAnimal:abrir', async () => {
         parent: MainWindow,
         modal: true,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, "preload.js"),
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: true
         }
     });
 
     await modalCadastro.loadFile(path.join(__dirname, "../renderer/cadastroAnimal.html"));
 });
 
-ipcMain.handle('signUp', (event, data) => {
+ipcMain.handle('signUp', (_event, data: CadastroUsuario) => {
     return new Promise((resolve, reject) => {
         const sql = 'INSERT INTO users (name, email, password, birthday, tel) VALUES (?, ?, ?, ?, ?)'
     
-        connection.query(sql, [data.name, data.email, data.password, data.birthday || null, data.tel || null], (erro, result) => {
+        connection.query<ResultSetHeader>(sql, [data.name, data.email, data.password, data.birthday || null, data.tel || null], (erro, result) => {
             if (erro){
                 reject(erro);
                 return;
@@ -100,11 +138,11 @@ ipcMain.handle('signUp', (event, data) => {
     });
 });
 
-ipcMain.handle("login", (e, payload) => {
+ipcMain.handle("login", (_event, payload: LoginPayload) => {
     return new Promise((resolve, reject) => {
         const dbData = 'SELECT id, name, email, password, birthday, tel FROM users WHERE email = ?';
 
-        connection.query(dbData, [payload.email], (erro, resultados) => {
+        connection.query<RowDataPacket[]>(dbData, [payload.email], (erro, resultados) => {
             if (erro) {
                 console.error(erro);
                 reject(erro);
@@ -145,11 +183,11 @@ ipcMain.handle("VerificarLogado", () => {
 });
 
 
-ipcMain.handle("animal:cadastrar", (_event, dados) => {
+ipcMain.handle("animal:cadastrar", (_event, dados: Animal) => {
     return new Promise((resolve, reject) => {
         const sql = 'INSERT INTO animais (nome, cor, raca, idade, especie) VALUES (?, ?, ?, ?, ?)'
 
-        connection.query(sql, [dados.nome, dados.cor, dados.raca, dados.idade, dados.especie], (erro, result) => {
+        connection.query<ResultSetHeader>(sql, [dados.nome, dados.cor, dados.raca, dados.idade, dados.especie], (erro, result) => {
             if (erro){
                 reject(erro);
                 return;
@@ -160,11 +198,11 @@ ipcMain.handle("animal:cadastrar", (_event, dados) => {
     });
 });
 
-ipcMain.handle("animal:carregar", (_event, dados) => {
+ipcMain.handle("animal:carregar", () => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM animais ORDER BY idade DESC'
 
-        connection.query(sql, (erro, result) => {
+        connection.query<RowDataPacket[]>(sql, (erro, result) => {
             if (erro){
                 reject(erro);
                 return;

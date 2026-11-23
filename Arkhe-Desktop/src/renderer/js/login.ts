@@ -1,11 +1,11 @@
-const form = document.querySelector("#FormLogin");
+const form = document.querySelector<HTMLFormElement>("#FormLogin");
 
 if (form){
-    form.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e: SubmitEvent) => {
         e.preventDefault();
 
 
-        const dt = Object.fromEntries(new FormData(e.target));
+        const dt = Object.fromEntries(new FormData(e.target as HTMLFormElement));
         const payload = {
             email: String(dt.email || "").trim(),
             password: String(dt.password || "").trim()
