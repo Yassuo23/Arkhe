@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="description" content="Cadastro para adoção de um amigo">
   <title>ARKHE | Cadastro</title>
   <link rel="stylesheet" href="css/cadastro.css">
@@ -49,7 +50,7 @@
       <a href="login.html">Login</a>
     </nav>
   </div>
-  <script src="js/cadastro.js"></script>
+  <script type="module" src="js/cadastro.js"></script>
 </body>
 
 </html>

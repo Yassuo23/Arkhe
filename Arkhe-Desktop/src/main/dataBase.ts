@@ -1,11 +1,10 @@
-const fs = require("fs");
-const path = require("path");
-const dotenv = require("dotenv");
-const mysql = require("mysql2");
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+import mysql from "mysql2";
 
 const envPaths = [
-    path.resolve(__dirname, "../../.env"),
-    path.resolve(__dirname, "../../.gitignore/.env")
+    path.resolve(__dirname, "../../.env")
 ];
 const envPath = envPaths.find((candidate) => fs.existsSync(candidate));
 
@@ -28,12 +27,16 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) {
     throw new Error("DB_PORT deve ser um número inteiro entre 1 e 65535.");
 }
 
+const dbHost = process.env.DB_HOST!.trim();
+const dbUser = process.env.DB_USER!.trim();
+const dbName = process.env.DB_NAME!.trim();
+
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST.trim(),
+    host: dbHost,
     port,
-    user: process.env.DB_USER.trim(),
+    user: dbUser,
     password: process.env.DB_PASSWORD ?? "",
-    database: process.env.DB_NAME.trim()
+    database: dbName
 });
 
-module.exports = connection;
+export default connection;

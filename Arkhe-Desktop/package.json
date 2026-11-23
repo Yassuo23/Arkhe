@@ -2,9 +2,10 @@
   "name": "desktop",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/main/index.js",
   "scripts": {
-    "start": "electron src/main/index.js"
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.renderer.json && node -e \"const fs=require('fs'); fs.cpSync('src/renderer','dist/renderer',{recursive:true}); fs.cpSync('src/images','dist/images',{recursive:true})\"",
+    "start": "npm run build && electron dist/main/index.js"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +17,9 @@
     "dotenv": "^17.4.2",
     "electron": "^43.3.0",
     "mysql2": "^3.24.4"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
   }
 }
